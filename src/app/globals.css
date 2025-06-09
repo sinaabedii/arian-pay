@@ -1,0 +1,308 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* رنگ‌های اصلی - آبی کلاسیک و کرم */
+  --primary: #1A3C69;
+  --primary-hover: #15325A;
+  --primary-light: #E6EBF4;
+  
+  --secondary: #f4f1ec;
+  --secondary-hover: #e9e4db;
+  --secondary-light: #faf8f5;
+  
+  --accent: #f59e0b;
+  --accent-hover: #d97706;
+  --accent-light: #fef3c7;
+  
+  --success: #10b981;
+  --success-light: #d1fae5;
+  
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  
+  --background: #faf8f5;
+  --foreground: #1A3C69;
+  --card: #ffffff;
+  --card-foreground: #1A3C69;
+  
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --placeholder: rgba(26, 60, 105, 0.5);
+  
+  --ring: rgba(26, 60, 105, 0.3);
+  
+  --radius: 0.75rem;
+
+  /* گرادیان‌های جذاب */
+  --gradient-primary: linear-gradient(135deg, #1A3C69 0%, #2A4E80 100%);
+  --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fb7185 100%);
+  --gradient-elegant: linear-gradient(135deg, #1A3C69 0%, #f4f1ec 100%);
+  --gradient-light: linear-gradient(135deg, #f4f1ec 0%, #ffffff 100%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #2A4E80;
+    --primary-hover: #3A5E90;
+    --primary-light: #172A45;
+    
+    --secondary: #e9e4db;
+    --secondary-hover: #f4f1ec;
+    --secondary-light: #262421;
+    
+    --accent: #fbbf24;
+    --accent-hover: #f59e0b;
+    --accent-light: #3f3822;
+    
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --card: #1e293b;
+    --card-foreground: #f8fafc;
+    
+    --border: #334155;
+    --input: #334155;
+    --placeholder: rgba(248, 250, 252, 0.5);
+    
+    --success: #10b981;
+    --success-light: #064e3b;
+    
+    --warning: #f59e0b;
+    --warning-light: #78350f;
+    
+    --danger: #ef4444;
+    --danger-light: #7f1d1d;
+    
+    --ring: rgba(42, 78, 128, 0.3);
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "IranSansX", sans-serif;
+}
+
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+@font-face {
+  font-family: "IranSansX";
+  font-weight: 400;
+  src: url("/fonts/iransansx-regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "IranSansX";
+  font-weight: 300;
+  src: url("/fonts/iransansx-light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "IranSansX";
+  font-weight: 700;
+  src: url("/fonts/iransansx-bold.woff") format("woff");
+}
+
+:root {
+  font-family: "IranSansX", system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .gradient-text {
+    @apply text-transparent bg-clip-text;
+    background-image: var(--gradient-primary);
+  }
+  
+  .gradient-bg {
+    background-image: var(--gradient-primary);
+  }
+  
+  .accent-gradient-bg {
+    background-image: var(--gradient-accent);
+  }
+  
+  .elegant-gradient-bg {
+    background-image: var(--gradient-elegant);
+  }
+  
+  .light-gradient-bg {
+    background-image: var(--gradient-light);
+  }
+  
+  /* افکت‌های انیمیشن */
+  .hover-scale {
+    @apply transition-transform duration-300;
+  }
+  
+  .hover-scale:hover {
+    @apply transform scale-105;
+  }
+  
+  .hover-float {
+    @apply transition-transform duration-300;
+  }
+  
+  .hover-float:hover {
+    @apply transform -translate-y-1;
+  }
+  
+  .section-light {
+    @apply bg-secondary-light;
+  }
+  
+  .section-cream {
+    @apply bg-secondary;
+  }
+  
+  .section-white {
+    @apply bg-white;
+  }
+}
+
+@layer components {
+  .container {
+    @apply px-4 md:px-6 lg:px-8 mx-auto max-w-7xl;
+  }
+  
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors 
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+  }
+  
+  .btn-primary {
+    @apply bg-classic-blue text-white hover:bg-primary-hover;
+  }
+  
+  .btn-secondary {
+    @apply bg-cream text-classic-blue hover:bg-secondary-hover;
+  }
+  
+  .btn-accent {
+    @apply bg-accent text-white hover:bg-accent-hover;
+  }
+  
+  .btn-gradient {
+    @apply text-white gradient-bg hover:opacity-90;
+  }
+  
+  .btn-light {
+    @apply bg-secondary-light text-classic-blue hover:bg-secondary;
+  }
+  
+  .btn-outline {
+    @apply border border-input bg-transparent hover:bg-secondary-light hover:text-classic-blue;
+  }
+  
+  .btn-ghost {
+    @apply hover:bg-secondary-light hover:text-classic-blue;
+  }
+  
+  .btn-danger {
+    @apply bg-danger text-white hover:bg-danger hover:opacity-90;
+  }
+  
+  .btn-success {
+    @apply bg-success text-white hover:bg-success hover:opacity-90;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:border-classic-blue;
+  }
+  
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md dark:bg-slate-900/80;
+  }
+  
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm 
+    ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium 
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
+    disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  /* کارت‌های ویژه */
+  .feature-card {
+    @apply p-6 rounded-xl border border-border bg-card shadow-sm hover-float card-hover;
+  }
+  
+  .feature-icon {
+    @apply w-12 h-12 rounded-full flex items-center justify-center text-white mb-4;
+  }
+  
+  /* بج‌ها */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  
+  .badge-primary {
+    @apply bg-primary-light text-classic-blue;
+  }
+  
+  .badge-secondary {
+    @apply bg-secondary-light text-classic-blue;
+  }
+  
+  .badge-accent {
+    @apply bg-accent-light text-accent;
+  }
+  
+  .badge-success {
+    @apply bg-success-light text-success;
+  }
+  
+  .badge-warning {
+    @apply bg-warning-light text-warning;
+  }
+  
+  .badge-danger {
+    @apply bg-danger-light text-danger;
+  }
+}
+
+/* استایل برای placeholder */
+::placeholder {
+  color: var(--placeholder);
+}
+
+/* Leaflet Styles */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.store-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.store-marker-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.store-popup {
+  min-width: 200px;
+}
