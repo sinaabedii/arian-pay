@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,34 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuthStore } from "@/lib/store/auth-store";
 
-export default function VerifyPage() {
+// Loading component to show while suspense is active
+function VerifyLoading() {
+  return (
+    <div className="flex items-center justify-center min-h-screen px-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-primary">آرین پی</h1>
+          <p className="mt-2 text-secondary">سامانه پرداخت اعتباری</p>
+        </div>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>تایید شماره موبایل</CardTitle>
+            <CardDescription>
+              در حال بارگذاری...
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="text-center py-8">
+            <div className="animate-pulse">لطفاً صبر کنید...</div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+// Main verify form component that uses useSearchParams
+function VerifyForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const phone = searchParams.get("phone") || "";
@@ -173,5 +200,14 @@ export default function VerifyPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<VerifyLoading />}>
+      <VerifyForm />
+    </Suspense>
   );
 } 
