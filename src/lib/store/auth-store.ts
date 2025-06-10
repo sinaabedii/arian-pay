@@ -23,7 +23,7 @@ interface AuthState {
 // در حالت واقعی این باید از API دریافت شود
 const MOCK_USER: User = {
   id: "1",
-  name: "کاربر آرین پی",
+  name: "کاربر سعید پی ",
   phone: "09123456789",
   email: "user@arianpay.com",
   nationalId: "0123456789",

@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef } from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/utils/cn";
@@ -5,7 +7,7 @@ import { cn } from "@/utils/cn";
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "accent" | "gradient" | "light";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "accent" | "gradient" | "light" | "success";
   size?: "sm" | "md" | "lg" | "icon";
 }
 
@@ -35,10 +37,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             "btn-accent": variant === "accent",
             "btn-gradient": variant === "gradient",
             "btn-light": variant === "light",
-            "h-9 px-3 py-2": size === "sm",
+            "btn-success": variant === "success",
+            
+            "h-9 px-3 py-2 text-xs": size === "sm",
             "h-10 px-4 py-2": size === "md",
-            "h-11 px-5 py-2.5": size === "lg",
-            "h-10 w-10 p-0": size === "icon",
+            "h-11 px-6 py-3 text-base": size === "lg",
+            "h-10 w-10 p-2.5": size === "icon",
           },
           className
         )}

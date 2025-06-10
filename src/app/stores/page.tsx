@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, ShoppingBag, Globe, ExternalLink, ArrowRight, Navigation } from "lucide-react";
+import { Search, MapPin, ShoppingBag, Globe, ExternalLink, Navigation } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,36 +88,80 @@ const MOCK_PHYSICAL_STORES: PhysicalStore[] = [
     name: "هایپر استار",
     logo: "https://www.hyperstar.ir/static/img/favicon.ico",
     category: "هایپرمارکت",
-    address: "تهران، ایران مال",
+    address: "تهران، ایران مال، طبقه همکف",
     distance: 1.2,
     hasInstallment: true,
+    position: [35.7219, 51.3347], // موقعیت واقعی ایران مال
   },
   {
     id: "2",
     name: "افق کوروش",
     logo: "https://ofoghkourosh.com/static/img/logo.png",
     category: "فروشگاه زنجیره‌ای",
-    address: "تهران، میدان ونک",
+    address: "تهران، میدان ونک، خیابان ونک",
     distance: 2.4,
     hasInstallment: true,
+    position: [35.7561, 51.4090], // موقعیت واقعی میدان ونک
   },
   {
     id: "3",
     name: "پاساژ پالادیوم",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/1/18/Palladium-Mall-Logo.jpg",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Palladium_Mall_Logo.png/220px-Palladium_Mall_Logo.png",
     category: "مرکز خرید",
-    address: "تهران، زعفرانیه",
-    distance: 3.7,
-    hasInstallment: true,
+    address: "تهران، زعفرانیه، خیابان مقدس اردبیلی",
+    distance: 3.5,
+    hasInstallment: false,
+    position: [35.7967, 51.4128], // موقعیت واقعی پالادیوم
   },
   {
     id: "4",
-    name: "سامسونگ",
-    logo: "https://www.samsung.com/etc.clientlibs/samsung/clientlibs/consumer/global/clientlib-common/resources/images/favicon.ico",
-    category: "لوازم الکترونیکی",
-    address: "تهران، خیابان ولیعصر",
-    distance: 5.1,
+    name: "دیجی‌کالا",
+    logo: "https://dkstatics-public.digikala.com/digikala-favicon.ico",
+    category: "فروشگاه اینترنتی",
+    address: "تهران، خیابان گاندی جنوبی",
+    distance: 4.8,
     hasInstallment: true,
+    position: [35.7575, 51.4104], // موقعیت تقریبی دفتر دیجی‌کالا
+  },
+  {
+    id: "5",
+    name: "بازار بزرگ تهران",
+    logo: "/banks/default.svg",
+    category: "بازار سنتی",
+    address: "تهران، محدوده بازار تهران",
+    distance: 5.6,
+    hasInstallment: false,
+    position: [35.6728, 51.4195], // موقعیت واقعی بازار تهران
+  },
+  {
+    id: "6",
+    name: "فروشگاه رفاه",
+    logo: "https://www.refah.ir/uploads/refah-logo.png",
+    category: "فروشگاه زنجیره‌ای",
+    address: "تهران، میدان صادقیه",
+    distance: 6.2,
+    hasInstallment: true,
+    position: [35.7235, 51.3473], // موقعیت تقریبی صادقیه
+  },
+  {
+    id: "7",
+    name: "مجتمع تجاری کوروش",
+    logo: "/banks/default.svg",
+    category: "مرکز خرید",
+    address: "تهران، اتوبان ستاری، نبش پیامبر مرکزی",
+    distance: 7.5,
+    hasInstallment: true,
+    position: [35.7464, 51.3401], // موقعیت واقعی مجتمع کوروش
+  },
+  {
+    id: "8",
+    name: "فروشگاه شهروند",
+    logo: "https://shahrvand.ir/wp-content/uploads/2020/07/cropped-favicon-1-32x32.png",
+    category: "فروشگاه زنجیره‌ای",
+    address: "تهران، میدان آرژانتین",
+    distance: 8.1,
+    hasInstallment: true,
+    position: [35.7616, 51.4100], // موقعیت تقریبی آرژانتین
   },
 ];
 
@@ -162,6 +206,7 @@ export default function StoresPage() {
   // تابع برای پیدا کردن فروشگاه‌های نزدیک
   const findNearbyStores = () => {
     setShowMap(true);
+    setActiveTab("physical");
     // و سپس فروشگاه‌ها را بر اساس فاصله مرتب می‌کنیم
     setFilteredPhysicalStores(
       [...MOCK_PHYSICAL_STORES].sort((a, b) => a.distance - b.distance)
@@ -177,15 +222,25 @@ export default function StoresPage() {
     }, 100);
   };
 
-  // اینجا از activeTab استفاده می‌کنیم تا eslint error را رفع کنیم
-  const currentTab = activeTab;
-
   return (
     <AppLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">فروشگاه‌ها</h1>
-          <p className="text-secondary mt-1">خرید آنلاین و حضوری با اعتبار آرین پی {currentTab}</p>
+          <h1 className="text-2xl font-bold gradient-text">فروشگاه‌ها</h1>
+          <p className="text-secondary mt-1">خرید آنلاین و حضوری با اعتبار آرین پی</p>
+        </div>
+
+        <div className="bg-gradient-to-r from-primary/10 to-primary/5 p-4 rounded-lg border border-primary/20 mb-6">
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <div className="flex-1">
+              <h2 className="text-lg font-medium">پیدا کردن فروشگاه‌های نزدیک شما</h2>
+              <p className="text-sm text-secondary mt-1">با استفاده از موقعیت مکانی شما، نزدیک‌ترین فروشگاه‌های طرف قرارداد را پیدا می‌کنیم</p>
+            </div>
+            <Button onClick={findNearbyStores} className="gap-2 min-w-36 justify-center">
+              <MapPin size={18} />
+              نمایش فروشگاه‌های نزدیک
+            </Button>
+          </div>
         </div>
 
         <div className="relative">
@@ -199,7 +254,7 @@ export default function StoresPage() {
           />
         </div>
 
-        <Tabs defaultValue="online" onValueChange={setActiveTab}>
+        <Tabs defaultValue="online" value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="w-full">
             <TabsTrigger value="online" className="flex-1">
               <Globe className="h-4 w-4 mr-2" />
@@ -228,10 +283,17 @@ export default function StoresPage() {
           <TabsContent value="physical" className="mt-6">
             {!showMap && (
               <div className="flex justify-center mb-6">
-                <Button onClick={findNearbyStores} className="gap-2">
-                  <MapPin size={18} />
-                  یافتن فروشگاه‌های نزدیک من
-                </Button>
+                <div className="text-center p-6 bg-secondary-light rounded-lg max-w-md">
+                  <MapPin className="h-10 w-10 text-primary mx-auto mb-3" />
+                  <h3 className="text-lg font-medium">نمایش فروشگاه‌های نزدیک</h3>
+                  <p className="text-secondary my-3">
+                    برای مشاهده فروشگاه‌های نزدیک خود روی دکمه زیر کلیک کنید. به موقعیت مکانی شما نیاز داریم.
+                  </p>
+                  <Button onClick={findNearbyStores} className="gap-2 mt-2">
+                    <MapPin size={18} />
+                    نمایش فروشگاه‌ها روی نقشه
+                  </Button>
+                </div>
               </div>
             )}
             
@@ -247,38 +309,9 @@ export default function StoresPage() {
               </div>
             )}
             
-            <div id="store-details">
-              {selectedStore && (
-                <Card className="mb-6 border-primary">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-md overflow-hidden bg-secondary-light relative flex-shrink-0">
-                        <div className="w-full h-full flex items-center justify-center text-primary">
-                          <ShoppingBag size={24} />
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{selectedStore.name}</h3>
-                        <p className="text-sm text-secondary">{selectedStore.category}</p>
-                      </div>
-                    </div>
-                    <div className="mt-3 pt-3 border-t border-border">
-                      <div className="flex items-start gap-2 mb-2">
-                        <MapPin className="h-4 w-4 text-secondary flex-shrink-0 mt-0.5" />
-                        <p className="text-sm">{selectedStore.address}</p>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-primary">{selectedStore.distance.toFixed(1)} کیلومتر از شما</span>
-                        <Button size="sm" className="gap-1">
-                          خرید با اعتبار
-                          <ArrowRight size={14} />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            
+            <div id="store-details" className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">فروشگاه‌های حضوری</h2>
+              
               {filteredPhysicalStores.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {filteredPhysicalStores.map((store) => (

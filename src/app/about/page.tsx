@@ -8,7 +8,7 @@ export default function AboutPage() {
       <header className="border-b border-border">
         <div className="container py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-primary">آرین پی</h1>
+            <h1 className="text-2xl font-bold text-primary">سعید پی </h1>
           </div>
           <div className="flex items-center gap-4">
             <Link 
@@ -25,9 +25,9 @@ export default function AboutPage() {
         <section className="py-12 md:py-16">
           <div className="container">
             <div className="max-w-3xl mx-auto">
-              <h1 className="text-3xl md:text-4xl font-bold text-center">درباره آرین پی</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-center">درباره سعید پی </h1>
               <p className="mt-6 text-lg text-secondary text-center">
-                آرین پی یک پلتفرم پرداخت اعتباری و خرید اقساطی آنلاین است که با هدف تسهیل فرآیند خرید اقساطی برای مشتریان و فروشگاه‌ها ایجاد شده است.
+                سعید پی  یک پلتفرم پرداخت اعتباری و خرید اقساطی آنلاین است که با هدف تسهیل فرآیند خرید اقساطی برای مشتریان و فروشگاه‌ها ایجاد شده است.
               </p>
               
               <div className="mt-12 space-y-8">
@@ -39,9 +39,9 @@ export default function AboutPage() {
                 </div>
                 
                 <div className="bg-card rounded-lg p-6 border border-border">
-                  <h2 className="text-xl font-bold mb-4">تیم آرین پی</h2>
+                  <h2 className="text-xl font-bold mb-4">تیم سعید پی </h2>
                   <p className="text-secondary mb-4">
-                    تیم آرین پی متشکل از متخصصان حوزه فین‌تک، توسعه نرم‌افزار و اعتبارسنجی است که با سال‌ها تجربه در صنعت مالی، این پلتفرم را ایجاد کرده‌اند. 
+                    تیم سعید پی  متشکل از متخصصان حوزه فین‌تک، توسعه نرم‌افزار و اعتبارسنجی است که با سال‌ها تجربه در صنعت مالی، این پلتفرم را ایجاد کرده‌اند. 
                   </p>
                   <p className="text-secondary">
                     هدف ما ایجاد یک اکوسیستم پرداخت منسجم است که به کاربران امکان می‌دهد با خیال راحت و بدون نیاز به فرآیندهای پیچیده، از خدمات اعتباری بهره‌مند شوند.
@@ -49,7 +49,7 @@ export default function AboutPage() {
                 </div>
                 
                 <div className="bg-card rounded-lg p-6 border border-border">
-                  <h2 className="text-xl font-bold mb-4">مزایای آرین پی</h2>
+                  <h2 className="text-xl font-bold mb-4">مزایای سعید پی </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div className="flex items-start gap-3">
                       <div className="p-2 rounded-full bg-primary-light text-primary mt-1">
@@ -128,7 +128,7 @@ export default function AboutPage() {
         <div className="container">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <h3 className="text-xl font-bold text-primary">آرین پی</h3>
+              <h3 className="text-xl font-bold text-primary">سعید پی </h3>
               <p className="text-sm text-secondary mt-1">سامانه پرداخت اعتباری</p>
             </div>
             <div className="flex gap-6">
@@ -144,7 +144,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-border text-center text-sm text-secondary">
-            © {new Date().getFullYear()} آرین پی. تمامی حقوق محفوظ است.
+            © {new Date().getFullYear()} سعید پی . تمامی حقوق محفوظ است.
           </div>
         </div>
       </footer>

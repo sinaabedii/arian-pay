@@ -203,7 +203,7 @@ export default function ProfilePage() {
           </CardHeader>
           <CardContent>
             <p className="text-secondary mb-4">
-              با خروج از حساب کاربری، برای استفاده مجدد از خدمات آرین پی نیاز به ورود مجدد خواهید داشت.
+              با خروج از حساب کاربری، برای استفاده مجدد از خدمات سعید پی  نیاز به ورود مجدد خواهید داشت.
             </p>
             <Button 
               variant="danger" 

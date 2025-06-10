@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "آرین پی | سامانه پرداخت اعتباری",
-  description: "آرین پی - سامانه پرداخت اعتباری، خرید اقساطی و کیف پول",
+  title: "سعید پی  | سامانه پرداخت اعتباری",
+  description: "سعید پی  - سامانه پرداخت اعتباری، خرید اقساطی و کیف پول",
 };
 
 export default function RootLayout({

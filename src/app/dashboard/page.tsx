@@ -2,20 +2,13 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { CreditCard, Wallet, PiggyBank, ShoppingBag, BarChart3, Bell, Zap, Calendar, Percent, Tag, ChevronRight, ArrowUpRight, ArrowDownRight, Info, QrCode, User } from "lucide-react";
+import { CreditCard, Wallet, ShoppingBag, BarChart3, Bell, Zap, Calendar, Percent, Tag, ChevronRight, ArrowUpRight, ArrowDownRight, Info, QrCode, User } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AppLayout from "@/components/layout/app-layout";
 import { useAuthStore } from "@/lib/store/auth-store";
-
-const MOCK_CHART_DATA = [
-  { month: "فروردین", amount: 1200000 },
-  { month: "اردیبهشت", amount: 1800000 },
-  { month: "خرداد", amount: 1500000 },
-  { month: "تیر", amount: 2200000 },
-  { month: "مرداد", amount: 2500000 },
-  { month: "شهریور", amount: 1800000 },
-];
+import { AnimatedButton } from "@/components/ui/animated-button";
+import { BankCard, BankType } from "@/components/ui/bank-card";
 
 // نمونه داده برای آخرین تراکنش‌ها
 const MOCK_RECENT_TRANSACTIONS = [
@@ -33,6 +26,20 @@ const MOCK_OFFERS = [
 // نمونه داده برای یادآوری‌ها
 const MOCK_REMINDERS = [
   { id: "1", title: "پرداخت قسط بعدی", date: "۱۵ مهر", daysLeft: 3, amount: 2500000 },
+];
+
+// دیتای نمونه برای کارت‌های بانکی
+const MOCK_BANK_CARDS = [
+  {
+    id: "1",
+    bank: "mellat" as BankType,
+    cardNumber: "6104337812345678",
+    accountNumber: "12345678901",
+    sheba: "123456789012345678901234",
+    cardHolderName: "امیرحسین محمدی",
+    expiryDate: "1404/05",
+    isDefault: true,
+  },
 ];
 
 export default function DashboardPage() {
@@ -59,30 +66,32 @@ export default function DashboardPage() {
     <AppLayout>
       <div className="space-y-8">
         {/* هدر داشبورد */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 animate-fade-in">
           <div>
-            <h1 className="text-2xl font-bold">سلام، {user.name} 👋</h1>
+            <h1 className="text-2xl font-bold gradient-text">سلام، {user.name} 👋</h1>
             <p className="text-secondary mt-1">خوش آمدید! خلاصه حساب و فعالیت‌های شما در اینجا نمایش داده می‌شود.</p>
           </div>
           <div className="flex gap-2">
-            <Button 
+            <AnimatedButton 
               variant="outline" 
               size="sm" 
               className="gap-1"
+              animation="float"
               onClick={() => router.push("/credit-request")}
             >
               <Zap size={16} />
               افزایش اعتبار
-            </Button>
-            <Button 
-              variant="accent" 
+            </AnimatedButton>
+            <AnimatedButton 
+              variant="gradient" 
               size="sm" 
               className="gap-1"
+              animation="scale"
               onClick={() => router.push("/wallet")}
             >
               <Wallet size={16} />
               شارژ کیف پول
-            </Button>
+            </AnimatedButton>
           </div>
         </div>
         
@@ -91,7 +100,7 @@ export default function DashboardPage() {
           <InfoCard 
             title="کیف پول"
             value={formatCurrency(user.walletBalance)}
-            icon={<Wallet className="h-5 w-5 text-primary" />}
+            icon={<Wallet className="h-5 w-5 text-white" />}
             trend={{ value: "+12%", isPositive: true, label: "از ماه گذشته" }}
             onClick={() => router.push("/wallet")}
           />
@@ -99,7 +108,7 @@ export default function DashboardPage() {
           <InfoCard 
             title="اعتبار"
             value={user.creditLimit ? formatCurrency(user.creditLimit) : "درخواست اعتبار"}
-            icon={<CreditCard className="h-5 w-5 text-accent" />}
+            icon={<CreditCard className="h-5 w-5 text-white" />}
             trend={user.creditLimit ? { value: "50%", isPositive: true, label: "باقیمانده" } : undefined}
             onClick={() => router.push("/credit-request")}
           />
@@ -107,95 +116,127 @@ export default function DashboardPage() {
           <InfoCard 
             title="مجموع پرداخت‌ها"
             value={formatCurrency(4500000)}
-            icon={<BarChart3 className="h-5 w-5 text-success" />}
+            icon={<BarChart3 className="h-5 w-5 text-white" />}
             trend={{ value: "-5%", isPositive: false, label: "از ماه گذشته" }}
           />
           
           <InfoCard 
             title="اقساط فعال"
             value="2 قسط"
-            icon={<Calendar className="h-5 w-5 text-secondary" />}
+            icon={<Calendar className="h-5 w-5 text-white" />}
             badge={{ label: "قسط بعدی: 3 روز دیگر", variant: "warning" }}
             onClick={() => router.push("/installments")}
           />
         </div>
         
-        {/* نمودار و تراکنش‌های اخیر */}
+        {/* بخش اقساط و کارت‌های بانکی */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {/* کارت نمودار */}
-          <Card className="col-span-1 lg:col-span-2 hover-float card-hover">
-            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+          {/* کارت اقساط فعال */}
+          <Card className="col-span-1 hover-float card-hover shadow-card overflow-hidden">
+            <div className="h-1.5 bg-gradient-to-r from-warning-400 to-warning-500"></div>
+            <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-primary" />
-                روند مصرف اعتبار
+                <Calendar className="h-5 w-5 text-warning" />
+                اقساط فعال
               </CardTitle>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="h-8">هفتگی</Button>
-                <Button variant="primary" size="sm" className="h-8">ماهانه</Button>
-                <Button variant="outline" size="sm" className="h-8">سالانه</Button>
-              </div>
             </CardHeader>
             <CardContent>
-              <div className="h-[220px] mt-3">
-                {/* نمایش نمودار ساده */}
-                <div className="relative h-full flex items-end">
-                  {MOCK_CHART_DATA.map((item, index) => {
-                    // محاسبه ارتفاع بار برای نمودار
-                    const maxAmount = Math.max(...MOCK_CHART_DATA.map(d => d.amount));
-                    const height = (item.amount / maxAmount) * 100;
-                    
-                    return (
-                      <div key={index} className="flex-1 flex flex-col items-center">
-                        <div 
-                          className={`w-full max-w-[40px] rounded-t-md ${index === 4 ? 'bg-primary' : 'bg-primary/40'}`} 
-                          style={{ height: `${height}%` }}
-                        ></div>
-                        <div className="text-xs text-secondary mt-2">{item.month}</div>
-                        <div className="text-xs font-medium mt-1">{formatCurrency(item.amount).split(" ")[0]}</div>
+              <div className="space-y-6">
+                {MOCK_REMINDERS.map((reminder) => (
+                  <div key={reminder.id} className="space-y-2">
+                    <div className="flex justify-between">
+                      <div className="font-medium">{reminder.title}</div>
+                      <div className={`${reminder.daysLeft <= 3 ? 'text-danger' : 'text-warning'} font-medium`}>
+                        {reminder.daysLeft} روز مانده
                       </div>
-                    );
-                  })}
-                  
-                  {/* خط افقی */}
-                  <div className="absolute left-0 right-0 bottom-[40px] border-t border-dashed border-border"></div>
-                </div>
+                    </div>
+                    <div className="flex justify-between text-sm text-secondary">
+                      <div>تاریخ سررسید: {reminder.date}</div>
+                      <div>{formatCurrency(reminder.amount)}</div>
+                    </div>
+                    <div className="w-full bg-secondary-light rounded-full h-2 mt-2">
+                      <div 
+                        className="bg-gradient-to-r from-warning-400 to-warning-500 h-2 rounded-full" 
+                        style={{ width: `${((30 - reminder.daysLeft) / 30) * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+                
+                <AnimatedButton variant="outline" className="w-full gap-1" animation="float" onClick={() => router.push("/installments")}>
+                  <Calendar size={16} />
+                  مشاهده همه اقساط
+                </AnimatedButton>
               </div>
             </CardContent>
           </Card>
           
-          {/* کارت تراکنش‌های اخیر */}
-          <Card className="hover-float card-hover">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Bell className="h-5 w-5 text-primary" />
-                  آخرین تراکنش‌ها
-                </div>
-                <Button variant="ghost" size="sm" className="gap-1 h-8" onClick={() => router.push("/wallet")}>
-                  مشاهده همه
-                  <ChevronRight size={16} />
-                </Button>
+          {/* کارت حساب بانکی */}
+          <Card className="col-span-1 lg:col-span-2 hover-float card-hover shadow-card overflow-hidden">
+            <div className="h-1.5 bg-gradient-to-r from-primary-300 to-primary-500"></div>
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <CreditCard className="h-5 w-5 text-primary" />
+                حساب‌های بانکی
               </CardTitle>
+              <AnimatedButton 
+                variant="ghost" 
+                size="sm" 
+                className="gap-1 h-8" 
+                animation="float"
+                onClick={() => router.push("/wallet")}
+              >
+                مدیریت حساب‌ها
+                <ChevronRight size={16} />
+              </AnimatedButton>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {MOCK_RECENT_TRANSACTIONS.map((transaction) => (
-                  <div key={transaction.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0 last:pb-0">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full ${transaction.iconBg} flex items-center justify-center`}>
-                        {transaction.icon}
-                      </div>
-                      <div>
-                        <div className="font-medium">{transaction.title}</div>
-                        <div className="text-xs text-secondary">{transaction.date}</div>
-                      </div>
-                    </div>
-                    <div className={`font-medium ${transaction.type === 'income' ? 'text-success' : 'text-danger'}`}>
-                      {transaction.type === 'income' ? '+' : '-'}
-                      {formatCurrency(transaction.amount).split(" ")[0]}
-                    </div>
+            <CardContent className="pb-6">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="md:w-1/2">
+                  <div className="mb-4">
+                    <div className="text-sm text-secondary">کارت پیش‌فرض</div>
                   </div>
-                ))}
+                  <div className="w-full max-w-sm">
+                    <BankCard 
+                      {...MOCK_BANK_CARDS[0]}
+                      /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+                      onCopy={(text, textType) => {
+                        // در اینجا می‌توانید منطق کپی کردن را قرار دهید
+                        navigator.clipboard.writeText(text);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="md:w-1/2 space-y-4">
+                  <div className="text-sm text-secondary mb-1">تراکنش‌های اخیر</div>
+                  {MOCK_RECENT_TRANSACTIONS.slice(0, 2).map((transaction) => (
+                    <div key={transaction.id} className="flex items-center justify-between border-b border-border pb-3 last:border-0 last:pb-0 hover:bg-secondary-50/50 p-2 rounded-md transition-colors">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-full ${transaction.iconBg} flex items-center justify-center shadow-sm`}>
+                          {transaction.icon}
+                        </div>
+                        <div>
+                          <div className="font-medium">{transaction.title}</div>
+                          <div className="text-xs text-secondary">{transaction.date}</div>
+                        </div>
+                      </div>
+                      <div className={`font-medium ${transaction.type === 'income' ? 'text-success' : 'text-danger'}`}>
+                        {/* eslint-disable-next-line @typescript-eslint/no-unused-vars */}
+                        {transaction.type === 'income' ? '+' : '-'}
+                        {formatCurrency(transaction.amount).split(" ")[0]}
+                      </div>
+                    </div>
+                  ))}
+                  <AnimatedButton 
+                    variant="outline" 
+                    className="w-full gap-1 mt-2" 
+                    animation="float"
+                    onClick={() => router.push("/wallet")}
+                  >
+                    <Wallet size={16} />
+                    مشاهده کیف پول
+                  </AnimatedButton>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -204,7 +245,8 @@ export default function DashboardPage() {
         {/* ویجت‌های ویژه */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* ویجت پیشنهادات ویژه */}
-          <Card className="hover-float card-hover">
+          <Card className="hover-float card-hover shadow-card overflow-hidden">
+            <div className="h-1.5 bg-gradient-to-r from-accent-400 to-accent-500"></div>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Percent className="h-5 w-5 text-accent" />
@@ -214,29 +256,30 @@ export default function DashboardPage() {
             <CardContent>
               <div className="space-y-4">
                 {MOCK_OFFERS.map((offer) => (
-                  <div key={offer.id} className="p-3 bg-secondary-light rounded-lg hover:bg-secondary-light/70 transition-colors cursor-pointer">
+                  <div key={offer.id} className="p-4 bg-secondary-light rounded-lg hover:bg-secondary-50 transition-colors cursor-pointer hover-float border border-secondary-300/20">
                     <div className="flex justify-between items-start">
                       <div>
                         <div className="font-medium">{offer.title}</div>
-                        <div className="text-sm text-secondary">{offer.store}</div>
+                        <div className="text-sm text-secondary mt-1">{offer.store}</div>
                       </div>
-                      <div className="badge badge-accent">
+                      <div className="badge badge-accent animate-pulse-soft">
                         انقضا: {offer.expiresIn}
                       </div>
                     </div>
                   </div>
                 ))}
                 
-                <Button variant="outline" className="w-full mt-2 gap-1">
+                <AnimatedButton variant="outline" className="w-full mt-2 gap-1" animation="float">
                   <Tag size={16} />
                   مشاهده همه پیشنهادات
-                </Button>
+                </AnimatedButton>
               </div>
             </CardContent>
           </Card>
           
           {/* ویجت یادآوری‌ها */}
-          <Card className="hover-float card-hover">
+          <Card className="hover-float card-hover shadow-card overflow-hidden">
+            <div className="h-1.5 bg-gradient-to-r from-warning-400 to-warning-500"></div>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Bell className="h-5 w-5 text-warning" />
@@ -246,101 +289,75 @@ export default function DashboardPage() {
             <CardContent>
               <div className="space-y-4">
                 {MOCK_REMINDERS.map((reminder) => (
-                  <div key={reminder.id} className="p-4 border border-warning/20 bg-warning/5 rounded-lg">
+                  <div key={reminder.id} className="p-4 border border-warning-200 bg-warning-50 rounded-lg hover-float shadow-sm">
                     <div className="flex justify-between items-start">
                       <div>
-                        <div className="font-medium">{reminder.title}</div>
-                        <div className="text-sm text-secondary">تاریخ: {reminder.date}</div>
-                        <div className="text-sm text-secondary mt-1">مبلغ: {formatCurrency(reminder.amount)}</div>
+                        <div className="font-medium flex items-center gap-2">
+                          <Calendar size={16} className="text-warning" />
+                          {reminder.title}
+                        </div>
+                        <div className="text-sm text-secondary mt-1">تاریخ: {reminder.date}</div>
+                        <div className="text-sm font-medium mt-2">
+                          {formatCurrency(reminder.amount)}
+                        </div>
                       </div>
-                      <div className="badge badge-warning">
+                      <div className="badge badge-warning animate-pulse-soft">
                         {reminder.daysLeft} روز مانده
                       </div>
-                    </div>
-                    <div className="mt-3">
-                      <Button variant="accent" size="sm" className="w-full gap-1">
-                        پرداخت قسط
-                      </Button>
                     </div>
                   </div>
                 ))}
                 
-                {MOCK_REMINDERS.length === 0 && (
-                  <div className="p-6 text-center">
-                    <div className="text-secondary">یادآوری فعالی وجود ندارد</div>
-                  </div>
-                )}
+                <AnimatedButton 
+                  variant="accent" 
+                  className="w-full mt-2"
+                  animation="scale"
+                  onClick={() => router.push("/installments")}
+                >
+                  مدیریت اقساط
+                </AnimatedButton>
               </div>
             </CardContent>
           </Card>
         </div>
         
-        {/* بخش خدمات */}
-        <div className="mt-4">
-          <h2 className="text-xl font-semibold mb-4">خدمات آرین پی</h2>
+        {/* سرویس‌های پرکاربرد */}
+        <div className="mt-8">
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <Zap className="h-5 w-5 text-accent" />
+            سرویس‌های پرکاربرد
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <ServiceCard
-              icon={<ShoppingBag className="h-6 w-6" />}
-              title="خرید آنلاین"
-              description="خرید از فروشگاه‌های آنلاین با استفاده از اعتبار"
-              onClick={() => router.push("/stores")}
-              gradient="gradient-bg"
-            />
-            
-            <ServiceCard
-              icon={<QrCode className="h-6 w-6" />}
+            <ServiceCard 
+              icon={<QrCode size={20} />}
               title="پرداخت با QR"
-              description="پرداخت سریع در فروشگاه‌های فیزیکی با اسکن QR کد"
+              description="پرداخت سریع با اسکن کد QR"
               onClick={() => router.push("/qr-payment")}
-              gradient="accent-gradient-bg"
+              gradient="bg-gradient-to-r from-primary-600 to-primary-500"
             />
             
-            <ServiceCard
-              icon={<PiggyBank className="h-6 w-6" />}
-              title="اقساط"
-              description="مدیریت و پرداخت اقساط خریدهای اعتباری"
+            <ServiceCard 
+              icon={<CreditCard size={20} />}
+              title="اقساط من"
+              description="مدیریت اقساط و پرداخت‌ها"
               onClick={() => router.push("/installments")}
-              gradient="bg-primary"
+              gradient="bg-gradient-to-r from-accent-600 to-accent-500"
             />
             
-            <ServiceCard
-              icon={<CreditCard className="h-6 w-6" />}
-              title="درخواست اعتبار"
-              description="افزایش یا درخواست اعتبار جدید"
-              onClick={() => router.push("/credit-request")}
-              gradient="bg-secondary"
+            <ServiceCard 
+              icon={<ShoppingBag size={20} />}
+              title="فروشگاه‌ها"
+              description="مشاهده فروشگاه‌های طرف قرارداد"
+              onClick={() => router.push("/stores")}
+              gradient="bg-gradient-to-r from-success-600 to-success-500"
             />
             
-            <ServiceCard
-              icon={<ShoppingBag className="h-6 w-6" />}
-              title="فروشگاه‌های حضوری"
-              description="مشاهده فروشگاه‌های فیزیکی نزدیک شما"
-              onClick={() => router.push("/stores?tab=physical")}
-              gradient="bg-accent"
-            />
-            
-            <ServiceCard
-              icon={<Bell className="h-6 w-6" />}
-              title="اعلان‌ها و یادآوری‌ها"
-              description="مدیریت اعلان‌ها و یادآوری‌های مهم"
-              onClick={() => router.push("/notifications")}
-              gradient="bg-warning"
-            />
-            
-            <ServiceCard
-              icon={<BarChart3 className="h-6 w-6" />}
-              title="تاریخچه تراکنش‌ها"
-              description="مشاهده و مدیریت تمامی تراکنش‌های شما"
-              onClick={() => router.push("/transactions")}
-              gradient="bg-success"
-            />
-            
-            <ServiceCard
-              icon={<User className="h-6 w-6" />}
-              title="پروفایل"
-              description="مشاهده و ویرایش اطلاعات شخصی"
+            <ServiceCard 
+              icon={<User size={20} />}
+              title="پروفایل من"
+              description="مدیریت اطلاعات شخصی"
               onClick={() => router.push("/profile")}
-              gradient="gradient-elegant"
+              gradient="bg-gradient-to-r from-classic-blue-700 to-classic-blue-600"
             />
           </div>
         </div>
@@ -504,26 +521,40 @@ interface InfoCardProps {
 
 function InfoCard({ title, value, icon, trend, badge, onClick }: InfoCardProps) {
   return (
-    <Card className={`hover-float ${onClick ? 'cursor-pointer' : ''} card-hover`} onClick={onClick}>
+    <Card 
+      className={`hover-float card-hover transition-all duration-300 ${onClick ? 'cursor-pointer' : ''}`}
+      onClick={onClick}
+    >
       <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="p-2 rounded-full bg-primary-light">{icon}</div>
+        <div className="flex items-center justify-between">
+          <div className="w-10 h-10 rounded-full gradient-bg flex items-center justify-center shadow-soft animate-pulse-soft">
+            {icon}
+          </div>
+          
           {badge && (
-            <div className={`badge badge-${badge.variant}`}>
+            <div className={`badge badge-${badge.variant} animate-pulse-soft`}>
               {badge.label}
             </div>
           )}
         </div>
-        <div className="space-y-1">
+        
+        <div className="mt-3">
           <p className="text-sm text-secondary">{title}</p>
-          <p className="text-2xl font-bold">{value}</p>
+          <h3 className="text-xl font-bold mt-1">{value}</h3>
+          
           {trend && (
-            <div className="flex items-center text-xs">
-              <span className={trend.isPositive ? "text-success flex items-center" : "text-danger flex items-center"}>
-                {trend.isPositive ? <ArrowUpRight size={12} className="mr-1" /> : <ArrowDownRight size={12} className="mr-1" />}
+            <div className="flex items-center mt-2">
+              <div className={`text-xs font-medium flex items-center gap-1 
+                ${trend.isPositive ? 'text-success' : 'text-danger'}`}
+              >
+                {trend.isPositive ? (
+                  <ArrowUpRight size={14} />
+                ) : (
+                  <ArrowDownRight size={14} />
+                )}
                 {trend.value}
-              </span>
-              <span className="text-secondary mr-1">{trend.label}</span>
+              </div>
+              <span className="text-xs text-secondary mr-1">{trend.label}</span>
             </div>
           )}
         </div>
@@ -542,15 +573,16 @@ interface ServiceCardProps {
 
 function ServiceCard({ icon, title, description, onClick, gradient }: ServiceCardProps) {
   return (
-    <Card className="hover-scale cursor-pointer card-hover" onClick={onClick}>
-      <CardContent className="p-6 flex flex-col items-center text-center">
-        <div className={`p-3 rounded-full ${gradient} text-white mb-4`}>
-          {icon}
-        </div>
-        <h3 className="font-medium mb-1">{title}</h3>
-        <p className="text-xs text-secondary">{description}</p>
-      </CardContent>
-    </Card>
+    <div 
+      className="feature-card hover-float cursor-pointer"
+      onClick={onClick}
+    >
+      <div className={`feature-icon ${gradient}`}>
+        {icon}
+      </div>
+      <h3 className="font-medium">{title}</h3>
+      <p className="text-sm text-secondary mt-1">{description}</p>
+    </div>
   );
 }
 
@@ -563,17 +595,16 @@ interface ExpenseCategoryItemProps {
 
 function ExpenseCategoryItem({ category, amount, percentage, color }: ExpenseCategoryItemProps) {
   return (
-    <div className="flex items-start gap-2">
-      <div className={`w-3 h-3 rounded-full ${color} mt-1.5`}></div>
-      <div className="flex-1">
-        <div className="flex justify-between">
-          <span className="text-sm font-medium">{category}</span>
-          <span className="text-sm">{percentage}%</span>
-        </div>
-        <p className="text-xs text-secondary">{amount} تومان</p>
-        <div className="w-full bg-secondary-light rounded-full h-1.5 mt-1">
-          <div className={`h-1.5 rounded-full ${color.replace('light', '')}`} style={{ width: `${percentage}%` }}></div>
-        </div>
+    <div className="mb-3">
+      <div className="flex justify-between items-center mb-1.5">
+        <span className="text-sm font-medium">{category}</span>
+        <span className="text-sm">{amount}</span>
+      </div>
+      <div className="w-full h-2 bg-secondary-100 rounded-full overflow-hidden">
+        <div 
+          className={`h-full rounded-full ${color}`} 
+          style={{ width: `${percentage}%` }}
+        ></div>
       </div>
     </div>
   );
@@ -588,15 +619,16 @@ interface ComparisonStatProps {
 
 function ComparisonStat({ title, current, isPositive, percentChange }: ComparisonStatProps) {
   return (
-    <div className="p-3 bg-secondary-light rounded-lg">
-      <p className="text-xs text-secondary mb-1">{title}</p>
-      <p className="font-medium">{current}</p>
-      <div className="flex items-center mt-1 text-xs">
-        <span className={isPositive ? "text-success flex items-center" : "text-danger flex items-center"}>
-          {isPositive ? <ArrowDownRight size={12} className="mr-1" /> : <ArrowUpRight size={12} className="mr-1" />}
+    <div className="flex flex-col">
+      <span className="text-sm text-secondary">{title}</span>
+      <div className="flex items-center mt-1">
+        <span className="text-lg font-bold">{current}</span>
+        <div className={`text-xs ml-2 px-1.5 py-0.5 rounded-md flex items-center ${
+          isPositive ? 'bg-success-light/30 text-success' : 'bg-danger-light/30 text-danger'
+        }`}>
+          {isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
           {percentChange}
-        </span>
-        <span className="text-secondary mr-1">از ماه قبل</span>
+        </div>
       </div>
     </div>
   );

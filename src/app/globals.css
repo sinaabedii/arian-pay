@@ -7,23 +7,83 @@
   --primary: #1A3C69;
   --primary-hover: #15325A;
   --primary-light: #E6EBF4;
+  --primary-50: #E6EBF4;
+  --primary-100: #CCD7E9;
+  --primary-200: #99AFD3;
+  --primary-300: #6687BE;
+  --primary-400: #3A5FA8;
+  --primary-500: #1A3C69;
+  --primary-600: #163054;
+  --primary-700: #122540;
+  --primary-800: #0D192B;
+  --primary-900: #090E17;
   
   --secondary: #f4f1ec;
   --secondary-hover: #e9e4db;
   --secondary-light: #faf8f5;
+  --secondary-50: #faf8f5;
+  --secondary-100: #f4f1ec;
+  --secondary-200: #e9e4db;
+  --secondary-300: #ded6ca;
+  --secondary-400: #d2c9b8;
+  --secondary-500: #c7bba7;
+  --secondary-600: #bbae95;
+  --secondary-700: #b0a184;
+  --secondary-800: #a59372;
+  --secondary-900: #9a8561;
   
   --accent: #f59e0b;
   --accent-hover: #d97706;
   --accent-light: #fef3c7;
+  --accent-50: #fffbeb;
+  --accent-100: #fef3c7;
+  --accent-200: #fde68a;
+  --accent-300: #fcd34d;
+  --accent-400: #fbbf24;
+  --accent-500: #f59e0b;
+  --accent-600: #d97706;
+  --accent-700: #b45309;
+  --accent-800: #92400e;
+  --accent-900: #78350f;
   
   --success: #10b981;
   --success-light: #d1fae5;
+  --success-50: #ecfdf5;
+  --success-100: #d1fae5;
+  --success-200: #a7f3d0;
+  --success-300: #6ee7b7;
+  --success-400: #34d399;
+  --success-500: #10b981;
+  --success-600: #059669;
+  --success-700: #047857;
+  --success-800: #065f46;
+  --success-900: #064e3b;
   
   --warning: #f59e0b;
   --warning-light: #fef3c7;
+  --warning-50: #fffbeb;
+  --warning-100: #fef3c7;
+  --warning-200: #fde68a;
+  --warning-300: #fcd34d;
+  --warning-400: #fbbf24;
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  --warning-700: #b45309;
+  --warning-800: #92400e;
+  --warning-900: #78350f;
   
   --danger: #ef4444;
   --danger-light: #fee2e2;
+  --danger-50: #fef2f2;
+  --danger-100: #fee2e2;
+  --danger-200: #fecaca;
+  --danger-300: #fca5a5;
+  --danger-400: #f87171;
+  --danger-500: #ef4444;
+  --danger-600: #dc2626;
+  --danger-700: #b91c1c;
+  --danger-800: #991b1b;
+  --danger-900: #7f1d1d;
   
   --background: #faf8f5;
   --foreground: #1A3C69;
@@ -38,11 +98,30 @@
   
   --radius: 0.75rem;
 
+  /* سایه های زیبا */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  
+  /* سایه های خاص */
+  --shadow-soft: 0 4px 20px rgba(26, 60, 105, 0.08);
+  --shadow-card: 0 4px 25px rgba(26, 60, 105, 0.1);
+  --shadow-button: 0 4px 10px rgba(26, 60, 105, 0.15);
+
   /* گرادیان‌های جذاب */
   --gradient-primary: linear-gradient(135deg, #1A3C69 0%, #2A4E80 100%);
   --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fb7185 100%);
   --gradient-elegant: linear-gradient(135deg, #1A3C69 0%, #f4f1ec 100%);
   --gradient-light: linear-gradient(135deg, #f4f1ec 0%, #ffffff 100%);
+
+  /* ویژگی‌های مورد نیاز برای کارت بانکی */
+  --perspective: 1000px;
+  --rotate-y-180: rotateY(180deg);
+  --backface-visibility-hidden: hidden;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -50,14 +129,44 @@
     --primary: #2A4E80;
     --primary-hover: #3A5E90;
     --primary-light: #172A45;
+    --primary-50: #172A45;
+    --primary-100: #1e365a;
+    --primary-200: #254270;
+    --primary-300: #2d4e85;
+    --primary-400: #345a9a;
+    --primary-500: #2A4E80;
+    --primary-600: #3A5E90;
+    --primary-700: #3d679c;
+    --primary-800: #3e6daa;
+    --primary-900: #3e74b5;
     
     --secondary: #e9e4db;
     --secondary-hover: #f4f1ec;
     --secondary-light: #262421;
+    --secondary-50: #262421;
+    --secondary-100: #2e2c28;
+    --secondary-200: #38352f;
+    --secondary-300: #423e37;
+    --secondary-400: #4c473f;
+    --secondary-500: #e9e4db;
+    --secondary-600: #f4f1ec;
+    --secondary-700: #f8f6f2;
+    --secondary-800: #fbf9f7;
+    --secondary-900: #fefefe;
     
     --accent: #fbbf24;
     --accent-hover: #f59e0b;
     --accent-light: #3f3822;
+    --accent-50: #3f3822;
+    --accent-100: #4a4228;
+    --accent-200: #564c2e;
+    --accent-300: #625635;
+    --accent-400: #6e603b;
+    --accent-500: #fbbf24;
+    --accent-600: #f59e0b;
+    --accent-700: #d97706;
+    --accent-800: #b45309;
+    --accent-900: #92400e;
     
     --background: #0f172a;
     --foreground: #f8fafc;
@@ -70,14 +179,57 @@
     
     --success: #10b981;
     --success-light: #064e3b;
+    --success-50: #064e3b;
+    --success-100: #065f46;
+    --success-200: #047857;
+    --success-300: #059669;
+    --success-400: #10b981;
+    --success-500: #10b981;
+    --success-600: #34d399;
+    --success-700: #6ee7b7;
+    --success-800: #a7f3d0;
+    --success-900: #d1fae5;
     
     --warning: #f59e0b;
     --warning-light: #78350f;
+    --warning-50: #78350f;
+    --warning-100: #92400e;
+    --warning-200: #b45309;
+    --warning-300: #d97706;
+    --warning-400: #f59e0b;
+    --warning-500: #f59e0b;
+    --warning-600: #fbbf24;
+    --warning-700: #fcd34d;
+    --warning-800: #fde68a;
+    --warning-900: #fef3c7;
     
     --danger: #ef4444;
     --danger-light: #7f1d1d;
+    --danger-50: #7f1d1d;
+    --danger-100: #991b1b;
+    --danger-200: #b91c1c;
+    --danger-300: #dc2626;
+    --danger-400: #ef4444;
+    --danger-500: #ef4444;
+    --danger-600: #f87171;
+    --danger-700: #fca5a5;
+    --danger-800: #fecaca;
+    --danger-900: #fee2e2;
     
     --ring: rgba(42, 78, 128, 0.3);
+    
+    /* سایه های تاریک */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+    --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.2);
+    --shadow-card: 0 4px 25px rgba(0, 0, 0, 0.25);
+    --shadow-button: 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -97,18 +249,21 @@ body {
   font-family: "IranSansX";
   font-weight: 400;
   src: url("/fonts/iransansx-regular.woff") format("woff");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "IranSansX";
   font-weight: 300;
   src: url("/fonts/iransansx-light.woff") format("woff");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "IranSansX";
   font-weight: 700;
   src: url("/fonts/iransansx-bold.woff") format("woff");
+  font-display: swap;
 }
 
 :root {
@@ -160,6 +315,34 @@ body {
     @apply transform -translate-y-1;
   }
   
+  .hover-glow {
+    @apply transition-all duration-300;
+  }
+  
+  .hover-glow:hover {
+    @apply shadow-lg brightness-105;
+  }
+  
+  .hover-bright {
+    @apply transition-all duration-300;
+  }
+  
+  .hover-bright:hover {
+    @apply brightness-110;
+  }
+  
+  .hover-shadow {
+    @apply transition-shadow duration-300;
+  }
+  
+  .hover-shadow:hover {
+    @apply shadow-md;
+  }
+  
+  .text-link {
+    @apply text-primary underline-offset-4 hover:underline transition-all duration-300;
+  }
+  
   .section-light {
     @apply bg-secondary-light;
   }
@@ -171,6 +354,127 @@ body {
   .section-white {
     @apply bg-white;
   }
+  
+  /* اثرات سه بعدی برای کارت بانکی */
+  .perspective {
+    perspective: var(--perspective);
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
+  .backface-hidden {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  
+  /* انیمیشن پالس نرم برای دکمه‌ها و آیکون‌ها */
+  .animate-pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulse-soft {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  
+  /* انیمیشن fade-in برای عناصر */
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* انیمیشن‌های slide برای عناصر */
+  .animate-slide-in-left {
+    animation: slide-in-left 0.5s ease-out forwards;
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 0.5s ease-out forwards;
+  }
+  
+  .animate-slide-in-bottom {
+    animation: slide-in-bottom 0.5s ease-out forwards;
+  }
+  
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-in-bottom {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* اثر Copy Feedback */
+  .copy-success {
+    position: relative;
+  }
+  
+  .copy-success::after {
+    content: "کپی شد!";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--success);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    animation: fade-out 2s forwards;
+    white-space: nowrap;
+  }
+  
+  @keyframes fade-out {
+    0%, 70% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 }
 
 @layer components {
@@ -179,8 +483,9 @@ body {
   }
   
   .btn {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors 
-    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-300
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50
+    shadow-button hover:shadow-lg active:shadow-md;
   }
   
   .btn-primary {
@@ -212,15 +517,15 @@ body {
   }
   
   .btn-danger {
-    @apply bg-danger text-white hover:bg-danger hover:opacity-90;
+    @apply bg-danger text-white hover:bg-danger-600 hover:opacity-90;
   }
   
   .btn-success {
-    @apply bg-success text-white hover:bg-success hover:opacity-90;
+    @apply bg-success text-white hover:bg-success-600 hover:opacity-90;
   }
   
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:border-classic-blue;
+    @apply transition-all duration-300 hover:shadow-card hover:border-classic-blue;
   }
   
   .glass-effect {
@@ -230,17 +535,17 @@ body {
   .input {
     @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm 
     ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium 
-    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring 
-    disabled:cursor-not-allowed disabled:opacity-50;
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-primary
+    disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-300;
   }
   
   /* کارت‌های ویژه */
   .feature-card {
-    @apply p-6 rounded-xl border border-border bg-card shadow-sm hover-float card-hover;
+    @apply p-6 rounded-xl border border-border bg-card shadow-card hover-float card-hover;
   }
   
   .feature-icon {
-    @apply w-12 h-12 rounded-full flex items-center justify-center text-white mb-4;
+    @apply w-12 h-12 rounded-full flex items-center justify-center text-white mb-4 gradient-bg;
   }
   
   /* بج‌ها */
@@ -249,60 +554,119 @@ body {
   }
   
   .badge-primary {
-    @apply bg-primary-light text-classic-blue;
+    @apply bg-primary text-white;
   }
   
   .badge-secondary {
-    @apply bg-secondary-light text-classic-blue;
+    @apply bg-secondary text-primary;
   }
   
   .badge-accent {
-    @apply bg-accent-light text-accent;
+    @apply bg-accent text-white;
   }
   
   .badge-success {
-    @apply bg-success-light text-success;
+    @apply bg-success-500 text-white;
   }
   
   .badge-warning {
-    @apply bg-warning-light text-warning;
+    @apply bg-warning-500 text-white;
   }
   
   .badge-danger {
-    @apply bg-danger-light text-danger;
+    @apply bg-danger-500 text-white;
+  }
+  
+  /* کارت های جدید */
+  .panel-card {
+    @apply rounded-xl bg-card border border-border shadow-card p-6 transition-all duration-300;
+  }
+  
+  .panel-card:hover {
+    @apply shadow-lg border-primary-200;
+  }
+  
+  /* دکمه های آیکون دار */
+  .btn-icon {
+    @apply inline-flex items-center justify-center p-2 rounded-full transition-all duration-300 hover:bg-secondary-light;
   }
 }
 
-/* استایل برای placeholder */
 ::placeholder {
   color: var(--placeholder);
+  opacity: 1;
 }
 
-/* Leaflet Styles */
 .leaflet-container {
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 10;
 }
 
 .store-marker {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--primary);
-  color: white;
-  border: 2px solid white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+.store-marker:hover {
+  transform: scale(1.05);
 }
 
 .store-marker-icon {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  box-shadow: var(--shadow-md);
 }
 
 .store-popup {
-  min-width: 200px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Loader animation */
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid var(--primary-light);
+  border-bottom-color: var(--primary);
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scrollbar style */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--secondary-light);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-300);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-400);
 }

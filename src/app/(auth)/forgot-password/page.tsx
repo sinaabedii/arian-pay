@@ -47,7 +47,7 @@ export default function ForgotPasswordPage() {
     <div className="flex items-center justify-center min-h-screen px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary">آرین پی</h1>
+          <h1 className="text-3xl font-bold text-primary">سعید پی </h1>
           <p className="mt-2 text-secondary">سامانه پرداخت اعتباری</p>
         </div>
         

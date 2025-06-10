@@ -49,7 +49,7 @@ export default function ContactPage() {
       <header className="border-b border-border">
         <div className="container py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-primary">آرین پی</h1>
+            <h1 className="text-2xl font-bold text-primary">سعید پی </h1>
           </div>
           <div className="flex items-center gap-4">
             <Link 
@@ -186,7 +186,7 @@ export default function ContactPage() {
         <div className="container">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <h3 className="text-xl font-bold text-primary">آرین پی</h3>
+              <h3 className="text-xl font-bold text-primary">سعید پی </h3>
               <p className="text-sm text-secondary mt-1">سامانه پرداخت اعتباری</p>
             </div>
             <div className="flex gap-6">
@@ -202,7 +202,7 @@ export default function ContactPage() {
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-border text-center text-sm text-secondary">
-            © {new Date().getFullYear()} آرین پی. تمامی حقوق محفوظ است.
+            © {new Date().getFullYear()} سعید پی . تمامی حقوق محفوظ است.
           </div>
         </div>
       </footer>

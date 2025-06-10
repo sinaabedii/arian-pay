@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CreditCard, ArrowRight, Shield, Sparkles, Star, Clock, CreditCardIcon, WalletIcon, MapIcon, UsersIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PaymentAnimation, SuccessAnimation, ScanPaperAnimation } from "@/components/ui/animation";
 
 export default function HomePage() {
   return (
@@ -12,7 +13,7 @@ export default function HomePage() {
             <div className="gradient-bg w-8 h-8 rounded-md flex items-center justify-center">
               <CreditCardIcon className="h-5 w-5 text-white" />
             </div>
-            <h1 className="text-2xl font-bold gradient-text">آرین پی</h1>
+            <h1 className="text-2xl font-bold gradient-text">سعید پی </h1>
           </div>
           <div className="flex items-center gap-4">
             <Link 
@@ -39,52 +40,61 @@ export default function HomePage() {
           </div>
           
           <div className="container">
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-block mb-4">
-                <span className="badge badge-primary py-1 px-3">
-                  <Sparkles className="h-3.5 w-3.5 mr-1" />
-                  <span>راه‌حل جدید پرداخت اقساطی</span>
-                </span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                <span className="gradient-text">خرید اقساطی هوشمند</span>
-                <br />
-                <span>با آرین پی</span>
-              </h2>
-              <p className="mt-6 text-lg text-primary/80 md:text-xl">
-                بدون نیاز به چک و ضامن، با احراز هویت آنلاین در کمتر از ۱۰ دقیقه اعتبار بگیرید و از هزاران فروشگاه آنلاین و حضوری خرید اقساطی کنید.
-              </p>
-              <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/register">
-                  <Button variant="gradient" size="lg" className="w-full sm:w-auto hover-scale">
-                    <span>ثبت‌نام رایگان</span>
-                    <ArrowRight className="mr-2 h-5 w-5" />
-                  </Button>
-                </Link>
-                <Link href="/stores">
-                  <Button variant="light" size="lg" className="w-full sm:w-auto hover-float">
-                    فروشگاه‌های طرف قرارداد
-                  </Button>
-                </Link>
+            <div className="flex flex-col-reverse lg:flex-row items-center gap-8">
+              <div className="lg:w-1/2 text-center lg:text-right animate-fade-in">
+                <div className="inline-block mb-4">
+                  <span className="badge badge-primary py-1 px-3">
+                    <Sparkles className="h-3.5 w-3.5 mr-1" />
+                    <span>راه‌حل جدید پرداخت اقساطی</span>
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-bold mb-4 animate-slide-in-bottom" style={{animationDelay: '0.1s'}}>
+                  <span className="gradient-text">خرید اقساطی هوشمند</span>
+                  <br />
+                  <span>با سعید پی </span>
+                </h2>
+                <p className="mt-6 text-lg text-primary/80 md:text-xl animate-slide-in-bottom" style={{animationDelay: '0.2s'}}>
+                  بدون نیاز به چک و ضامن، با احراز هویت آنلاین در کمتر از ۱۰ دقیقه اعتبار بگیرید و از هزاران فروشگاه آنلاین و حضوری خرید اقساطی کنید.
+                </p>
+                <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-in-bottom" style={{animationDelay: '0.3s'}}>
+                  <Link href="/register">
+                    <Button variant="gradient" size="lg" className="w-full sm:w-auto hover-scale">
+                      <span>ثبت‌نام رایگان</span>
+                      <ArrowRight className="mr-2 h-5 w-5" />
+                    </Button>
+                  </Link>
+                  <Link href="/stores">
+                    <Button variant="light" size="lg" className="w-full sm:w-auto hover-float">
+                      فروشگاه‌های طرف قرارداد
+                    </Button>
+                  </Link>
+                </div>
+                
+                {/* آمار */}
+                <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 animate-slide-in-bottom" style={{animationDelay: '0.4s'}}>
+                  <div className="hover-float">
+                    <p className="text-3xl font-bold gradient-text">+۵۰۰</p>
+                    <p className="text-primary/70">فروشگاه طرف قرارداد</p>
+                  </div>
+                  <div className="hover-float">
+                    <p className="text-3xl font-bold gradient-text">+۵۰,۰۰۰</p>
+                    <p className="text-primary/70">کاربر فعال</p>
+                  </div>
+                  <div className="hover-float">
+                    <p className="text-3xl font-bold gradient-text">۹۸٪</p>
+                    <p className="text-primary/70">رضایت مشتریان</p>
+                  </div>
+                  <div className="hover-float">
+                    <p className="text-3xl font-bold gradient-text">۱۰ دقیقه</p>
+                    <p className="text-primary/70">فعالسازی اعتبار</p>
+                  </div>
+                </div>
               </div>
               
-              {/* آمار */}
-              <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="hover-float">
-                  <p className="text-3xl font-bold gradient-text">+۵۰۰</p>
-                  <p className="text-primary/70">فروشگاه طرف قرارداد</p>
-                </div>
-                <div className="hover-float">
-                  <p className="text-3xl font-bold gradient-text">+۵۰,۰۰۰</p>
-                  <p className="text-primary/70">کاربر فعال</p>
-                </div>
-                <div className="hover-float">
-                  <p className="text-3xl font-bold gradient-text">۹۸٪</p>
-                  <p className="text-primary/70">رضایت مشتریان</p>
-                </div>
-                <div className="hover-float">
-                  <p className="text-3xl font-bold gradient-text">۱۰ دقیقه</p>
-                  <p className="text-primary/70">فعالسازی اعتبار</p>
+              {/* انیمیشن پرداخت */}
+              <div className="lg:w-1/2 flex justify-center animate-fade-in">
+                <div className="w-full max-w-md h-96">
+                  <PaymentAnimation className="w-full h-full" />
                 </div>
               </div>
             </div>
@@ -95,8 +105,8 @@ export default function HomePage() {
         <section className="py-16 section-white">
           <div className="container">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">چرا آرین پی؟</h2>
-              <p className="text-primary/70 max-w-2xl mx-auto">سیستم پرداخت اعتباری هوشمند آرین پی مزایای بی‌نظیری را برای خریداران و فروشندگان فراهم می‌کند</p>
+              <h2 className="text-3xl font-bold mb-4">چرا سعید پی ؟</h2>
+              <p className="text-primary/70 max-w-2xl mx-auto">سیستم پرداخت اعتباری هوشمند سعید پی  مزایای بی‌نظیری را برای خریداران و فروشندگان فراهم می‌کند</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -146,53 +156,61 @@ export default function HomePage() {
           
           <div className="container">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">نحوه کار آرین پی</h2>
-              <p className="text-primary/70 max-w-2xl mx-auto">در سه گام ساده، اعتبار خود را دریافت کنید و از خرید اقساطی لذت ببرید</p>
+              <h2 className="text-3xl font-bold mb-4 animate-fade-in">نحوه کار سعید پی </h2>
+              <p className="text-primary/70 max-w-2xl mx-auto animate-fade-in" style={{animationDelay: '0.1s'}}>در سه گام ساده، اعتبار خود را دریافت کنید و از خرید اقساطی لذت ببرید</p>
             </div>
             
-            <div className="max-w-3xl mx-auto">
-              <div className="relative">
-                {/* خط زمانی */}
-                <div className="absolute top-0 bottom-0 left-0 right-0 md:left-1/2 md:right-auto w-0.5 h-full bg-primary/20 md:translate-x-0 -translate-x-1/2 z-0"></div>
-                
-                <div className="space-y-12">
-                  <div className="relative z-10">
-                    <HowItWorksStep 
-                      number={1}
-                      title="ثبت‌نام و احراز هویت"
-                      description="در آرین پی ثبت‌نام کنید، اطلاعات هویتی خود را وارد کنید و فرآیند احراز هویت آنلاین را تکمیل نمایید."
-                      icon={<UsersIcon className="h-6 w-6" />}
-                    />
-                  </div>
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="md:w-1/2">
+                <div className="relative">
+                  {/* خط زمانی */}
+                  <div className="absolute top-0 bottom-0 left-0 right-0 md:left-1/2 md:right-auto w-0.5 h-full bg-primary/20 md:translate-x-0 -translate-x-1/2 z-0"></div>
                   
-                  <div className="relative z-10">
-                    <HowItWorksStep 
-                      number={2}
-                      title="دریافت اعتبار"
-                      description="پس از تأیید، اعتبار خود را به صورت آنی دریافت کنید و سقف اعتبار شما مشخص می‌شود."
-                      icon={<CreditCard className="h-6 w-6" />}
-                      reverse
-                    />
-                  </div>
-                  
-                  <div className="relative z-10">
-                    <HowItWorksStep 
-                      number={3}
-                      title="خرید اقساطی"
-                      description="از فروشگاه‌های طرف قرارداد به صورت آنلاین یا حضوری خرید کنید و هزینه را به صورت اقساطی پرداخت نمایید."
-                      icon={<WalletIcon className="h-6 w-6" />}
-                    />
+                  <div className="space-y-12">
+                    <div className="relative z-10">
+                      <HowItWorksStep 
+                        number={1}
+                        title="ثبت‌نام و احراز هویت"
+                        description="در سعید پی  ثبت‌نام کنید، اطلاعات هویتی خود را وارد کنید و فرآیند احراز هویت آنلاین را تکمیل نمایید."
+                        icon={<UsersIcon className="h-6 w-6" />}
+                      />
+                    </div>
+                    
+                    <div className="relative z-10">
+                      <HowItWorksStep 
+                        number={2}
+                        title="دریافت اعتبار"
+                        description="پس از تأیید، اعتبار خود را به صورت آنی دریافت کنید و سقف اعتبار شما مشخص می‌شود."
+                        icon={<CreditCard className="h-6 w-6" />}
+                        reverse
+                      />
+                    </div>
+                    
+                    <div className="relative z-10">
+                      <HowItWorksStep 
+                        number={3}
+                        title="خرید اقساطی"
+                        description="از فروشگاه‌های طرف قرارداد به صورت آنلاین یا حضوری خرید کنید و هزینه را به صورت اقساطی پرداخت نمایید."
+                        icon={<WalletIcon className="h-6 w-6" />}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
               
-              <div className="mt-12 text-center">
-                <Link href="/register">
-                  <Button variant="primary" className="hover-scale">
-                    همین حالا شروع کنید
-                  </Button>
-                </Link>
+              <div className="md:w-1/2 mt-12 md:mt-0 flex justify-center">
+                <div className="w-full max-w-md h-96">
+                  <SuccessAnimation className="w-full h-full" />
+                </div>
               </div>
+            </div>
+            
+            <div className="mt-12 text-center animate-fade-in" style={{animationDelay: '0.4s'}}>
+              <Link href="/register">
+                <Button variant="primary" className="hover-scale">
+                  همین حالا شروع کنید
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
@@ -201,34 +219,44 @@ export default function HomePage() {
         <section className="py-16 section-cream">
           <div className="container">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">قابلیت‌های ویژه آرین پی</h2>
-              <p className="text-primary/70 max-w-2xl mx-auto">با امکانات متنوع و هوشمند آرین پی، تجربه خرید اقساطی را به سطح جدیدی ببرید</p>
+              <h2 className="text-3xl font-bold mb-4 animate-fade-in">قابلیت‌های ویژه سعید پی </h2>
+              <p className="text-primary/70 max-w-2xl mx-auto animate-fade-in" style={{animationDelay: '0.1s'}}>با امکانات متنوع و هوشمند سعید پی ، تجربه خرید اقساطی را به سطح جدیدی ببرید</p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <FeatureCard 
-                title="کیف پول هوشمند" 
-                description="مدیریت موجودی، اقساط و تراکنش‌ها در یک کیف پول دیجیتال یکپارچه"
-                icon={<WalletIcon />}
-              />
+            <div className="flex flex-col-reverse lg:flex-row items-center gap-12 mb-16">
+              <div className="lg:w-1/2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FeatureCard 
+                    title="کیف پول هوشمند" 
+                    description="مدیریت موجودی، اقساط و تراکنش‌ها در یک کیف پول دیجیتال یکپارچه"
+                    icon={<WalletIcon />}
+                  />
+                  
+                  <FeatureCard 
+                    title="افزایش اعتبار" 
+                    description="با بازپرداخت به موقع اقساط، سقف اعتبار خود را تا ۵۰ میلیون تومان افزایش دهید"
+                    icon={<ArrowRight />}
+                  />
+                  
+                  <FeatureCard 
+                    title="پرداخت با QR" 
+                    description="در فروشگاه‌های فیزیکی با اسکن کد QR به سرعت خرید اقساطی انجام دهید"
+                    icon={<Sparkles />}
+                  />
+                  
+                  <FeatureCard 
+                    title="فروشگاه‌های نزدیک" 
+                    description="با نقشه هوشمند، نزدیک‌ترین فروشگاه‌های طرف قرارداد را پیدا کنید"
+                    icon={<MapIcon />}
+                  />
+                </div>
+              </div>
               
-              <FeatureCard 
-                title="افزایش اعتبار" 
-                description="با بازپرداخت به موقع اقساط، سقف اعتبار خود را تا ۵۰ میلیون تومان افزایش دهید"
-                icon={<ArrowRight />}
-              />
-              
-              <FeatureCard 
-                title="پرداخت با QR" 
-                description="در فروشگاه‌های فیزیکی با اسکن کد QR به سرعت خرید اقساطی انجام دهید"
-                icon={<Sparkles />}
-              />
-              
-              <FeatureCard 
-                title="فروشگاه‌های نزدیک" 
-                description="با نقشه هوشمند، نزدیک‌ترین فروشگاه‌های طرف قرارداد را پیدا کنید"
-                icon={<MapIcon />}
-              />
+              <div className="lg:w-1/2 flex justify-center animate-fade-in">
+                <div className="w-full max-w-md h-96">
+                  <ScanPaperAnimation className="w-full h-full" loop={true} />
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -238,28 +266,28 @@ export default function HomePage() {
           <div className="container">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">نظرات کاربران</h2>
-              <p className="text-primary/70 max-w-2xl mx-auto">آنچه مشتریان درباره تجربه استفاده از آرین پی می‌گویند</p>
+              <p className="text-primary/70 max-w-2xl mx-auto">آنچه مشتریان درباره تجربه استفاده از سعید پی  می‌گویند</p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <TestimonialCard 
                 name="علی محمدی"
-                title="کاربر آرین پی"
-                testimonial="با آرین پی توانستم بدون دردسر ضامن و چک، لپ‌تاپ مورد نیازم را به صورت اقساطی تهیه کنم. فرآیند احراز هویت بسیار سریع بود و کمتر از ۱۰ دقیقه اعتبارم فعال شد."
+                title="کاربر سعید پی "
+                testimonial="با سعید پی  توانستم بدون دردسر ضامن و چک، لپ‌تاپ مورد نیازم را به صورت اقساطی تهیه کنم. فرآیند احراز هویت بسیار سریع بود و کمتر از ۱۰ دقیقه اعتبارم فعال شد."
                 rating={5}
               />
               
               <TestimonialCard 
                 name="مریم حسینی"
                 title="صاحب فروشگاه"
-                testimonial="به عنوان یک فروشگاه طرف قرارداد، آرین پی به ما کمک کرد تا فروش محصولاتمان را افزایش دهیم. مشتریان از امکان خرید اقساطی بدون پیچیدگی استقبال کرده‌اند."
+                testimonial="به عنوان یک فروشگاه طرف قرارداد، سعید پی  به ما کمک کرد تا فروش محصولاتمان را افزایش دهیم. مشتریان از امکان خرید اقساطی بدون پیچیدگی استقبال کرده‌اند."
                 rating={5}
               />
               
               <TestimonialCard 
                 name="محمد رضایی"
-                title="کاربر آرین پی"
-                testimonial="کیف پول دیجیتال آرین پی واقعاً کاربردی است. می‌توانم به راحتی اقساط را مدیریت کنم و از وضعیت اعتبارم مطلع باشم. رابط کاربری ساده و کاربرپسند است."
+                title="کاربر سعید پی "
+                testimonial="کیف پول دیجیتال سعید پی  واقعاً کاربردی است. می‌توانم به راحتی اقساط را مدیریت کنم و از وضعیت اعتبارم مطلع باشم. رابط کاربری ساده و کاربرپسند است."
                 rating={4}
               />
             </div>
@@ -270,7 +298,7 @@ export default function HomePage() {
         <section className="py-16 bg-primary text-white">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-6">همین امروز به جمع کاربران آرین پی بپیوندید</h2>
+              <h2 className="text-3xl font-bold mb-6">همین امروز به جمع کاربران سعید پی  بپیوندید</h2>
               <p className="mb-8 text-white/80">
                 تنها با چند کلیک ثبت‌نام کنید، اعتبار خود را دریافت کنید و از خرید اقساطی آسان لذت ببرید.
               </p>
@@ -282,7 +310,7 @@ export default function HomePage() {
                 </Link>
                 <Link href="/about">
                   <Button variant="outline" size="lg" className="bg-white/10 hover:bg-white/20 border-white/20 text-white hover-float">
-                    درباره آرین پی
+                    درباره سعید پی 
                   </Button>
                 </Link>
               </div>
@@ -299,7 +327,7 @@ export default function HomePage() {
                 <div className="gradient-bg w-8 h-8 rounded-md flex items-center justify-center">
                   <CreditCardIcon className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="text-xl font-bold gradient-text">آرین پی</h3>
+                <h3 className="text-xl font-bold gradient-text">سعید پی </h3>
               </div>
               <p className="text-sm text-primary/70 mt-1">سامانه پرداخت اعتباری</p>
             </div>
@@ -316,7 +344,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="mt-8 pt-6 border-t border-border text-center text-sm text-primary/70">
-            © {new Date().getFullYear()} آرین پی. تمامی حقوق محفوظ است.
+            © {new Date().getFullYear()} سعید پی . تمامی حقوق محفوظ است.
           </div>
         </div>
       </footer>
@@ -335,16 +363,19 @@ interface HowItWorksStepProps {
 
 function HowItWorksStep({ number, title, description, icon, reverse = false }: HowItWorksStepProps) {
   return (
-    <div className={`flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-4`}>
-      <div className="w-12 h-12 rounded-full gradient-bg flex-shrink-0 flex items-center justify-center text-white font-bold">
-        {number}
+    <div className={`flex items-center ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} flex-col`}>
+      <div className={`relative md:w-12 md:mx-6 mb-4 md:mb-0 ${reverse ? 'md:order-1' : ''}`}>
+        <div className="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white font-bold shadow-lg animate-pulse-soft z-20 relative">
+          {number}
+        </div>
+        <div className="hidden md:block absolute top-0 left-0 right-0 bottom-0 bg-card rounded-full transform scale-150 opacity-20 animate-pulse z-10"></div>
       </div>
-      <div className={`flex-1 ${reverse ? 'md:text-right' : 'md:text-left'} text-center bg-white rounded-xl p-4 border border-border hover-float card-hover`}>
-        <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-          <div className="w-8 h-8 rounded-full bg-primary-light flex items-center justify-center text-primary">
+      <div className={`bg-card border border-border shadow-card rounded-xl p-6 w-full md:w-1/2 hover-float ${reverse ? 'text-right animate-slide-in-right' : 'text-right md:text-left animate-slide-in-left'}`} style={{ animationDelay: `${0.2 * number}s` }}>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-full gradient-bg flex items-center justify-center shadow-sm text-white">
             {icon}
           </div>
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <h3 className="text-lg font-bold">{title}</h3>
         </div>
         <p className="text-primary/70">{description}</p>
       </div>
