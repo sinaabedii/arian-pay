@@ -6,27 +6,27 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Smartphone, MessageCircle, ArrowRight, Shield, CheckCircle2, Award } from "lucide-react";
 import { useAuthStore } from "@/lib/store/auth-store";
 
 // Loading component to show while suspense is active
 function VerifyLoading() {
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary">سعید پی </h1>
-          <p className="mt-2 text-secondary">سامانه پرداخت اعتباری</p>
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-lg flex items-center justify-center mx-auto mb-4">
+            <span className="text-white text-2xl font-bold">سعید</span>
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">تایید شماره موبایل</h2>
+          <p className="text-gray-600">در حال بارگذاری...</p>
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>تایید شماره موبایل</CardTitle>
-            <CardDescription>
-              در حال بارگذاری...
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center py-8">
-            <div className="animate-pulse">لطفاً صبر کنید...</div>
+        <Card className="border-0 shadow-lg rounded-2xl overflow-hidden">
+          <div className="h-1.5 bg-gradient-to-r from-blue-500 to-blue-700"></div>
+          <CardContent className="text-center p-8">
+            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p className="mt-4 text-gray-600">لطفاً صبر کنید...</p>
           </CardContent>
         </Card>
       </div>
@@ -124,78 +124,103 @@ function VerifyForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary">سعید پی </h1>
-          <p className="mt-2 text-secondary">سامانه پرداخت اعتباری</p>
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-lg flex items-center justify-center mx-auto mb-4">
+            <span className="text-white text-2xl font-bold">سعید</span>
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">تایید شماره موبایل</h2>
+          <p className="text-gray-600">کد تایید ارسال شده به شماره {phone} را وارد کنید</p>
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>تایید شماره موبایل</CardTitle>
-            <CardDescription>
-              کد تایید ارسال شده به شماره {phone} را وارد کنید.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+        <Card className="border-0 shadow-lg rounded-2xl overflow-hidden">
+          <div className="h-1.5 bg-gradient-to-r from-blue-500 to-blue-700"></div>
+          <CardContent className="p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="flex justify-center gap-2">
-                {verificationCode.map((digit, index) => (
-                  <Input
-                    key={index}
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleInputChange(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e)}
-                    ref={(el) => {
-                      inputRefs.current[index] = el;
-                    }}
-                    className="w-12 h-12 text-center text-lg"
-                  />
-                ))}
-              </div>
-              
-              <div className="text-center text-sm text-secondary">
-                {timer > 0 ? (
-                  <p>
-                    کد جدید تا <span className="font-medium">{formatTime(timer)}</span> دیگر
-                  </p>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleResendCode}
-                    className="text-primary hover:underline"
-                  >
-                    ارسال مجدد کد
-                  </button>
-                )}
+              <div className="space-y-4">
+                <label className="text-sm font-medium flex items-center gap-2 text-gray-700">
+                  <MessageCircle size={16} className="text-blue-600" />
+                  کد تایید را وارد کنید
+                </label>
+                
+                <div className="flex justify-center gap-3">
+                  {verificationCode.map((digit, index) => (
+                    <Input
+                      key={index}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleInputChange(index, e.target.value)}
+                      onKeyDown={(e) => handleKeyDown(index, e)}
+                      ref={(el) => {
+                        inputRefs.current[index] = el;
+                      }}
+                      className="w-12 h-14 text-center text-lg border-gray-300 focus:border-blue-500 rounded-xl"
+                    />
+                  ))}
+                </div>
+                
+                <div className="text-center text-sm text-gray-600 flex items-center justify-center gap-2">
+                  {timer > 0 ? (
+                    <>
+                      <span>ارسال مجدد کد تا</span> 
+                      <span className="inline-block bg-gray-100 text-blue-600 px-2 py-1 rounded-md font-medium">{formatTime(timer)}</span>
+                      <span>دیگر</span>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleResendCode}
+                      className="text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      ارسال مجدد کد
+                    </button>
+                  )}
+                </div>
               </div>
               
               {error && (
-                <div className="p-3 text-sm text-danger bg-danger-light rounded-md">
+                <div className="p-4 text-sm text-red-600 bg-red-50 rounded-xl border border-red-200">
                   {error}
                 </div>
               )}
               
               <Button 
                 type="submit" 
-                className="w-full" 
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 rounded-xl text-base" 
                 disabled={loading || verificationCode.some((digit) => !digit)}
               >
-                {loading ? "در حال بررسی..." : "تایید"}
+                {loading ? "در حال بررسی..." : "تایید شماره موبایل"}
+                <ArrowRight className="mr-2 h-5 w-5" />
               </Button>
+
+              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-green-500" />
+                  <span>امنیت بانکی</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <span>تایید فوری</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Award className="h-4 w-4 text-green-500" />
+                  <span>مجوز رسمی</span>
+                </div>
+              </div>
             </form>
           </CardContent>
-          <CardFooter>
-            <div className="w-full text-center">
-              <Link href="/login" className="text-primary hover:underline">
-                تغییر شماره موبایل
-              </Link>
-            </div>
+          <CardFooter className="px-8 py-6 bg-gray-50 border-t border-gray-100 flex justify-center">
+            <Link 
+              href="/login" 
+              className="flex items-center text-gray-500 hover:text-blue-600 transition-colors text-sm"
+            >
+              <ArrowLeft className="h-4 w-4 ml-2" />
+              تغییر شماره موبایل
+            </Link>
           </CardFooter>
         </Card>
       </div>

@@ -3,9 +3,15 @@
 @tailwind utilities;
 
 :root {
+  /* رنگ‌های اصلی - طبق خواسته مشتری */
+  --blue: #1A3C69;
+  --cream: #f4f1ec;
+  --dark-blue: #0A1B3C;
+  --light-cream: #FCFAF8;
+  
   /* رنگ‌های اصلی - آبی کلاسیک و کرم */
-  --primary: #1A3C69;
-  --primary-hover: #15325A;
+  --primary: #1A3C69; /* blue */
+  --primary-hover: #0A1B3C; /* darkBlue */
   --primary-light: #E6EBF4;
   --primary-50: #E6EBF4;
   --primary-100: #CCD7E9;
@@ -18,11 +24,12 @@
   --primary-800: #0D192B;
   --primary-900: #090E17;
   
-  --secondary: #f4f1ec;
+  /* رنگ ثانویه - کرم روشن، گرم و آرامش‌بخش */
+  --secondary: #f4f1ec; /* cream */
   --secondary-hover: #e9e4db;
-  --secondary-light: #faf8f5;
-  --secondary-50: #faf8f5;
-  --secondary-100: #f4f1ec;
+  --secondary-light: #FCFAF8; /* lightCream */
+  --secondary-50: #FCFAF8; /* lightCream */
+  --secondary-100: #f4f1ec; /* cream */
   --secondary-200: #e9e4db;
   --secondary-300: #ded6ca;
   --secondary-400: #d2c9b8;
@@ -32,6 +39,7 @@
   --secondary-800: #a59372;
   --secondary-900: #9a8561;
   
+  /* رنگ تاکیدی - نارنجی طلایی برای تاکید و برجسته‌سازی */
   --accent: #f59e0b;
   --accent-hover: #d97706;
   --accent-light: #fef3c7;
@@ -46,6 +54,7 @@
   --accent-800: #92400e;
   --accent-900: #78350f;
   
+  /* رنگ موفقیت - سبز */
   --success: #10b981;
   --success-light: #d1fae5;
   --success-50: #ecfdf5;
@@ -59,6 +68,7 @@
   --success-800: #065f46;
   --success-900: #064e3b;
   
+  /* رنگ هشدار - نارنجی */
   --warning: #f59e0b;
   --warning-light: #fef3c7;
   --warning-50: #fffbeb;
@@ -72,6 +82,7 @@
   --warning-800: #92400e;
   --warning-900: #78350f;
   
+  /* رنگ خطر - قرمز */
   --danger: #ef4444;
   --danger-light: #fee2e2;
   --danger-50: #fef2f2;
@@ -85,11 +96,13 @@
   --danger-800: #991b1b;
   --danger-900: #7f1d1d;
   
-  --background: #faf8f5;
-  --foreground: #1A3C69;
+  /* تعیین رنگ پس‌زمینه و متن به صورت یکپارچه */
+  --background: #FCFAF8;  /* lightCream */
+  --foreground: #1A3C69;  /* blue */
   --card: #ffffff;
-  --card-foreground: #1A3C69;
+  --card-foreground: #1A3C69; /* blue */
   
+  /* سایر رنگ‌ها */
   --border: #e5e7eb;
   --input: #e5e7eb;
   --placeholder: rgba(26, 60, 105, 0.5);
@@ -112,16 +125,38 @@
   --shadow-card: 0 4px 25px rgba(26, 60, 105, 0.1);
   --shadow-button: 0 4px 10px rgba(26, 60, 105, 0.15);
 
-  /* گرادیان‌های جذاب */
-  --gradient-primary: linear-gradient(135deg, #1A3C69 0%, #2A4E80 100%);
+  /* گرادیان‌های جذاب با ترکیب‌های جدید */
+  --gradient-primary: linear-gradient(135deg, #1A3C69 0%, #0A1B3C 100%); /* blue to darkBlue */
   --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #fb7185 100%);
-  --gradient-elegant: linear-gradient(135deg, #1A3C69 0%, #f4f1ec 100%);
-  --gradient-light: linear-gradient(135deg, #f4f1ec 0%, #ffffff 100%);
+  --gradient-elegant: linear-gradient(135deg, #1A3C69 0%, #f4f1ec 100%); /* blue to cream */
+  --gradient-light: linear-gradient(135deg, #f4f1ec 0%, #FCFAF8 100%); /* cream to lightCream */
+  --gradient-cream: linear-gradient(135deg, #FCFAF8 0%, #f4f1ec 100%); /* lightCream to cream */
+  --gradient-blue-soft: linear-gradient(160deg, #1A3C69 0%, #2a4d7c 100%); /* نرم‌تر */
+  --gradient-blue-night: linear-gradient(120deg, #0A1B3C 0%, #1A3C69 100%); /* تیره به روشن */
+  
+  /* سایه‌های رنگی جدید */
+  --shadow-blue: 0 5px 20px rgba(26, 60, 105, 0.15);
+  --shadow-blue-strong: 0 8px 25px rgba(26, 60, 105, 0.25);
+  --shadow-cream: 0 5px 20px rgba(244, 241, 236, 0.8);
+  --shadow-dark-blue: 0 5px 15px rgba(10, 27, 60, 0.2);
 
   /* ویژگی‌های مورد نیاز برای کارت بانکی */
   --perspective: 1000px;
   --rotate-y-180: rotateY(180deg);
   --backface-visibility-hidden: hidden;
+
+  /* رنگ‌های دکمه‌ها */
+  --btn-primary-bg: #1A3C69; /* blue */
+  --btn-primary-text: #FCFAF8; /* lightCream */
+  --btn-primary-hover-bg: #0A1B3C; /* darkBlue */
+  
+  --btn-secondary-bg: #f4f1ec; /* cream */
+  --btn-secondary-text: #1A3C69; /* blue */
+  --btn-secondary-hover-bg: #FCFAF8; /* lightCream */
+  
+  --btn-accent-bg: #f59e0b; /* accent */
+  --btn-accent-text: #ffffff;
+  --btn-accent-hover-bg: #d97706;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -278,24 +313,55 @@ body {
   }
   
   .gradient-text {
-    @apply text-transparent bg-clip-text;
-    background-image: var(--gradient-primary);
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-400;
   }
   
   .gradient-bg {
-    background-image: var(--gradient-primary);
+    @apply bg-gradient-to-r from-primary to-primary-400 text-white;
   }
   
   .accent-gradient-bg {
-    background-image: var(--gradient-accent);
+    @apply bg-gradient-to-r from-accent to-accent-600 text-white;
   }
   
   .elegant-gradient-bg {
-    background-image: var(--gradient-elegant);
+    @apply bg-gradient-to-r from-primary to-secondary text-white;
   }
   
   .light-gradient-bg {
     background-image: var(--gradient-light);
+  }
+  
+  .cream-gradient-bg {
+    background-image: var(--gradient-cream);
+  }
+
+  .primary-text {
+    @apply text-primary;
+  }
+
+  .primary-text-70 {
+    @apply text-primary text-opacity-70;
+  }
+
+  .primary-text-80 {
+    @apply text-primary text-opacity-80;
+  }
+
+  .primary-bg {
+    @apply bg-primary;
+  }
+  
+  .secondary-bg {
+    @apply bg-secondary;
+  }
+  
+  .cream-bg {
+    @apply bg-secondary;
+  }
+  
+  .white-bg {
+    @apply bg-white;
   }
   
   /* افکت‌های انیمیشن */
@@ -348,7 +414,7 @@ body {
   }
   
   .section-cream {
-    @apply bg-secondary;
+    @apply bg-secondary-50;
   }
   
   .section-white {
@@ -529,7 +595,7 @@ body {
   }
   
   .glass-effect {
-    @apply bg-white/80 backdrop-blur-md dark:bg-slate-900/80;
+    @apply bg-white bg-opacity-80 backdrop-blur-md dark:bg-slate-900 dark:bg-opacity-80;
   }
   
   .input {
@@ -541,11 +607,11 @@ body {
   
   /* کارت‌های ویژه */
   .feature-card {
-    @apply p-6 rounded-xl border border-border bg-card shadow-card hover-float card-hover;
+    @apply bg-card rounded-xl p-6 shadow-card hover:shadow-lg transition-all duration-300;
   }
   
   .feature-icon {
-    @apply w-12 h-12 rounded-full flex items-center justify-center text-white mb-4 gradient-bg;
+    @apply w-12 h-12 rounded-full flex items-center justify-center text-white mb-4;
   }
   
   /* بج‌ها */
@@ -669,4 +735,394 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-400);
+}
+
+/* نمایش ویژگی‌های برجسته با طراحی جدید */
+.feature-highlight-card {
+  @apply relative overflow-hidden bg-white rounded-xl p-6 shadow-card transition-all duration-300 hover:shadow-lg border border-border;
+}
+
+.feature-highlight-card:hover {
+  @apply shadow-xl;
+}
+
+.feature-highlight-icon {
+  @apply w-12 h-12 flex items-center justify-center rounded-full mb-4;
+}
+
+/* کارت مزایا با استایل جدید */
+.benefit-card {
+  @apply bg-white rounded-xl p-8 shadow-card hover:shadow-lg transition-all duration-300 border-t-4 relative overflow-hidden hover:translate-y-[-5px];
+}
+
+.benefit-card-primary {
+  border-color: var(--primary);
+}
+
+.benefit-card-accent {
+  border-color: var(--accent);
+}
+
+.benefit-card-success {
+  border-color: var(--success);
+}
+
+.benefit-number {
+  @apply text-5xl font-bold opacity-10 absolute -top-2 -right-2 z-0;
+}
+
+.benefit-content {
+  @apply relative z-10;
+}
+
+/* باکس تیتر با استایل متفاوت */
+.title-box {
+  @apply relative inline-block mb-4;
+}
+
+.title-box::before {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 40%;
+  height: 3px;
+  background: var(--gradient-primary);
+}
+
+/* جداکننده شیک */
+.elegant-divider {
+  @apply w-full h-px my-8 relative overflow-hidden;
+  background: linear-gradient(90deg, transparent, var(--primary-200), transparent);
+}
+
+/* نوار پیشرفت با طراحی شیک */
+.progress-elegant {
+  @apply w-full h-2 bg-secondary-200 rounded-full overflow-hidden;
+}
+
+.progress-bar {
+  @apply h-full rounded-full;
+  background: var(--gradient-primary);
+  animation: progress-animation 2s ease-out forwards;
+}
+
+@keyframes progress-animation {
+  0% { width: 0; }
+  100% { width: var(--progress-value); }
+}
+
+/* استایل‌های جدید برای نمایش آمار */
+.stat-box {
+  @apply p-6 rounded-xl bg-white shadow-card hover:shadow-lg transition-all duration-300 text-center;
+}
+
+.stat-value {
+  @apply text-4xl font-bold mb-2 gradient-text;
+}
+
+.stat-label {
+  @apply text-primary text-opacity-70;
+}
+
+/* کارت چرا ما با طراحی جدید */
+.why-us-card {
+  @apply relative p-8 rounded-xl overflow-hidden transition-all duration-300 flex flex-col justify-between h-full;
+  background: linear-gradient(135deg, white 0%, var(--secondary-50) 100%);
+}
+
+.why-us-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-5px);
+}
+
+.why-us-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.03;
+  z-index: 0;
+}
+
+/* کلاس‌های سفارشی برای رنگ‌ها */
+.blue-bg {
+  @apply bg-primary;
+}
+
+.cream-bg {
+  @apply bg-secondary;
+}
+
+.dark-blue-bg {
+  @apply bg-primary-hover;
+}
+
+.light-cream-bg {
+  @apply bg-secondary-light;
+}
+
+.blue-text {
+  @apply text-primary;
+}
+
+.cream-text {
+  @apply text-secondary;
+}
+
+.dark-blue-text {
+  @apply text-primary-hover;
+}
+
+/* استایل‌های جدید برای کارت‌ها */
+.blue-card {
+  background-image: var(--gradient-blue-soft);
+  @apply rounded-xl p-6 text-white shadow-lg transition-all duration-300;
+  box-shadow: var(--shadow-blue);
+}
+
+.blue-card:hover {
+  box-shadow: var(--shadow-blue-strong);
+  transform: translateY(-3px);
+}
+
+.dark-blue-card {
+  background-image: var(--gradient-blue-night);
+  @apply rounded-xl p-6 text-white shadow-lg transition-all duration-300;
+  box-shadow: var(--shadow-dark-blue);
+}
+
+.dark-blue-card:hover {
+  box-shadow: var(--shadow-blue-strong);
+  transform: translateY(-3px);
+}
+
+.cream-card {
+  background-image: var(--gradient-cream);
+  @apply rounded-xl p-6 shadow-lg transition-all duration-300 text-primary;
+  box-shadow: var(--shadow-cream);
+}
+
+.cream-card:hover {
+  transform: translateY(-3px);
+}
+
+/* خطوط جداکننده با استایل جدید */
+.divider-blue {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  @apply my-8 opacity-30;
+}
+
+.divider-cream {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cream), transparent);
+  @apply my-8 opacity-50;
+}
+
+/* استایل‌های انیمیشن رنگ */
+.hover-color-shift {
+  transition: background-image 0.5s ease, transform 0.3s ease;
+}
+
+.hover-color-shift:hover {
+  background-image: var(--gradient-blue-night);
+}
+
+/* کلاس‌های رنگ پس‌زمینه */
+.bg-blue {
+  background-color: var(--blue);
+}
+
+.bg-cream {
+  background-color: var(--cream);
+}
+
+.bg-dark-blue {
+  background-color: var(--dark-blue);
+}
+
+.bg-light-cream {
+  background-color: var(--light-cream);
+}
+
+/* کلاس‌های رنگ متن */
+.text-blue {
+  color: var(--blue);
+}
+
+.text-cream {
+  color: var(--cream);
+}
+
+.text-dark-blue {
+  color: var(--dark-blue);
+}
+
+.text-light-cream {
+  color: var(--light-cream);
+}
+
+/* کلاس‌های متن با شفافیت */
+.text-blue-70 {
+  color: var(--blue);
+  opacity: 0.7;
+}
+
+.text-cream-70 {
+  color: var(--cream);
+  opacity: 0.7;
+}
+
+.text-blue-50 {
+  color: var(--blue);
+  opacity: 0.5;
+}
+
+.text-cream-50 {
+  color: var(--cream);
+  opacity: 0.5;
+}
+
+/* استایل‌های دکمه */
+.btn-blue {
+  background-color: var(--blue);
+  color: var(--light-cream);
+  @apply py-2 px-4 rounded-lg shadow-md transition-all duration-300;
+}
+
+.btn-blue:hover {
+  background-color: var(--dark-blue);
+  @apply shadow-lg;
+}
+
+.btn-cream {
+  background-color: var(--cream);
+  color: var(--blue);
+  @apply py-2 px-4 rounded-lg shadow-md transition-all duration-300;
+}
+
+.btn-cream:hover {
+  background-color: var(--light-cream);
+  @apply shadow-lg;
+}
+
+.btn-outline-blue {
+  background-color: transparent;
+  color: var(--blue);
+  @apply py-2 px-4 rounded-lg shadow-sm border border-blue transition-all duration-300;
+}
+
+.btn-outline-blue:hover {
+  background-color: var(--blue);
+  color: var(--light-cream);
+  @apply shadow-md;
+}
+
+/* کلاس‌های مرز */
+.border-blue {
+  border-color: var(--blue);
+}
+
+.border-cream {
+  border-color: var(--cream);
+}
+
+.border-dark-blue {
+  border-color: var(--dark-blue);
+}
+
+.border-light-cream {
+  border-color: var(--light-cream);
+}
+
+/* کلاس‌های کارت‌ها */
+.blue-card {
+  background-image: var(--gradient-blue-soft);
+  @apply rounded-xl p-6 text-white shadow-lg transition-all duration-300;
+  box-shadow: var(--shadow-blue);
+}
+
+.blue-card:hover {
+  box-shadow: var(--shadow-blue-strong);
+  transform: translateY(-3px);
+}
+
+.dark-blue-card {
+  background-image: var(--gradient-blue-night);
+  @apply rounded-xl p-6 text-white shadow-lg transition-all duration-300;
+  box-shadow: var(--shadow-dark-blue);
+}
+
+.dark-blue-card:hover {
+  box-shadow: var(--shadow-blue-strong);
+  transform: translateY(-3px);
+}
+
+.cream-card {
+  background-image: var(--gradient-cream);
+  @apply rounded-xl p-6 shadow-lg transition-all duration-300 text-blue;
+  box-shadow: var(--shadow-cream);
+}
+
+.cream-card:hover {
+  transform: translateY(-3px);
+}
+
+/* بج‌ها */
+.badge-blue {
+  background-color: var(--blue);
+  color: var(--light-cream);
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.badge-cream {
+  background-color: var(--cream);
+  color: var(--blue);
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+.badge-dark-blue {
+  background-color: var(--dark-blue);
+  color: var(--light-cream);
+  @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+/* فرم‌های ورودی */
+.input-blue {
+  border-color: var(--blue);
+  color: var(--blue);
+  @apply bg-white border rounded-lg p-2 w-full outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300;
+}
+
+.input-dark {
+  border-color: var(--dark-blue);
+  color: var(--dark-blue);
+  @apply bg-white border rounded-lg p-2 w-full outline-none focus:ring-2 focus:ring-blue-800 focus:ring-opacity-50 transition duration-300;
+}
+
+/* سایه‌های رنگی */
+.shadow-blue {
+  box-shadow: var(--shadow-blue);
+}
+
+.shadow-blue-strong {
+  box-shadow: var(--shadow-blue-strong);
+}
+
+.shadow-cream {
+  box-shadow: var(--shadow-cream);
+}
+
+/* استایل‌های انیمیشن رنگ */
+.hover-color-shift {
+  transition: background-image 0.5s ease, transform 0.3s ease;
+}
+
+.hover-color-shift:hover {
+  background-image: var(--gradient-blue-night);
 }

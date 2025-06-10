@@ -21,86 +21,8 @@ interface AnimationProps {
   onComplete?: () => void;
 }
 
-// A simple animation player using browser's Web Animations API
-export function Animation({
-  name,
-  className = "",
-  loop = true,
-  autoplay = true,
-  width = "100%",
-  height = "100%",
-  style = {},
-  onComplete,
-}: AnimationProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  useEffect(() => {
-    if (!containerRef.current) return;
-    
-    // Select the appropriate animation data
-    let animationData;
-    switch(name) {
-      case "payment":
-        animationData = paymentAnimation;
-        break;
-      case "success":
-        animationData = successAnimation;
-        break;
-      case "scan-paper":
-        animationData = scanPaperAnimation;
-        break;
-      default:
-        animationData = paymentAnimation;
-    }
-    
-    // Create script element to load lottie player
-    const script = document.createElement("script");
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js";
-    script.async = true;
-    script.onload = () => {
-      if (typeof window.lottie !== "undefined" && containerRef.current) {
-        const anim = window.lottie.loadAnimation({
-          container: containerRef.current,
-          renderer: "svg",
-          loop: loop,
-          autoplay: autoplay,
-          animationData: animationData,
-        });
-        
-        if (onComplete && !loop) {
-          anim.addEventListener("complete", onComplete);
-        }
-        
-        return () => {
-          anim.destroy();
-          if (onComplete && !loop) {
-            anim.removeEventListener("complete", onComplete);
-          }
-        };
-      }
-    };
-    
-    document.body.appendChild(script);
-    
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
-    };
-  }, [name, loop, autoplay, onComplete]);
-  
-  return (
-    <div
-      ref={containerRef}
-      className={className}
-      style={{
-        width,
-        height,
-        ...style,
-      }}
-    />
-  );
-}
+// Static variable to track if lottie is loaded
+let isLottieLoaded = false;
 
 // Declare the lottie type for global window object
 declare global {
@@ -119,6 +41,121 @@ declare global {
       }
     };
   }
+}
+
+// A simple animation player using browser's Web Animations API
+export function Animation({
+  name,
+  className = "",
+  loop = true,
+  autoplay = true,
+  width = "100%",
+  height = "100%",
+  style = {},
+  onComplete,
+}: AnimationProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const animRef = useRef<any>(null);
+
+  // Function to load animation
+  const loadAnimation = () => {
+    if (!containerRef.current || !window.lottie) return;
+    
+    // Clear previous animations in the container
+    if (containerRef.current) {
+      containerRef.current.innerHTML = '';
+    }
+
+    // Select the appropriate animation data
+    let animationData;
+    switch(name) {
+      case "payment":
+        animationData = paymentAnimation;
+        break;
+      case "success":
+        animationData = successAnimation;
+        break;
+      case "scan-paper":
+        animationData = scanPaperAnimation;
+        break;
+      default:
+        animationData = paymentAnimation;
+    }
+
+    // Create a new animation
+    const anim = window.lottie.loadAnimation({
+      container: containerRef.current,
+      renderer: "svg",
+      loop: loop,
+      autoplay: autoplay,
+      animationData: animationData,
+    });
+
+    animRef.current = anim;
+
+    if (onComplete && !loop) {
+      anim.addEventListener("complete", onComplete);
+    }
+  };
+
+  useEffect(() => {
+    // Cleanup previous animation if exists
+    if (animRef.current) {
+      if (onComplete && !loop) {
+        animRef.current.removeEventListener("complete", onComplete);
+      }
+      animRef.current.destroy();
+      animRef.current = null;
+    }
+
+    // If lottie is already loaded
+    if (isLottieLoaded && window.lottie) {
+      loadAnimation();
+      return;
+    }
+
+    // Load lottie script if not already loaded
+    if (!isLottieLoaded) {
+      const script = document.createElement("script");
+      script.src = "https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js";
+      script.async = true;
+      script.onload = () => {
+        isLottieLoaded = true;
+        loadAnimation();
+      };
+      
+      document.body.appendChild(script);
+      
+      return () => {
+        if (script.parentNode && !isLottieLoaded) {
+          script.parentNode.removeChild(script);
+        }
+      };
+    }
+    
+    return () => {
+      // Cleanup on unmount
+      if (animRef.current) {
+        if (onComplete && !loop) {
+          animRef.current.removeEventListener("complete", onComplete);
+        }
+        animRef.current.destroy();
+        animRef.current = null;
+      }
+    };
+  }, [name, loop, autoplay, onComplete]);
+  
+  return (
+    <div
+      ref={containerRef}
+      className={className}
+      style={{
+        width,
+        height,
+        ...style,
+      }}
+    />
+  );
 }
 
 // Specific animation components for easier use

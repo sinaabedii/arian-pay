@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, User, Smartphone, Lock, ShieldCheck } from "lucide-react";
+import { ArrowLeft, User, Smartphone, Lock, ShieldCheck, Shield, CheckCircle2, Award, ArrowRight } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/store/auth-store";
 
 export default function RegisterPage() {
@@ -87,39 +88,23 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-secondary-50 relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute -top-48 -right-48 w-96 h-96 rounded-full bg-primary-100/30 blur-3xl" />
-      <div className="absolute -bottom-48 -left-48 w-96 h-96 rounded-full bg-secondary-300/20 blur-3xl" />
-      
-      <div className="w-full max-w-md z-10 animate-fade-in">
-        <div className="text-center mb-6 animate-slide-in-top" style={{ animationDelay: '0.1s' }}>
-          <div className="flex justify-center mb-3">
-            <div className="w-16 h-16 bg-gradient-to-br from-classic-blue to-classic-blue-700 rounded-xl shadow-lg flex items-center justify-center hover-float">
-              <span className="text-white text-xl font-bold">AP</span>
-            </div>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl shadow-lg flex items-center justify-center mx-auto mb-4">
+            <span className="text-white text-2xl font-bold">سعید</span>
           </div>
-          <h1 className="text-2xl font-bold gradient-text">
-            سعید پی 
-          </h1>
-          <p className="text-sm text-secondary mt-1">
-            راهکار اعتباری برای خرید‌های روزمره شما
-          </p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">ثبت‌نام در سعید پی</h2>
+          <p className="text-gray-600">برای استفاده از خدمات اعتباری سعید پی، ثبت‌نام کنید</p>
         </div>
 
-        <Card className="border-0 shadow-card animate-slide-in-bottom overflow-hidden" style={{ animationDelay: '0.2s' }}>
-          <div className="h-2 bg-gradient-to-l from-classic-blue-300 to-classic-blue-700"></div>
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-xl text-center">ثبت‌نام در سعید پی </CardTitle>
-            <CardDescription className="text-center">
-              برای استفاده از خدمات اعتباری سعید پی ، ثبت‌نام کنید.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-5">
+        <Card className="border-0 shadow-lg rounded-2xl overflow-hidden">
+          <div className="h-1.5 bg-gradient-to-r from-blue-500 to-blue-700"></div>
+          <CardContent className="p-8">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label className="text-sm font-medium flex items-center gap-2">
-                  <User size={16} className="text-primary/70" />
+                <label className="text-sm font-medium flex items-center gap-2 text-gray-700">
+                  <User size={16} className="text-blue-600" />
                   نام و نام خانوادگی
                 </label>
                 <Input 
@@ -127,14 +112,14 @@ export default function RegisterPage() {
                   placeholder="نام و نام خانوادگی خود را وارد کنید" 
                   value={name} 
                   onChange={(e) => setName(e.target.value)}
-                  className="border-secondary-300 focus:border-primary"
+                  className="border-gray-300 focus:border-blue-500 rounded-xl py-5"
                   required
                 />
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium flex items-center gap-2">
-                  <Smartphone size={16} className="text-primary/70" />
+                <label className="text-sm font-medium flex items-center gap-2 text-gray-700">
+                  <Smartphone size={16} className="text-blue-600" />
                   شماره موبایل
                 </label>
                 <Input 
@@ -142,14 +127,14 @@ export default function RegisterPage() {
                   placeholder="09123456789" 
                   value={phone} 
                   onChange={(e) => setPhone(e.target.value)}
-                  className="border-secondary-300 focus:border-primary"
+                  className="border-gray-300 focus:border-blue-500 rounded-xl py-5"
                   required
                 />
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium flex items-center gap-2">
-                  <Lock size={16} className="text-primary/70" />
+                <label className="text-sm font-medium flex items-center gap-2 text-gray-700">
+                  <Lock size={16} className="text-blue-600" />
                   رمز عبور
                 </label>
                 <Input 
@@ -157,23 +142,23 @@ export default function RegisterPage() {
                   placeholder="رمز عبور خود را وارد کنید" 
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)}
-                  className="border-secondary-300 focus:border-primary"
+                  className="border-gray-300 focus:border-blue-500 rounded-xl py-5"
                   required
                 />
                 {password && (
-                  <div className="mt-1">
-                    <div className="w-full h-1.5 bg-secondary-200 rounded-full overflow-hidden flex">
+                  <div className="mt-2">
+                    <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden flex">
                       <div 
                         className={`h-full transition-all duration-300 ${
                           passwordStrength === 0 ? 'w-0' :
-                          passwordStrength === 1 ? 'w-1/4 bg-danger' :
-                          passwordStrength === 2 ? 'w-2/4 bg-warning' :
-                          passwordStrength === 3 ? 'w-3/4 bg-accent' :
-                          'w-full bg-success'
+                          passwordStrength === 1 ? 'w-1/4 bg-red-500' :
+                          passwordStrength === 2 ? 'w-2/4 bg-yellow-500' :
+                          passwordStrength === 3 ? 'w-3/4 bg-blue-500' :
+                          'w-full bg-green-500'
                         }`}
                       ></div>
                     </div>
-                    <p className="text-xs mt-1 text-secondary">
+                    <p className="text-xs mt-1 text-gray-600">
                       {passwordStrength === 0 ? 'رمز عبور ضعیف است' :
                        passwordStrength === 1 ? 'رمز عبور ضعیف است' :
                        passwordStrength === 2 ? 'رمز عبور متوسط است' :
@@ -185,8 +170,8 @@ export default function RegisterPage() {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium flex items-center gap-2">
-                  <ShieldCheck size={16} className="text-primary/70" />
+                <label className="text-sm font-medium flex items-center gap-2 text-gray-700">
+                  <ShieldCheck size={16} className="text-blue-600" />
                   تکرار رمز عبور
                 </label>
                 <Input 
@@ -194,50 +179,64 @@ export default function RegisterPage() {
                   placeholder="رمز عبور را مجدداً وارد کنید" 
                   value={confirmPassword} 
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className={`border-secondary-300 focus:border-primary ${
-                    confirmPassword && password !== confirmPassword ? 'border-danger focus:border-danger' : ''
+                  className={`border-gray-300 focus:border-blue-500 rounded-xl py-5 ${
+                    confirmPassword && password !== confirmPassword ? 'border-red-500 focus:border-red-500' : ''
                   }`}
                   required
                 />
                 {confirmPassword && password !== confirmPassword && (
-                  <p className="text-xs text-danger mt-1">رمز عبور و تکرار آن مطابقت ندارند</p>
+                  <p className="text-xs text-red-600 mt-1">رمز عبور و تکرار آن مطابقت ندارند</p>
                 )}
               </div>
               
               {errorMessage && (
-                <div className="p-4 text-sm text-danger bg-danger-light/50 rounded-lg border border-danger-200 animate-pulse-soft">
+                <div className="p-4 text-sm text-red-600 bg-red-50 rounded-xl border border-red-200">
                   {errorMessage}
                 </div>
               )}
               
-              <AnimatedButton 
+              <Button 
                 type="submit" 
-                variant="gradient"
-                fullWidth
-                size="lg"
-                animation="scale"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 rounded-xl text-base"
                 disabled={loading}
               >
                 {loading ? "در حال ثبت‌نام..." : "ثبت‌نام"}
-              </AnimatedButton>
+                <ArrowRight className="mr-2 h-5 w-5" />
+              </Button>
+
+              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 mt-4">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-green-500" />
+                  <span>امنیت بانکی</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <span>تایید فوری</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Award className="h-4 w-4 text-green-500" />
+                  <span>مجوز رسمی</span>
+                </div>
+              </div>
             </form>
           </CardContent>
-          <CardFooter className="px-6 py-4">
-            <div className="w-full text-center flex flex-col gap-3">
-              <p>
-                حساب کاربری دارید؟{" "}
-                <Link href="/login" className="text-link font-medium">
-                  وارد شوید
-                </Link>
-              </p>
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center text-xs text-secondary hover:text-primary transition-colors"
+          <CardFooter className="px-8 py-6 bg-gray-50 border-t border-gray-100 flex flex-col gap-4">
+            <p className="text-center text-gray-600">
+              حساب کاربری دارید؟{" "}
+              <Link 
+                href="/login" 
+                className="text-blue-600 font-medium hover:text-blue-800"
               >
-                <ArrowLeft className="h-3 w-3 mr-1" />
-                بازگشت به صفحه اصلی
+                وارد شوید
               </Link>
-            </div>
+            </p>
+            <Link
+              href="/"
+              className="flex items-center justify-center text-sm text-gray-500 hover:text-blue-600 transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4 ml-2" />
+              بازگشت به صفحه اصلی
+            </Link>
           </CardFooter>
         </Card>
       </div>
