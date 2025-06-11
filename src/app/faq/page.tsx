@@ -6,7 +6,7 @@ import {
   ChevronDown, 
   ChevronUp, 
   ChevronLeft, 
-  CreditCardIcon, 
+  CreditCard, 
   Bell, 
   Search, 
   Menu, 
@@ -14,9 +14,17 @@ import {
   Download, 
   Phone, 
   Mail, 
-  MapIcon, 
+  MapPin, 
   ArrowRight, 
-  HelpCircle
+  HelpCircle,
+  MessageCircle,
+  Shield,
+  Wallet,
+  Lock,
+  Home,
+  ShoppingBag,
+  BarChart3,
+  Star
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -27,32 +35,36 @@ const FAQData = [
   {
     id: 1,
     category: "خدمات اعتباری",
+    icon: CreditCard,
+    color: "from-blue-500 to-blue-600",
     questions: [
       {
         id: "credit-1",
-        question: "چگونه می‌توانم از سعید پی  اعتبار دریافت کنم؟",
+        question: "چگونه می‌توانم از سعید پی اعتبار دریافت کنم؟",
         answer: "برای دریافت اعتبار، ابتدا باید در سایت ثبت‌نام کنید و مراحل احراز هویت را تکمیل نمایید. سپس به بخش درخواست اعتبار رفته و فرم مربوطه را تکمیل کنید. پس از بررسی‌های لازم، اعتبار شما در کمتر از 10 دقیقه فعال خواهد شد."
       },
       {
         id: "credit-2",
-        question: "سقف اعتبار سعید پی  چقدر است؟",
+        question: "سقف اعتبار سعید پی چقدر است؟",
         answer: "سقف اعتبار برای هر کاربر متفاوت است و بر اساس اعتبارسنجی انجام شده تعیین می‌شود. حداقل اعتبار 5 میلیون تومان و حداکثر آن تا 50 میلیون تومان می‌باشد. با استفاده مناسب از اعتبار و بازپرداخت به موقع اقساط، امکان افزایش سقف اعتبار وجود دارد."
       },
       {
         id: "credit-3",
         question: "آیا برای دریافت اعتبار نیاز به ضامن یا چک دارم؟",
-        answer: "خیر، در سعید پی  نیازی به ارائه ضامن یا چک نیست. ما با استفاده از الگوریتم‌های پیشرفته اعتبارسنجی و بررسی سوابق مالی، اعتبار شما را تعیین می‌کنیم."
+        answer: "خیر، در سعید پی نیازی به ارائه ضامن یا چک نیست. ما با استفاده از الگوریتم‌های پیشرفته اعتبارسنجی و بررسی سوابق مالی، اعتبار شما را تعیین می‌کنیم."
       }
     ]
   },
   {
     id: 2,
     category: "خرید اقساطی",
+    icon: ShoppingBag,
+    color: "from-green-500 to-green-600",
     questions: [
       {
         id: "installment-1",
-        question: "از چه فروشگاه‌هایی می‌توانم با اعتبار سعید پی  خرید کنم؟",
-        answer: "شما می‌توانید از تمام فروشگاه‌های طرف قرارداد سعید پی ، اعم از فروشگاه‌های آنلاین و فروشگاه‌های فیزیکی، خرید اقساطی انجام دهید. لیست کامل فروشگاه‌ها در بخش 'فروشگاه‌ها' قابل مشاهده است."
+        question: "از چه فروشگاه‌هایی می‌توانم با اعتبار سعید پی خرید کنم؟",
+        answer: "شما می‌توانید از تمام فروشگاه‌های طرف قرارداد سعید پی، اعم از فروشگاه‌های آنلاین و فروشگاه‌های فیزیکی، خرید اقساطی انجام دهید. لیست کامل فروشگاه‌ها در بخش 'فروشگاه‌ها' قابل مشاهده است."
       },
       {
         id: "installment-2",
@@ -69,6 +81,8 @@ const FAQData = [
   {
     id: 3,
     category: "کیف پول",
+    icon: Wallet,
+    color: "from-purple-500 to-purple-600",
     questions: [
       {
         id: "wallet-1",
@@ -82,24 +96,26 @@ const FAQData = [
       },
       {
         id: "wallet-3",
-        question: "آیا استفاده از کیف پول سعید پی  هزینه‌ای دارد؟",
-        answer: "خیر، استفاده از کیف پول سعید پی  کاملاً رایگان است و هیچ کارمزدی برای تراکنش‌های شارژ و پرداخت دریافت نمی‌شود."
+        question: "آیا استفاده از کیف پول سعید پی هزینه‌ای دارد؟",
+        answer: "خیر، استفاده از کیف پول سعید پی کاملاً رایگان است و هیچ کارمزدی برای تراکنش‌های شارژ و پرداخت دریافت نمی‌شود."
       }
     ]
   },
   {
     id: 4,
     category: "امنیت و حریم خصوصی",
+    icon: Shield,
+    color: "from-orange-500 to-orange-600",
     questions: [
       {
         id: "security-1",
-        question: "آیا اطلاعات شخصی و مالی من در سعید پی  امن است؟",
+        question: "آیا اطلاعات شخصی و مالی من در سعید پی امن است؟",
         answer: "بله، امنیت اطلاعات کاربران یکی از اولویت‌های اصلی ماست. تمام اطلاعات شخصی و مالی با استفاده از پروتکل‌های رمزنگاری پیشرفته محافظت می‌شوند و دسترسی به آن‌ها محدود است."
       },
       {
         id: "security-2",
         question: "در صورت سرقت یا گم شدن گوشی، چگونه می‌توانم حساب خود را محافظت کنم؟",
-        answer: "در صورت سرقت یا گم شدن گوشی، سریعاً با پشتیبانی سعید پی  تماس بگیرید تا حساب شما را موقتاً مسدود کنیم. همچنین می‌توانید از طریق رایانه یا دستگاه دیگری وارد حساب خود شده و رمز عبور را تغییر دهید."
+        answer: "در صورت سرقت یا گم شدن گوشی، سریعاً با پشتیبانی سعید پی تماس بگیرید تا حساب شما را موقتاً مسدود کنیم. همچنین می‌توانید از طریق رایانه یا دستگاه دیگری وارد حساب خود شده و رمز عبور را تغییر دهید."
       }
     ]
   }
@@ -110,13 +126,14 @@ export default function FAQPage() {
   const [expandedCategories, setExpandedCategories] = useState<number[]>([1]); // اولین دسته باز باشد
   const [expandedQuestions, setExpandedQuestions] = useState<string[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('faq');
 
   // آیتم‌های منوی اصلی
   const navItems = [
-    { id: 'dashboard', label: 'داشبورد', icon: CreditCardIcon, href: '/dashboard' },
-    { id: 'credit', label: 'اعتبار', icon: CreditCardIcon, href: '/credit-request', badge: '15M' },
-    { id: 'stores', label: 'فروشگاه‌ها', icon: CreditCardIcon, href: '/stores' },
-    { id: 'transactions', label: 'گزارش‌ها', icon: CreditCardIcon, href: '/transactions' },
+    { id: 'dashboard', label: 'داشبورد', icon: Home, href: '/dashboard' },
+    { id: 'credit', label: 'اعتبار', icon: CreditCard, href: '/credit-request', badge: '15M' },
+    { id: 'stores', label: 'فروشگاه‌ها', icon: ShoppingBag, href: '/stores' },
+    { id: 'transactions', label: 'گزارش‌ها', icon: BarChart3, href: '/transactions' },
     { id: 'contact', label: 'پشتیبانی', icon: HelpCircle, href: '/contact', badge: '2' }
   ];
 
@@ -174,7 +191,7 @@ export default function FAQPage() {
             <Link href="/">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <CreditCardIcon className="h-6 w-6 text-white" />
+                  <CreditCard className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-gray-900">سعید پی</h1>
@@ -190,10 +207,11 @@ export default function FAQPage() {
                   key={item.id}
                   href={item.href}
                   className="focus:outline-none"
+                  onClick={() => setActiveTab(item.id)}
                 >
                   <div
                     className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      item.href === '/contact'
+                      activeTab === item.id
                         ? 'bg-white shadow-sm text-blue-600'
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
@@ -261,11 +279,14 @@ export default function FAQPage() {
                   key={item.id}
                   href={item.href}
                   className="focus:outline-none"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setIsMenuOpen(false);
+                  }}
                 >
                   <div
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                      item.href === '/contact'
+                      activeTab === item.id
                         ? 'bg-blue-50 text-blue-600 border border-blue-200'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
@@ -298,101 +319,168 @@ export default function FAQPage() {
       <main className="pb-16">
         <section className="py-12 md:py-16 px-4">
           <div className="max-w-7xl mx-auto">
-            <div className="max-w-3xl mx-auto">
-              {/* Page Title */}
+            <div className="max-w-4xl mx-auto">
+              {/* Page Header */}
               <div className="text-center mb-12">
                 <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full mb-4">
                   <HelpCircle className="h-4 w-4" />
                   <span className="text-sm font-medium">راهنمای کاربران</span>
                 </div>
-                <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">سوالات متداول</h1>
+                <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                  سوالات 
+                  <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent"> متداول</span>
+                </h1>
                 <p className="text-lg text-gray-600 leading-relaxed">
                   پاسخ سوالات رایج درباره خدمات سعید پی را در این بخش بیابید
                 </p>
               </div>
               
-              <div className="mt-8 relative">
-                <Input
-                  type="text"
-                  placeholder="جستجو در سوالات متداول..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pr-10 py-6 rounded-xl border-gray-300 focus:border-blue-500"
-                />
-                <div className="absolute left-3 top-3">
-                  <Search className="h-5 w-5 text-gray-400" />
+              {/* Search Box */}
+              <div className="mb-8 relative">
+                <div className="relative">
+                  <Input
+                    type="text"
+                    placeholder="جستجو در سوالات متداول..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-12 py-4 rounded-xl border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 bg-white shadow-sm text-right"
+                  />
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                    <Search className="h-5 w-5 text-gray-400" />
+                  </div>
                 </div>
               </div>
               
-              <div className="mt-8 space-y-6">
+              {/* FAQ Categories */}
+              <div className="space-y-6">
                 {filteredFAQs.length > 0 ? (
                   filteredFAQs.map(category => (
-                    <Card key={category.id} className="border-0 shadow-sm rounded-xl overflow-hidden">
+                    <div key={category.id} className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100">
+                      {/* Category Header */}
                       <div 
-                        className="p-5 flex items-center justify-between cursor-pointer border-b border-gray-100 bg-gray-50"
+                        className={`h-2 bg-gradient-to-r ${category.color}`}
+                      ></div>
+                      
+                      <div 
+                        className="p-6 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
                         onClick={() => toggleCategory(category.id)}
                       >
-                        <h2 className="text-xl font-semibold text-gray-900">{category.category}</h2>
-                        <Button variant="ghost" size="sm" className="p-1 hover:bg-blue-50">
-                          {expandedCategories.includes(category.id) ? (
-                            <ChevronUp size={20} className="text-blue-600" />
-                          ) : (
-                            <ChevronDown size={20} className="text-gray-600" />
-                          )}
-                        </Button>
+                        <div className="flex items-center gap-4">
+                          <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-xl flex items-center justify-center`}>
+                            <category.icon className="h-6 w-6 text-white" />
+                          </div>
+                          <div>
+                            <h2 className="text-xl font-bold text-gray-900">{category.category}</h2>
+                            <p className="text-sm text-gray-500">{category.questions.length} سوال</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-500 hidden sm:inline">
+                            {expandedCategories.includes(category.id) ? 'بستن' : 'مشاهده'}
+                          </span>
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                            expandedCategories.includes(category.id) 
+                              ? 'bg-blue-100 text-blue-600' 
+                              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          }`}>
+                            {expandedCategories.includes(category.id) ? (
+                              <ChevronUp className="h-5 w-5" />
+                            ) : (
+                              <ChevronDown className="h-5 w-5" />
+                            )}
+                          </div>
+                        </div>
                       </div>
+                      
+                      {/* Questions */}
                       {expandedCategories.includes(category.id) && (
-                        <CardContent className="p-5">
-                          <div className="space-y-4">
+                        <div className="px-6 pb-6">
+                          <div className="space-y-3">
                             {category.questions.map(q => (
-                              <div key={q.id} className="border border-gray-200 rounded-xl overflow-hidden">
+                              <div key={q.id} className="border border-gray-200 rounded-2xl overflow-hidden bg-gray-50">
                                 <div 
-                                  className="p-4 flex items-center justify-between cursor-pointer hover:bg-blue-50 transition-colors"
+                                  className="p-4 flex items-center justify-between cursor-pointer hover:bg-white transition-colors"
                                   onClick={() => toggleQuestion(q.id)}
                                 >
-                                  <h3 className="font-medium text-gray-800">{q.question}</h3>
-                                  <Button variant="ghost" size="sm" className="p-1">
+                                  <div className="flex items-center gap-3 flex-1">
+                                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                      <MessageCircle className="h-4 w-4 text-blue-600" />
+                                    </div>
+                                    <h3 className="font-medium text-gray-800 text-right">{q.question}</h3>
+                                  </div>
+                                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                                    expandedQuestions.includes(q.id) 
+                                      ? 'bg-blue-100 text-blue-600' 
+                                      : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                  }`}>
                                     {expandedQuestions.includes(q.id) ? (
-                                      <ChevronUp size={18} className="text-blue-600" />
+                                      <ChevronUp className="h-4 w-4" />
                                     ) : (
-                                      <ChevronDown size={18} className="text-gray-600" />
+                                      <ChevronDown className="h-4 w-4" />
                                     )}
-                                  </Button>
+                                  </div>
                                 </div>
                                 {expandedQuestions.includes(q.id) && (
-                                  <div className="p-4 bg-white text-gray-600 border-t border-gray-100">
-                                    {q.answer}
+                                  <div className="px-4 pb-4">
+                                    <div className="bg-white rounded-xl p-4 border border-gray-100">
+                                      <p className="text-gray-700 leading-relaxed text-right">{q.answer}</p>
+                                    </div>
                                   </div>
                                 )}
                               </div>
                             ))}
                           </div>
-                        </CardContent>
+                        </div>
                       )}
-                    </Card>
+                    </div>
                   ))
                 ) : (
-                  <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <p className="text-xl font-medium text-gray-900 mb-2">موردی یافت نشد!</p>
-                    <p className="text-gray-600">
+                  /* No Results */
+                  <div className="text-center py-16 bg-white rounded-3xl shadow-lg border border-gray-100">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Search className="h-10 w-10 text-gray-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">موردی یافت نشد!</h3>
+                    <p className="text-gray-600 mb-6">
                       هیچ سوالی مطابق با جستجوی شما یافت نشد. لطفاً با عبارت دیگری جستجو کنید.
                     </p>
+                    <Button 
+                      onClick={() => setSearchQuery("")}
+                      variant="outline" 
+                      className="border-gray-300 hover:border-blue-600 hover:text-blue-600"
+                    >
+                      مشاهده همه سوالات
+                    </Button>
                   </div>
                 )}
               </div>
               
-              <div className="mt-12 bg-blue-50 p-8 rounded-2xl shadow-sm border border-blue-100">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">پاسخ سوال خود را پیدا نکردید؟</h3>
-                <p className="text-gray-600 mb-6">
-                  اگر پاسخ سوال خود را در بین سوالات متداول پیدا نکردید، می‌توانید با تیم پشتیبانی ما تماس بگیرید.
-                </p>
-                <div>
-                  <Link href="/contact">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-xl">
-                      تماس با پشتیبانی
-                      <ArrowRight className="mr-2 h-5 w-5" />
-                    </Button>
-                  </Link>
+              {/* Contact Support Section */}
+              <div className="mt-12 bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl p-8 border border-blue-200">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <MessageCircle className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-blue-900 mb-3">پاسخ سوال خود را پیدا نکردید؟</h3>
+                  <p className="text-blue-700 mb-6 leading-relaxed">
+                    اگر پاسخ سوال خود را در بین سوالات متداول پیدا نکردید، می‌توانید با تیم پشتیبانی ما تماس بگیرید.
+                  </p>
+                  
+                  {/* Contact Options */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link href="/contact">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200">
+                        تماس با پشتیبانی
+                        <ArrowRight className="mr-2 h-5 w-5" />
+                      </Button>
+                    </Link>
+                    <a href="tel:02112345678">
+                      <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white py-3 px-6 rounded-xl">
+                        <Phone className="ml-2 h-4 w-4" />
+                        تماس مستقیم
+                      </Button>
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -407,7 +495,7 @@ export default function FAQPage() {
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                  <CreditCardIcon className="h-6 w-6 text-white" />
+                  <CreditCard className="h-6 w-6 text-white" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold">سعید پی</h3>
@@ -457,7 +545,7 @@ export default function FAQPage() {
                   <span className="text-gray-400 text-sm">info@saeedpay.ir</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <MapIcon className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                  <MapPin className="w-4 h-4 text-blue-400 flex-shrink-0" />
                   <span className="text-gray-400 text-sm">تهران، ولیعصر، برج سعید</span>
                 </li>
               </ul>
@@ -471,4 +559,4 @@ export default function FAQPage() {
       </footer>
     </div>
   );
-} 
+}
