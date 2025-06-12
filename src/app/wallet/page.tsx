@@ -2,19 +2,39 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Wallet, CreditCard, ArrowUp, Check, ChevronDown, ChevronsUpDown, Banknote, User, AlertCircle, Clock } from "lucide-react";
+import {
+  Wallet,
+  CreditCard,
+  ArrowUp,
+  Check,
+  ChevronDown,
+  ChevronsUpDown,
+  Banknote,
+  User,
+  AlertCircle,
+  Clock,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import AppLayout from "@/components/layout/app-layout";
 import { useAuthStore } from "@/lib/store/auth-store";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BankCard, BankType, AddBankCardButton } from "@/components/ui/bank-card";
+import {
+  BankCard,
+  BankType,
+  AddBankCardButton,
+} from "@/components/ui/bank-card";
 import { AddBankCard, BankCardFormData } from "@/components/ui/add-bank-card";
 import { AnimatedButton } from "@/components/ui/animated-button";
 
-// دیتای نمونه برای تراکنش‌های کیف پول
 const MOCK_TRANSACTIONS = [
   {
     id: "1",
@@ -42,7 +62,6 @@ const MOCK_TRANSACTIONS = [
   },
 ];
 
-// دیتای نمونه برای کارت‌های بانکی
 const MOCK_BANK_CARDS = [
   {
     id: "1",
@@ -64,7 +83,6 @@ const MOCK_BANK_CARDS = [
   },
 ];
 
-// تعریف تایپ دقیق برای کارت‌های بانکی
 type BankCardType = {
   id: string;
   bank: BankType;
@@ -83,12 +101,16 @@ export default function WalletPage() {
   const [isDepositDialogOpen, setIsDepositDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDepositSuccess, setIsDepositSuccess] = useState(false);
-  const [bankCards, setBankCards] = useState<BankCardType[]>(MOCK_BANK_CARDS as BankCardType[]);
+  const [bankCards, setBankCards] = useState<BankCardType[]>(
+    MOCK_BANK_CARDS as BankCardType[]
+  );
   const [isAddCardDialogOpen, setIsAddCardDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("wallet");
-  const [copySuccess, setCopySuccess] = useState<{ text: string, type: string } | null>(null);
+  const [copySuccess, setCopySuccess] = useState<{
+    text: string;
+    type: string;
+  } | null>(null);
 
-  // اگر کاربر لاگین نکرده باشد، به صفحه ورود هدایت می‌شود
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
@@ -99,18 +121,15 @@ export default function WalletPage() {
     return null;
   }
 
-  // تبدیل اعداد به فرمت تومان با جداکننده هزارگان
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("fa-IR").format(amount) + " تومان";
   };
 
   const handleDeposit = () => {
-    // شبیه‌سازی درخواست به درگاه پرداخت
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);
       setIsDepositSuccess(true);
-      // بعد از چند ثانیه دیالوگ را ببندد
       setTimeout(() => {
         setIsDepositSuccess(false);
         setIsDepositDialogOpen(false);
@@ -118,13 +137,11 @@ export default function WalletPage() {
       }, 2000);
     }, 1500);
   };
-  
-  // حذف کارت بانکی
+
   const handleDeleteCard = (id: string) => {
     setBankCards((prev) => prev.filter((card) => card.id !== id));
   };
-  
-  // تنظیم کارت به عنوان پیش‌فرض
+
   const handleSetDefaultCard = (id: string) => {
     setBankCards((prev) =>
       prev.map((card) => ({
@@ -133,10 +150,8 @@ export default function WalletPage() {
       }))
     );
   };
-  
-  // اضافه کردن کارت جدید
+
   const handleAddCard = (data: BankCardFormData) => {
-    // ایجاد کارت جدید با تایپ دقیق
     const newCard: BankCardType = {
       id: `${bankCards.length + 1}`,
       bank: data.bank,
@@ -144,19 +159,17 @@ export default function WalletPage() {
       cardHolderName: data.cardHolderName,
       expiryDate: data.expiryDate || "",
       isDefault: bankCards.length === 0,
-      // فیلدهای اختیاری را فقط در صورت وجود اضافه می‌کنیم
       ...(data.accountNumber ? { accountNumber: data.accountNumber } : {}),
-      ...(data.sheba ? { sheba: data.sheba } : {})
+      ...(data.sheba ? { sheba: data.sheba } : {}),
     };
-    
+
     setBankCards((prev) => [...prev, newCard]);
   };
-  
-  // کپی کردن متن
+
   const handleCopy = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
     setCopySuccess({ text, type });
-    
+
     setTimeout(() => {
       setCopySuccess(null);
     }, 2000);
@@ -166,11 +179,15 @@ export default function WalletPage() {
     <AppLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold gradient-text">کیف پول و حساب‌های بانکی</h1>
-          <p className="text-secondary mt-1">مدیریت کیف پول، افزودن حساب‌های بانکی و انجام تراکنش‌های مالی</p>
+          <h1 className="text-2xl font-bold gradient-text">
+            کیف پول و حساب‌های بانکی
+          </h1>
+          <p className="text-secondary mt-1">
+            مدیریت کیف پول، افزودن حساب‌های بانکی و انجام تراکنش‌های مالی
+          </p>
         </div>
 
-        <Tabs 
+        <Tabs
           defaultValue="wallet"
           value={activeTab}
           onValueChange={setActiveTab}
@@ -184,8 +201,7 @@ export default function WalletPage() {
               <CreditCard size={16} /> کارت‌های بانکی
             </TabsTrigger>
           </TabsList>
-          
-          {/* بخش کیف پول */}
+
           <TabsContent value="wallet">
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -197,17 +213,19 @@ export default function WalletPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold gradient-text">{formatCurrency(user.walletBalance)}</div>
+                    <div className="text-3xl font-bold gradient-text">
+                      {formatCurrency(user.walletBalance)}
+                    </div>
                     <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                      <AnimatedButton 
+                      <AnimatedButton
                         onClick={() => setIsDepositDialogOpen(true)}
                         className="flex-1 gap-2"
                         animation="scale"
                       >
                         <ArrowUp size={18} /> افزایش موجودی
                       </AnimatedButton>
-                      <AnimatedButton 
-                        variant="outline" 
+                      <AnimatedButton
+                        variant="outline"
                         className="flex-1 gap-2"
                         animation="float"
                       >
@@ -216,7 +234,7 @@ export default function WalletPage() {
                     </div>
                   </CardContent>
                 </Card>
-                
+
                 <Card className="hover-float card-hover shadow-card">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-lg flex items-center gap-2">
@@ -231,13 +249,15 @@ export default function WalletPage() {
                           <User className="h-5 w-5" />
                         </div>
                         <div>
-                          <span className="text-sm text-secondary">انتقال به</span>
+                          <span className="text-sm text-secondary">
+                            انتقال به
+                          </span>
                           <div className="font-medium">حساب شخصی</div>
                         </div>
                       </div>
-                      
+
                       <div className="pt-2">
-                        <AnimatedButton 
+                        <AnimatedButton
                           className="w-full gap-2"
                           animation="scale"
                         >
@@ -253,25 +273,43 @@ export default function WalletPage() {
                 <h2 className="text-xl font-semibold mb-4">تراکنش‌های اخیر</h2>
                 <div className="space-y-4">
                   {MOCK_TRANSACTIONS.map((transaction) => (
-                    <Card key={transaction.id} className="hover-float card-hover shadow-card">
+                    <Card
+                      key={transaction.id}
+                      className="hover-float card-hover shadow-card"
+                    >
                       <CardContent className="p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className={`p-2 rounded-full ${
-                            transaction.type === "deposit" 
-                              ? "bg-success/10 text-success" 
-                              : "bg-danger/10 text-danger"
-                          }`}>
-                            {transaction.type === "deposit" ? <ArrowUp size={16} /> : <CreditCard size={16} />}
+                          <div
+                            className={`p-2 rounded-full ${
+                              transaction.type === "deposit"
+                                ? "bg-success/10 text-success"
+                                : "bg-danger/10 text-danger"
+                            }`}
+                          >
+                            {transaction.type === "deposit" ? (
+                              <ArrowUp size={16} />
+                            ) : (
+                              <CreditCard size={16} />
+                            )}
                           </div>
                           <div>
-                            <div className="font-medium">{transaction.description}</div>
-                            <div className="text-sm text-secondary">{transaction.date}</div>
+                            <div className="font-medium">
+                              {transaction.description}
+                            </div>
+                            <div className="text-sm text-secondary">
+                              {transaction.date}
+                            </div>
                           </div>
                         </div>
-                        <div className={`font-medium ${
-                          transaction.type === "deposit" ? "text-success" : "text-danger"
-                        }`}>
-                          {transaction.type === "deposit" ? "+" : "-"}{formatCurrency(transaction.amount)}
+                        <div
+                          className={`font-medium ${
+                            transaction.type === "deposit"
+                              ? "text-success"
+                              : "text-danger"
+                          }`}
+                        >
+                          {transaction.type === "deposit" ? "+" : "-"}
+                          {formatCurrency(transaction.amount)}
                         </div>
                       </CardContent>
                     </Card>
@@ -280,20 +318,23 @@ export default function WalletPage() {
               </div>
             </div>
           </TabsContent>
-          
-          {/* بخش کارت‌های بانکی */}
+
           <TabsContent value="bank-cards">
             <div className="space-y-6">
               <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200 flex items-start gap-3 text-blue-800">
                 <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                 <div>
-                  <h3 className="font-medium text-blue-800">راهنمای استفاده از کارت‌های بانکی</h3>
+                  <h3 className="font-medium text-blue-800">
+                    راهنمای استفاده از کارت‌های بانکی
+                  </h3>
                   <p className="text-sm text-blue-700 mt-1">
-                    از این بخش می‌توانید کارت‌های بانکی خود را مدیریت کنید. برای افزودن کارت جدید روی دکمه «افزودن کارت بانکی» کلیک کنید. برای مشاهده اطلاعات کامل هر کارت، روی آن کلیک کنید.
+                    از این بخش می‌توانید کارت‌های بانکی خود را مدیریت کنید. برای
+                    افزودن کارت جدید روی دکمه «افزودن کارت بانکی» کلیک کنید.
+                    برای مشاهده اطلاعات کامل هر کارت، روی آن کلیک کنید.
                   </p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {bankCards.map((card) => (
                   <BankCard
@@ -304,30 +345,33 @@ export default function WalletPage() {
                     onCopy={handleCopy}
                   />
                 ))}
-                
-                {/* دکمه افزودن کارت جدید */}
-                <AddBankCardButton onClick={() => setIsAddCardDialogOpen(true)} />
+
+                <AddBankCardButton
+                  onClick={() => setIsAddCardDialogOpen(true)}
+                />
               </div>
-              
+
               {bankCards.length === 0 && (
                 <div className="py-12 text-center">
                   <div className="w-16 h-16 rounded-full bg-secondary-light mx-auto flex items-center justify-center">
                     <CreditCard className="h-8 w-8 text-secondary" />
                   </div>
-                  <h3 className="mt-4 text-lg font-medium">هنوز کارت بانکی اضافه نکرده‌اید</h3>
+                  <h3 className="mt-4 text-lg font-medium">
+                    هنوز کارت بانکی اضافه نکرده‌اید
+                  </h3>
                   <p className="mt-2 text-secondary">
                     برای افزودن کارت بانکی جدید روی دکمه بالا کلیک کنید
                   </p>
                 </div>
               )}
-              
+
               {copySuccess && (
                 <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-success text-white rounded-md shadow-lg animate-fade-in flex items-center gap-2">
                   <Check size={16} />
                   <span>
-                    {copySuccess.type === 'card' && 'شماره کارت '}
-                    {copySuccess.type === 'sheba' && 'شماره شبا '}
-                    {copySuccess.type === 'account' && 'شماره حساب '}
+                    {copySuccess.type === "card" && "شماره کارت "}
+                    {copySuccess.type === "sheba" && "شماره شبا "}
+                    {copySuccess.type === "account" && "شماره حساب "}
                     کپی شد
                   </span>
                 </div>
@@ -336,8 +380,10 @@ export default function WalletPage() {
           </TabsContent>
         </Tabs>
 
-        {/* دیالوگ افزایش موجودی */}
-        <Dialog open={isDepositDialogOpen} onOpenChange={setIsDepositDialogOpen}>
+        <Dialog
+          open={isDepositDialogOpen}
+          onOpenChange={setIsDepositDialogOpen}
+        >
           <DialogContent>
             <DialogHeader>
               <DialogTitle>افزایش موجودی کیف پول</DialogTitle>
@@ -345,7 +391,7 @@ export default function WalletPage() {
                 مبلغ مورد نظر برای شارژ کیف پول را وارد کنید
               </DialogDescription>
             </DialogHeader>
-            
+
             {!isDepositSuccess ? (
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
@@ -358,43 +404,53 @@ export default function WalletPage() {
                     disabled={isProcessing}
                   />
                 </div>
-                
-                {/* کارت پیش‌فرض */}
+
                 {bankCards.length > 0 && (
                   <div className="space-y-2">
                     <label className="text-sm font-medium">کارت بانکی</label>
                     <div className="p-3 border border-border rounded-md flex items-center gap-3">
-                      <div 
+                      <div
                         className="w-10 h-10 rounded-full flex items-center justify-center"
-                        style={{ 
-                          backgroundImage: `linear-gradient(to right, var(--primary-500), var(--primary-600))` 
+                        style={{
+                          backgroundImage: `linear-gradient(to right, var(--primary-500), var(--primary-600))`,
                         }}
                       >
                         <CreditCard className="h-5 w-5 text-white" />
                       </div>
                       <div className="flex-1">
                         <div className="font-medium">
-                          {bankCards.find(card => card.isDefault)?.cardNumber.slice(0, 4) + ' •••• •••• ' + bankCards.find(card => card.isDefault)?.cardNumber.slice(-4)}
+                          {bankCards
+                            .find((card) => card.isDefault)
+                            ?.cardNumber.slice(0, 4) +
+                            " •••• •••• " +
+                            bankCards
+                              .find((card) => card.isDefault)
+                              ?.cardNumber.slice(-4)}
                         </div>
                         <div className="text-xs text-secondary">
-                          {bankCards.find(card => card.isDefault)?.cardHolderName}
+                          {
+                            bankCards.find((card) => card.isDefault)
+                              ?.cardHolderName
+                          }
                         </div>
                       </div>
                       <ChevronDown className="h-5 w-5 text-secondary" />
                     </div>
                   </div>
                 )}
-                
+
                 <div className="flex flex-col gap-2">
-                  <Button 
-                    onClick={handleDeposit} 
+                  <Button
+                    onClick={handleDeposit}
                     disabled={!depositAmount || isProcessing}
                     className="w-full"
                   >
-                    {isProcessing ? "در حال پردازش..." : "پرداخت و افزایش موجودی"}
+                    {isProcessing
+                      ? "در حال پردازش..."
+                      : "پرداخت و افزایش موجودی"}
                   </Button>
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     onClick={() => setIsDepositDialogOpen(false)}
                     disabled={isProcessing}
                     className="w-full"
@@ -406,28 +462,35 @@ export default function WalletPage() {
             ) : (
               <div className="py-6 text-center space-y-4">
                 <div className="w-16 h-16 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto">
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    strokeWidth={2} 
-                    stroke="currentColor" 
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
                     className="w-8 h-8"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-success">پرداخت با موفقیت انجام شد</h3>
-                  <p className="text-secondary mt-1">موجودی کیف پول شما افزایش یافت</p>
+                  <h3 className="text-xl font-semibold text-success">
+                    پرداخت با موفقیت انجام شد
+                  </h3>
+                  <p className="text-secondary mt-1">
+                    موجودی کیف پول شما افزایش یافت
+                  </p>
                 </div>
               </div>
             )}
           </DialogContent>
         </Dialog>
-        
-        {/* دیالوگ افزودن کارت بانکی */}
-        <AddBankCard 
+
+        <AddBankCard
           open={isAddCardDialogOpen}
           onOpenChange={setIsAddCardDialogOpen}
           onSubmit={handleAddCard}
@@ -436,4 +499,4 @@ export default function WalletPage() {
       </div>
     </AppLayout>
   );
-} 
+}

@@ -14,7 +14,6 @@ import {
   Shield,
   CheckCircle2,
   Award,
-  CreditCard,
   Clock,
 } from "lucide-react";
 import { useAuthStore } from "@/lib/store/auth-store";

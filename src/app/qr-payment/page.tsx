@@ -2,7 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Camera, QrCode, CreditCard, Check, X, RefreshCw, ShoppingBag, ArrowRight, MapPin } from "lucide-react";
+import {
+  Camera,
+  QrCode,
+  CreditCard,
+  Check,
+  X,
+  RefreshCw,
+  ShoppingBag,
+  ArrowRight,
+  MapPin,
+} from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +20,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AppLayout from "@/components/layout/app-layout";
 import { useAuthStore } from "@/lib/store/auth-store";
 
-// تعریف اینترفیس برای ساختار پذیرنده
 interface MerchantType {
   id: string;
   name: string;
@@ -25,25 +34,23 @@ export default function QRPaymentPage() {
   const [qrValue, setQrValue] = useState("");
   const [merchant, setMerchant] = useState<MerchantType | null>(null);
   const [isScanning, setIsScanning] = useState(false);
-  const [paymentStatus, setPaymentStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
+  const [paymentStatus, setPaymentStatus] = useState<
+    "idle" | "processing" | "success" | "error"
+  >("idle");
   const [error, setError] = useState("");
 
-  // اگر کاربر لاگین نکرده باشد، به صفحه ورود هدایت می‌شود
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
     }
   }, [isAuthenticated, router]);
 
-  // شبیه‌سازی اسکن QR کد
   const simulateScan = () => {
     setIsScanning(true);
     setError("");
-    
-    // شبیه‌سازی اسکن بعد از 2 ثانیه
+
     setTimeout(() => {
       setIsScanning(false);
-      // یک نمونه داده برای پذیرنده
       setMerchant({
         id: "123456",
         name: "فروشگاه لوازم خانگی ایران",
@@ -52,20 +59,15 @@ export default function QRPaymentPage() {
       });
     }, 2000);
   };
-  
-  // شبیه‌سازی پرداخت
+
   const simulatePayment = () => {
     if (!amount || isNaN(Number(amount))) {
       setError("لطفاً مبلغ را به درستی وارد کنید");
       return;
     }
-    
     setPaymentStatus("processing");
     setError("");
-    
-    // شبیه‌سازی پردازش پرداخت
     setTimeout(() => {
-      // 80% احتمال موفقیت
       if (Math.random() > 0.2) {
         setPaymentStatus("success");
       } else {
@@ -74,8 +76,7 @@ export default function QRPaymentPage() {
       }
     }, 2000);
   };
-  
-  // بازنشانی وضعیت
+
   const resetState = () => {
     setPaymentStatus("idle");
     setMerchant(null);
@@ -83,8 +84,7 @@ export default function QRPaymentPage() {
     setQrValue("");
     setError("");
   };
-  
-  // تبدیل اعداد به فرمت تومان با جداکننده هزارگان
+
   const formatCurrency = (amount: string) => {
     if (!amount || isNaN(Number(amount))) return "";
     return new Intl.NumberFormat("fa-IR").format(Number(amount)) + " تومان";
@@ -95,7 +95,9 @@ export default function QRPaymentPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold">پرداخت با QR کد</h1>
-          <p className="text-secondary mt-1">پرداخت سریع و آسان در فروشگاه‌های طرف قرارداد</p>
+          <p className="text-secondary mt-1">
+            پرداخت سریع و آسان در فروشگاه‌های طرف قرارداد
+          </p>
         </div>
 
         {paymentStatus === "idle" ? (
@@ -111,7 +113,7 @@ export default function QRPaymentPage() {
                   ورود دستی کد
                 </TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="scan" className="mt-6">
                 <Card>
                   <CardContent className="pt-6">
@@ -129,14 +131,16 @@ export default function QRPaymentPage() {
                             <Camera className="h-12 w-12 text-secondary" />
                           )}
                         </div>
-                        <Button 
-                          onClick={simulateScan} 
+                        <Button
+                          onClick={simulateScan}
                           disabled={isScanning}
                           className="mt-4"
                         >
                           {isScanning ? "در حال اسکن..." : "اسکن QR کد"}
                         </Button>
-                        <p className="text-xs text-secondary mt-2">دوربین خود را به سمت QR کد فروشگاه بگیرید</p>
+                        <p className="text-xs text-secondary mt-2">
+                          دوربین خود را به سمت QR کد فروشگاه بگیرید
+                        </p>
                       </div>
                     ) : (
                       <MerchantInfo merchant={merchant} />
@@ -144,35 +148,39 @@ export default function QRPaymentPage() {
                   </CardContent>
                 </Card>
               </TabsContent>
-              
+
               <TabsContent value="manual" className="mt-6">
                 <Card>
                   <CardContent className="pt-6">
                     <div className="space-y-4">
                       <div>
-                        <label className="text-sm font-medium block mb-2">کد QR پذیرنده</label>
+                        <label className="text-sm font-medium block mb-2">
+                          کد QR پذیرنده
+                        </label>
                         <Input
                           value={qrValue}
                           onChange={(e) => setQrValue(e.target.value)}
                           placeholder="کد را وارد کنید"
                         />
-                        <p className="text-xs text-secondary mt-1">کد QR را از فروشگاه دریافت کنید</p>
+                        <p className="text-xs text-secondary mt-1">
+                          کد QR را از فروشگاه دریافت کنید
+                        </p>
                       </div>
-                      <Button 
+                      <Button
                         onClick={() => {
                           if (qrValue) {
                             simulateScan();
                           } else {
                             setError("لطفاً کد را وارد کنید");
                           }
-                        }} 
+                        }}
                         disabled={isScanning || !qrValue}
                         className="w-full"
                       >
                         تایید کد
                       </Button>
                     </div>
-                    
+
                     {merchant && (
                       <div className="mt-4">
                         <MerchantInfo merchant={merchant} />
@@ -182,13 +190,15 @@ export default function QRPaymentPage() {
                 </Card>
               </TabsContent>
             </Tabs>
-            
+
             {merchant && (
               <Card className="mt-4">
                 <CardContent className="pt-6">
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm font-medium block mb-2">مبلغ پرداخت (تومان)</label>
+                      <label className="text-sm font-medium block mb-2">
+                        مبلغ پرداخت (تومان)
+                      </label>
                       <Input
                         type="text"
                         value={amount}
@@ -202,27 +212,35 @@ export default function QRPaymentPage() {
                         </p>
                       )}
                     </div>
-                    
+
                     <div className="flex justify-between pt-2 text-sm border-t border-border">
                       <span>اعتبار شما:</span>
-                      <span className="font-medium">{user?.creditLimit ? formatCurrency(user.creditLimit.toString()) : "نامشخص"}</span>
+                      <span className="font-medium">
+                        {user?.creditLimit
+                          ? formatCurrency(user.creditLimit.toString())
+                          : "نامشخص"}
+                      </span>
                     </div>
-                    
+
                     <div className="flex justify-between text-sm">
                       <span>موجودی کیف پول:</span>
-                      <span className="font-medium">{user?.walletBalance ? formatCurrency(user.walletBalance.toString()) : "نامشخص"}</span>
+                      <span className="font-medium">
+                        {user?.walletBalance
+                          ? formatCurrency(user.walletBalance.toString())
+                          : "نامشخص"}
+                      </span>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="border-t border-border pt-4">
                   <div className="w-full space-y-3">
                     {error && (
-                      <div className="p-2 bg-danger-light text-danger text-sm rounded">
+                      <div className="p-2 bg-red-50 text-red-600 text-sm rounded">
                         {error}
                       </div>
                     )}
-                    <Button 
-                      onClick={simulatePayment} 
+                    <Button
+                      onClick={simulatePayment}
                       className="w-full gap-2"
                       disabled={!amount || isNaN(Number(amount))}
                     >
@@ -235,11 +253,11 @@ export default function QRPaymentPage() {
             )}
           </>
         ) : (
-          <PaymentResult 
-            status={paymentStatus} 
-            amount={amount} 
-            merchant={merchant} 
-            error={error} 
+          <PaymentResult
+            status={paymentStatus}
+            amount={amount}
+            merchant={merchant}
+            error={error}
             onReset={resetState}
             onViewTransactions={() => router.push("/wallet")}
           />
@@ -284,7 +302,14 @@ interface PaymentResultProps {
   onViewTransactions: () => void;
 }
 
-function PaymentResult({ status, amount, merchant, error, onReset, onViewTransactions }: PaymentResultProps) {
+function PaymentResult({
+  status,
+  amount,
+  merchant,
+  error,
+  onReset,
+  onViewTransactions,
+}: PaymentResultProps) {
   return (
     <Card>
       <CardContent className="pt-6 pb-0">
@@ -298,19 +323,22 @@ function PaymentResult({ status, amount, merchant, error, onReset, onViewTransac
               <p className="text-secondary">لطفاً صبر کنید...</p>
             </>
           )}
-          
+
           {status === "success" && (
             <>
-              <div className="w-16 h-16 rounded-full bg-success-light flex items-center justify-center mb-4">
-                <Check className="h-8 w-8 text-success" />
+              <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mb-4">
+                <Check className="h-8 w-8 text-green-600" />
               </div>
               <h2 className="text-xl font-medium mb-2">پرداخت موفق</h2>
               <p className="text-secondary mb-4">پرداخت با موفقیت انجام شد</p>
-              
+
               <div className="w-full bg-secondary-light rounded-lg p-4 mb-4">
                 <div className="flex justify-between mb-2">
                   <span className="text-secondary">مبلغ:</span>
-                  <span className="font-medium">{new Intl.NumberFormat("fa-IR").format(Number(amount))} تومان</span>
+                  <span className="font-medium">
+                    {new Intl.NumberFormat("fa-IR").format(Number(amount))}{" "}
+                    تومان
+                  </span>
                 </div>
                 <div className="flex justify-between mb-2">
                   <span className="text-secondary">پذیرنده:</span>
@@ -318,37 +346,38 @@ function PaymentResult({ status, amount, merchant, error, onReset, onViewTransac
                 </div>
                 <div className="flex justify-between">
                   <span className="text-secondary">شماره پیگیری:</span>
-                  <span className="font-medium">{Math.floor(Math.random() * 1000000000)}</span>
+                  <span className="font-medium">
+                    {Math.floor(Math.random() * 1000000000)}
+                  </span>
                 </div>
               </div>
             </>
           )}
-          
+
           {status === "error" && (
             <>
-              <div className="w-16 h-16 rounded-full bg-danger-light flex items-center justify-center mb-4">
-                <X className="h-8 w-8 text-danger" />
+              <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4">
+                <X className="h-8 w-8 text-red-600" />
               </div>
               <h2 className="text-xl font-medium mb-2">خطا در پرداخت</h2>
-              <p className="text-danger mb-4">{error}</p>
+              <p className="text-red-600 mb-4">{error}</p>
             </>
           )}
         </div>
       </CardContent>
-      
+
       <CardFooter className="flex flex-col gap-3 border-t border-border mt-6 pt-4">
         {status === "success" ? (
           <>
-            <Button 
-              variant="outline" 
-              className="w-full" 
+            <Button
+              variant="outline"
+              className="w-full"
               onClick={onViewTransactions}
             >
               مشاهده تراکنش‌ها
             </Button>
-            <Button 
-              variant="primary" 
-              className="w-full gap-2" 
+            <Button
+              className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white"
               onClick={onReset}
             >
               <ArrowRight className="h-4 w-4" />
@@ -356,9 +385,9 @@ function PaymentResult({ status, amount, merchant, error, onReset, onViewTransac
             </Button>
           </>
         ) : (
-          <Button 
-            variant={status === "error" ? "primary" : "outline"} 
-            className="w-full" 
+          <Button
+            className={`w-full ${status === "error" ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}`}
+            variant={status === "error" ? "default" : "outline"}
             onClick={onReset}
             disabled={status === "processing"}
           >
@@ -368,4 +397,4 @@ function PaymentResult({ status, amount, merchant, error, onReset, onViewTransac
       </CardFooter>
     </Card>
   );
-} 
+}

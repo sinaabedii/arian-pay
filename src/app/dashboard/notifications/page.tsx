@@ -1,313 +1,442 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Bell,
-  ShoppingBag,
-  CreditCard,
-  Wallet,
   Calendar,
+  CreditCard,
+  Info,
   CheckCircle,
-  Clock,
-  AlertCircle,
+  AlertTriangle,
+  X,
   ChevronDown,
-  ChevronUp,
-  Trash
+  ExternalLink,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import AppLayout from "@/components/layout/app-layout";
+import { useAuthStore } from "@/lib/store/auth-store";
 
-// نمونه داده برای اعلان‌ها
-const MOCK_NOTIFICATIONS = [
-  { 
-    id: "1", 
-    title: "قسط بعدی شما", 
-    description: "قسط بعدی شما تا ۳ روز دیگر سررسید می‌شود.", 
-    date: "1402/08/18", 
-    time: "09:15", 
-    isRead: false,
+// تعریف اینترفیس برای ساختار اعلان‌ها
+interface Notification {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  type: string;
+  status: "read" | "unread";
+  icon: React.ReactNode;
+  iconBg: string;
+  action: {
+    label: string;
+    link: string;
+  };
+}
+
+// نمونه داده‌های اعلان‌ها
+const MOCK_NOTIFICATIONS: Notification[] = [
+  {
+    id: "1",
+    title: "سررسید قسط بعدی",
+    description: "قسط بعدی شما در تاریخ ۱۵ مهر سررسید خواهد شد.",
+    date: "۱۰ مهر ۱۴۰۲",
+    time: "۱۰:۲۵",
     type: "reminder",
-    icon: <Calendar className="h-5 w-5" />
+    status: "unread",
+    icon: <Calendar size={16} />,
+    iconBg: "bg-accent-light text-accent",
+    action: {
+      label: "مشاهده اقساط",
+      link: "/installments",
+    },
   },
-  { 
-    id: "2", 
-    title: "کیف پول شارژ شد", 
-    description: "کیف پول شما با مبلغ ۵,۰۰۰,۰۰۰ تومان شارژ شد.", 
-    date: "1402/08/15", 
-    time: "14:30", 
-    isRead: true,
-    type: "wallet",
-    icon: <Wallet className="h-5 w-5" />
-  },
-  { 
-    id: "3", 
-    title: "اعتبار تأیید شد", 
-    description: "درخواست اعتبار شما به مبلغ ۱۵,۰۰۰,۰۰۰ تومان تأیید شد.", 
-    date: "1402/08/10", 
-    time: "11:45", 
-    isRead: true,
+  {
+    id: "2",
+    title: "افزایش اعتبار تایید شد",
+    description:
+      "درخواست افزایش اعتبار شما تایید شد. اعتبار جدید شما: ۲۰ میلیون تومان",
+    date: "۵ مهر ۱۴۰۲",
+    time: "۱۵:۴۰",
     type: "credit",
-    icon: <CreditCard className="h-5 w-5" />
+    status: "read",
+    icon: <CreditCard size={16} />,
+    iconBg: "bg-success-light text-success",
+    action: {
+      label: "مشاهده اعتبار",
+      link: "/dashboard",
+    },
   },
-  { 
-    id: "4", 
-    title: "خرید موفق", 
-    description: "خرید شما از فروشگاه دیجی کالا با موفقیت انجام شد.", 
-    date: "1402/08/05", 
-    time: "16:20", 
-    isRead: true,
-    type: "purchase",
-    icon: <ShoppingBag className="h-5 w-5" />
-  },
-  { 
-    id: "5", 
-    title: "پیشنهاد ویژه", 
-    description: "۲۰٪ تخفیف ویژه برای خرید از فروشگاه ایران کالا تا پایان هفته.", 
-    date: "1402/08/01", 
-    time: "10:00", 
-    isRead: false,
+  {
+    id: "3",
+    title: "تخفیف ویژه فروشگاه دیجی کالا",
+    description:
+      "با استفاده از اعتبار سعید پی  در دیجی کالا از تخفیف ۱۵ درصدی بهره‌مند شوید.",
+    date: "۱ مهر ۱۴۰۲",
+    time: "۰۹:۱۵",
     type: "offer",
-    icon: <AlertCircle className="h-5 w-5" />
+    status: "read",
+    icon: <Info size={16} />,
+    iconBg: "bg-primary-light text-primary",
+    action: {
+      label: "مشاهده فروشگاه",
+      link: "/stores",
+    },
+  },
+  {
+    id: "4",
+    title: "پرداخت موفق",
+    description:
+      "پرداخت شما به مبلغ ۲,۵۰۰,۰۰۰ تومان به دیجی کالا با موفقیت انجام شد.",
+    date: "۲۸ شهریور ۱۴۰۲",
+    time: "۱۱:۳۰",
+    type: "payment",
+    status: "read",
+    icon: <CheckCircle size={16} />,
+    iconBg: "bg-success-light text-success",
+    action: {
+      label: "مشاهده تراکنش",
+      link: "/transactions",
+    },
+  },
+  {
+    id: "5",
+    title: "هشدار پرداخت قسط",
+    description:
+      "تنها ۲ روز تا سررسید قسط شما باقی مانده است. لطفاً به‌موقع پرداخت کنید.",
+    date: "۲۵ شهریور ۱۴۰۲",
+    time: "۰۸:۴۵",
+    type: "alert",
+    status: "read",
+    icon: <AlertTriangle size={16} />,
+    iconBg: "bg-warning-light text-warning",
+    action: {
+      label: "پرداخت قسط",
+      link: "/installments",
+    },
+  },
+];
+
+// تنظیمات اعلان‌ها
+const NOTIFICATION_SETTINGS = [
+  {
+    id: "payment_success",
+    title: "پرداخت موفق",
+    description: "اطلاع‌رسانی پرداخت‌های موفق",
+    defaultEnabled: true,
+  },
+  {
+    id: "payment_due",
+    title: "سررسید اقساط",
+    description: "یادآوری سررسید اقساط (۵ روز قبل)",
+    defaultEnabled: true,
+  },
+  {
+    id: "credit_changes",
+    title: "تغییرات اعتبار",
+    description: "اطلاع‌رسانی تغییرات در اعتبار شما",
+    defaultEnabled: true,
+  },
+  {
+    id: "special_offers",
+    title: "پیشنهادات ویژه",
+    description: "دریافت پیشنهادات و تخفیف‌های ویژه",
+    defaultEnabled: true,
+  },
+  {
+    id: "security_alerts",
+    title: "هشدارهای امنیتی",
+    description: "هشدارهای مربوط به امنیت حساب",
+    defaultEnabled: true,
   },
 ];
 
 export default function NotificationsPage() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuthStore();
+  const [activeTab, setActiveTab] = useState("all");
   const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
-  const [expandedNotification, setExpandedNotification] = useState<string | null>(null);
-  const [filter, setFilter] = useState<string>("all");
-  
-  // تغییر وضعیت خوانده شدن اعلان
-  const toggleReadStatus = (id: string) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notification =>
+  const [notificationSettings, setNotificationSettings] = useState(
+    NOTIFICATION_SETTINGS.map((setting) => ({
+      ...setting,
+      enabled: setting.defaultEnabled,
+    }))
+  );
+
+  // اگر کاربر لاگین نکرده باشد، به صفحه ورود هدایت می‌شود
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, router]);
+
+  // نشان‌گذاری یک اعلان به عنوان خوانده شده
+  const markAsRead = (id: string) => {
+    setNotifications(
+      notifications.map((notification) =>
         notification.id === id
-          ? { ...notification, isRead: !notification.isRead }
+          ? { ...notification, status: "read" }
           : notification
       )
     );
   };
-  
-  // حذف اعلان
-  const deleteNotification = (id: string) => {
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notification => notification.id !== id)
+
+  // حذف یک اعلان
+  const removeNotification = (id: string) => {
+    setNotifications(
+      notifications.filter((notification) => notification.id !== id)
     );
-    if (expandedNotification === id) {
-      setExpandedNotification(null);
-    }
   };
-  
-  // تغییر وضعیت نمایش جزئیات اعلان
-  const toggleNotificationDetails = (id: string) => {
-    setExpandedNotification(expandedNotification === id ? null : id);
-  };
-  
-  // علامت‌گذاری همه اعلان‌ها به عنوان خوانده شده
+
+  // نشان‌گذاری همه اعلان‌ها به عنوان خوانده شده
   const markAllAsRead = () => {
-    setNotifications(prevNotifications =>
-      prevNotifications.map(notification => ({ ...notification, isRead: true }))
+    setNotifications(
+      notifications.map((notification) => ({ ...notification, status: "read" }))
     );
   };
-  
-  // فیلتر اعلان‌ها
-  const filteredNotifications = notifications.filter(notification => {
-    if (filter === "all") return true;
-    if (filter === "unread") return !notification.isRead;
-    return notification.type === filter;
+
+  // تغییر وضعیت تنظیم اعلان
+  const toggleNotificationSetting = (id: string) => {
+    setNotificationSettings(
+      notificationSettings.map((setting) =>
+        setting.id === id ? { ...setting, enabled: !setting.enabled } : setting
+      )
+    );
+  };
+
+  // فیلتر اعلان‌ها بر اساس تب فعال
+  const filteredNotifications = notifications.filter((notification) => {
+    if (activeTab === "all") return true;
+    if (activeTab === "unread") return notification.status === "unread";
+    return notification.type === activeTab;
   });
-  
+
   // تعداد اعلان‌های خوانده نشده
-  const unreadCount = notifications.filter(notification => !notification.isRead).length;
-  
+  const unreadCount = notifications.filter(
+    (notification) => notification.status === "unread"
+  ).length;
+
   return (
-    <div className="space-y-8">
-      {/* هدر صفحه */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">اعلان‌ها</h1>
-          <p className="text-gray-600 mt-1">مدیریت اعلان‌ها و اطلاعیه‌های سیستم</p>
-        </div>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            className="gap-1"
-            onClick={markAllAsRead}
-            disabled={unreadCount === 0}
-          >
-            <CheckCircle className="h-4 w-4" />
-            علامت همه به عنوان خوانده شده
-          </Button>
-        </div>
-      </div>
-      
-      {/* فیلترها */}
-      <Card className="border-0 shadow-sm rounded-xl overflow-hidden">
-        <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-        <CardContent className="p-6">
-          <div className="flex flex-wrap gap-2">
-            <Button 
-              variant={filter === "all" ? "default" : "outline"} 
-              className={filter === "all" ? "bg-blue-600 hover:bg-blue-700" : ""}
-              onClick={() => setFilter("all")}
-            >
-              همه ({notifications.length})
-            </Button>
-            <Button 
-              variant={filter === "unread" ? "default" : "outline"} 
-              className={filter === "unread" ? "bg-blue-600 hover:bg-blue-700" : ""}
-              onClick={() => setFilter("unread")}
-            >
-              خوانده نشده ({unreadCount})
-            </Button>
-            <Button 
-              variant={filter === "reminder" ? "default" : "outline"} 
-              className={filter === "reminder" ? "bg-amber-500 hover:bg-amber-600" : ""}
-              onClick={() => setFilter("reminder")}
-            >
-              یادآوری
-            </Button>
-            <Button 
-              variant={filter === "wallet" ? "default" : "outline"} 
-              className={filter === "wallet" ? "bg-green-600 hover:bg-green-700" : ""}
-              onClick={() => setFilter("wallet")}
-            >
-              کیف پول
-            </Button>
-            <Button 
-              variant={filter === "credit" ? "default" : "outline"} 
-              className={filter === "credit" ? "bg-purple-600 hover:bg-purple-700" : ""}
-              onClick={() => setFilter("credit")}
-            >
-              اعتبار
-            </Button>
-            <Button 
-              variant={filter === "purchase" ? "default" : "outline"} 
-              className={filter === "purchase" ? "bg-blue-600 hover:bg-blue-700" : ""}
-              onClick={() => setFilter("purchase")}
-            >
-              خرید
-            </Button>
-            <Button 
-              variant={filter === "offer" ? "default" : "outline"} 
-              className={filter === "offer" ? "bg-red-600 hover:bg-red-700" : ""}
-              onClick={() => setFilter("offer")}
-            >
-              پیشنهاد
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* لیست اعلان‌ها */}
-      <div className="space-y-4">
-        {filteredNotifications.length > 0 ? (
-          filteredNotifications.map(notification => (
-            <Card 
-              key={notification.id} 
-              className={`border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl ${!notification.isRead ? 'bg-blue-50 border-r-4 border-r-blue-500' : ''}`}
-            >
-              <CardContent className="p-0">
-                <div 
-                  className="p-4 cursor-pointer"
-                  onClick={() => toggleNotificationDetails(notification.id)}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        notification.type === 'reminder' ? 'bg-amber-100 text-amber-600' :
-                        notification.type === 'wallet' ? 'bg-green-100 text-green-600' :
-                        notification.type === 'credit' ? 'bg-purple-100 text-purple-600' :
-                        notification.type === 'purchase' ? 'bg-blue-100 text-blue-600' :
-                        'bg-red-100 text-red-600'
-                      }`}>
-                        {notification.icon}
-                      </div>
-                      <div>
-                        <div className="font-medium text-gray-900">{notification.title}</div>
-                        <div className="text-sm text-gray-600 mt-1">{notification.description}</div>
-                        <div className="text-xs text-gray-500 mt-2">
-                          {notification.date} - {notification.time}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {!notification.isRead && (
-                        <div className="w-3 h-3 rounded-full bg-blue-600"></div>
-                      )}
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 w-8 p-0"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteNotification(notification.id);
-                        }}
-                      >
-                        <Trash className="h-4 w-4 text-gray-500" />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 w-8 p-0"
-                      >
-                        {expandedNotification === notification.id ? (
-                          <ChevronUp className="h-4 w-4 text-gray-500" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4 text-gray-500" />
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                
-                {expandedNotification === notification.id && (
-                  <div className="p-4 bg-gray-50 border-t border-gray-100">
-                    <div className="flex justify-end">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="gap-1"
-                        onClick={() => toggleReadStatus(notification.id)}
-                      >
-                        {notification.isRead ? (
-                          <>
-                            <Clock className="h-4 w-4" />
-                            علامت به عنوان خوانده نشده
-                          </>
-                        ) : (
-                          <>
-                            <CheckCircle className="h-4 w-4" />
-                            علامت به عنوان خوانده شده
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <div className="py-12 text-center bg-white rounded-xl border border-gray-200">
-            <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <Bell className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-1">هیچ اعلانی یافت نشد</h3>
-            <p className="text-gray-500">
-              در حال حاضر هیچ اعلانی برای نمایش وجود ندارد.
+    <AppLayout>
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold">اعلان‌ها و یادآوری‌ها</h1>
+            <p className="text-secondary mt-1">
+              مدیریت اعلان‌ها و تنظیمات یادآوری
             </p>
-            {filter !== "all" && (
-              <Button
-                variant="outline"
-                className="mt-4 gap-1"
-                onClick={() => setFilter("all")}
-              >
-                نمایش همه اعلان‌ها
+          </div>
+          <div className="flex gap-2">
+            {unreadCount > 0 && (
+              <Button variant="outline" size="sm" onClick={markAllAsRead}>
+                <CheckCircle className="h-4 w-4 mr-2" />
+                نشان‌گذاری همه به عنوان خوانده شده
               </Button>
             )}
           </div>
-        )}
+        </div>
+
+        <Tabs defaultValue="all" onValueChange={setActiveTab}>
+          <TabsList className="w-full">
+            <TabsTrigger value="all" className="flex-1">
+              همه
+              {unreadCount > 0 && (
+                <span className="mr-2 text-xs bg-primary text-white rounded-full w-5 h-5 inline-flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="unread" className="flex-1">
+              خوانده نشده
+            </TabsTrigger>
+            <TabsTrigger value="reminder" className="flex-1">
+              یادآوری‌ها
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex-1">
+              تنظیمات
+            </TabsTrigger>
+          </TabsList>
+
+          {/* لیست اعلان‌ها */}
+          {["all", "unread", "reminder"].includes(activeTab) && (
+            <TabsContent value={activeTab} className="mt-6">
+              {filteredNotifications.length > 0 ? (
+                <div className="space-y-4">
+                  {filteredNotifications.map((notification) => (
+                    <NotificationCard
+                      key={notification.id}
+                      notification={notification}
+                      onMarkAsRead={markAsRead}
+                      onRemove={removeNotification}
+                      onAction={() => router.push(notification.action.link)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-16 bg-secondary-light rounded-lg">
+                  <Bell className="h-12 w-12 text-secondary mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">
+                    اعلانی موجود نیست
+                  </h3>
+                  <p className="text-secondary">
+                    در حال حاضر اعلانی برای نمایش وجود ندارد.
+                  </p>
+                </div>
+              )}
+            </TabsContent>
+          )}
+
+          {/* تنظیمات اعلان‌ها */}
+          <TabsContent value="settings" className="mt-6">
+            <Card>
+              <CardHeader>
+                <h2 className="text-lg font-medium">تنظیمات اعلان‌ها</h2>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {notificationSettings.map((setting) => (
+                    <div
+                      key={setting.id}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="space-y-1">
+                        <h3 className="font-medium">{setting.title}</h3>
+                        <p className="text-sm text-secondary">
+                          {setting.description}
+                        </p>
+                      </div>
+                      <div className="flex items-center">
+                        <Switch
+                          id={`switch-${setting.id}`}
+                          checked={setting.enabled}
+                          onCheckedChange={() =>
+                            toggleNotificationSetting(setting.id)
+                          }
+                        />
+                        <Label
+                          htmlFor={`switch-${setting.id}`}
+                          className="sr-only"
+                        >
+                          {setting.title}
+                        </Label>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+              <CardFooter className="border-t border-border pt-4 flex justify-end">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  ذخیره تنظیمات
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
-    </div>
+    </AppLayout>
   );
-} 
+}
+
+interface NotificationCardProps {
+  notification: Notification;
+  onMarkAsRead: (id: string) => void;
+  onRemove: (id: string) => void;
+  onAction: () => void;
+}
+
+function NotificationCard({
+  notification,
+  onMarkAsRead,
+  onRemove,
+  onAction,
+}: NotificationCardProps) {
+  const [expanded, setExpanded] = useState(false);
+
+  // وقتی کارت باز می‌شود، اعلان به عنوان خوانده شده نشان‌گذاری می‌شود
+  useEffect(() => {
+    if (expanded && notification.status === "unread") {
+      onMarkAsRead(notification.id);
+    }
+  }, [expanded, notification.id, notification.status, onMarkAsRead]);
+
+  return (
+    <Card
+      className={`overflow-hidden transition-all ${
+        notification.status === "unread"
+          ? "border-primary-light"
+          : "border-border"
+      }`}
+    >
+      <CardContent className="p-0">
+        <div className="p-4">
+          <div
+            className="flex items-start gap-3 cursor-pointer"
+            onClick={() => setExpanded(!expanded)}
+          >
+            <div
+              className={`w-8 h-8 rounded-full ${notification.iconBg} flex items-center justify-center flex-shrink-0 mt-1`}
+            >
+              {notification.icon}
+            </div>
+            <div className="flex-1">
+              <div className="flex justify-between">
+                <h3
+                  className={`font-medium ${
+                    notification.status === "unread" ? "text-primary" : ""
+                  }`}
+                >
+                  {notification.title}
+                  {notification.status === "unread" && (
+                    <span className="inline-block w-2 h-2 bg-primary rounded-full mr-2 align-middle"></span>
+                  )}
+                </h3>
+                <button
+                  className="text-secondary hover:text-danger"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(notification.id);
+                  }}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              <p className="text-sm text-secondary mt-1">
+                {notification.date} - {notification.time}
+              </p>
+            </div>
+            <ChevronDown
+              size={18}
+              className={`text-secondary transition-transform ${
+                expanded ? "rotate-180" : ""
+              }`}
+            />
+          </div>
+
+          {expanded && (
+            <div className="mt-3 pt-3 border-t border-border">
+              <p className="text-sm mb-4">{notification.description}</p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full gap-1"
+                onClick={onAction}
+              >
+                {notification.action.label}
+                <ExternalLink size={14} />
+              </Button>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

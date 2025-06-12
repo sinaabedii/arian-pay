@@ -4,8 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import {
   CreditCard,
-  Shield,
-  Clock,
   Phone,
   Mail,
   MapPin,
@@ -22,7 +20,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default function ContactPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,16 +57,16 @@ export default function ContactPage() {
     },
   ];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // شبیه‌سازی ارسال فرم
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
@@ -79,8 +76,7 @@ export default function ContactPage() {
         phone: "",
         message: "",
       });
-      
-      // بعد از 3 ثانیه پیام موفقیت را پنهان کن
+
       setTimeout(() => {
         setIsSubmitted(false);
       }, 3000);
@@ -89,7 +85,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header - Same as About Page */}
       <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200">
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 text-sm">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -244,7 +239,6 @@ export default function ContactPage() {
         <section className="py-12 md:py-16 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="max-w-4xl mx-auto">
-              {/* Page Header */}
               <div className="text-center mb-12">
                 <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full mb-4">
                   <MessageCircle className="h-4 w-4" />
@@ -254,41 +248,47 @@ export default function ContactPage() {
                   در خدمت شما هستیم
                 </h1>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  برای ارتباط با ما و ارسال نظرات و پیشنهادات خود می‌توانید از راه‌های زیر اقدام نمایید.
+                  برای ارتباط با ما و ارسال نظرات و پیشنهادات خود می‌توانید از
+                  راه‌های زیر اقدام نمایید.
                 </p>
               </div>
 
-              {/* Contact Info Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center">
                   <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Phone className="h-8 w-8 text-blue-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">شماره تماس</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    شماره تماس
+                  </h3>
                   <p className="text-gray-600 mb-1">021-12345678</p>
                   <p className="text-gray-600">021-87654321</p>
                   <div className="mt-3 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full inline-block">
                     پشتیبانی ۲۴/۷
                   </div>
                 </div>
-                
+
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center">
                   <div className="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <Mail className="h-8 w-8 text-green-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">ایمیل</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    ایمیل
+                  </h3>
                   <p className="text-gray-600 mb-1">info@saeedpay.ir</p>
                   <p className="text-gray-600">support@saeedpay.ir</p>
                   <div className="mt-3 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full inline-block">
                     پاسخ در کمتر از ۲۴ ساعت
                   </div>
                 </div>
-                
+
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center">
                   <div className="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
                     <MapPin className="h-8 w-8 text-purple-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">آدرس دفتر</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    آدرس دفتر
+                  </h3>
                   <p className="text-gray-600">تهران، خیابان ولیعصر</p>
                   <p className="text-gray-600">برج سعید، طبقه 10</p>
                   <div className="mt-3 text-xs text-purple-600 bg-purple-50 px-2 py-1 rounded-full inline-block">
@@ -297,12 +297,14 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* Contact Form */}
               <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
                 <div className="mb-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">فرم تماس</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                    فرم تماس
+                  </h2>
                   <p className="text-gray-600">
-                    پیام خود را از طریق فرم زیر ارسال کنید. تیم پشتیبانی ما در اسرع وقت با شما تماس خواهد گرفت.
+                    پیام خود را از طریق فرم زیر ارسال کنید. تیم پشتیبانی ما در
+                    اسرع وقت با شما تماس خواهد گرفت.
                   </p>
                 </div>
 
@@ -311,8 +313,13 @@ export default function ContactPage() {
                     <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4">
                       <CheckCircle2 className="h-10 w-10 text-green-600" />
                     </div>
-                    <h3 className="text-xl font-bold text-green-600 mb-2">پیام شما ارسال شد!</h3>
-                    <p className="text-gray-600">با تشکر از تماس شما. تیم پشتیبانی ما به زودی با شما تماس خواهد گرفت.</p>
+                    <h3 className="text-xl font-bold text-green-600 mb-2">
+                      پیام شما ارسال شد!
+                    </h3>
+                    <p className="text-gray-600">
+                      با تشکر از تماس شما. تیم پشتیبانی ما به زودی با شما تماس
+                      خواهد گرفت.
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-6">
@@ -324,16 +331,16 @@ export default function ContactPage() {
                           </div>
                           نام و نام خانوادگی
                         </label>
-                        <Input 
-                          name="name" 
-                          value={formData.name} 
+                        <Input
+                          name="name"
+                          value={formData.name}
                           onChange={handleInputChange}
                           placeholder="نام کامل خود را وارد کنید"
                           className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-xl py-4 px-4 bg-gray-50 hover:bg-white transition-all"
-                          required 
+                          required
                         />
                       </div>
-                      
+
                       <div className="space-y-3">
                         <label className="text-sm font-medium flex items-center gap-2 text-gray-700">
                           <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -341,18 +348,18 @@ export default function ContactPage() {
                           </div>
                           ایمیل
                         </label>
-                        <Input 
-                          type="email" 
-                          name="email" 
-                          value={formData.email} 
+                        <Input
+                          type="email"
+                          name="email"
+                          value={formData.email}
                           onChange={handleInputChange}
                           placeholder="example@email.com"
                           className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-xl py-4 px-4 bg-gray-50 hover:bg-white transition-all"
-                          required 
+                          required
                         />
                       </div>
                     </div>
-                    
+
                     <div className="space-y-3">
                       <label className="text-sm font-medium flex items-center gap-2 text-gray-700">
                         <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -360,10 +367,10 @@ export default function ContactPage() {
                         </div>
                         شماره تماس
                       </label>
-                      <Input 
-                        type="tel" 
-                        name="phone" 
-                        value={formData.phone} 
+                      <Input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
                         onChange={handleInputChange}
                         placeholder="09123456789"
                         className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-xl py-4 px-4 bg-gray-50 hover:bg-white transition-all text-right"
@@ -371,7 +378,7 @@ export default function ContactPage() {
                         dir="ltr"
                       />
                     </div>
-                    
+
                     <div className="space-y-3">
                       <label className="text-sm font-medium flex items-center gap-2 text-gray-700">
                         <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -379,9 +386,9 @@ export default function ContactPage() {
                         </div>
                         پیام شما
                       </label>
-                      <textarea 
-                        name="message" 
-                        value={formData.message} 
+                      <textarea
+                        name="message"
+                        value={formData.message}
                         onChange={handleInputChange}
                         placeholder="پیام خود را اینجا بنویسید..."
                         rows={5}
@@ -389,10 +396,10 @@ export default function ContactPage() {
                         required
                       />
                     </div>
-                    
-                    <Button 
+
+                    <Button
                       onClick={handleSubmit}
-                      disabled={isSubmitting} 
+                      disabled={isSubmitting}
                       className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white py-4 rounded-xl text-base font-medium shadow-lg hover:shadow-xl disabled:cursor-not-allowed transition-all duration-200"
                     >
                       {isSubmitting ? (
@@ -411,14 +418,20 @@ export default function ContactPage() {
                 )}
               </div>
 
-              {/* Quick Contact Section */}
               <div className="mt-12 bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
                 <div className="text-center">
-                  <h3 className="text-xl font-bold text-blue-900 mb-4">نیاز به پاسخ سریع دارید؟</h3>
-                  <p className="text-blue-700 mb-6">تیم پشتیبانی ما آماده پاسخگویی به سوالات شما است</p>
+                  <h3 className="text-xl font-bold text-blue-900 mb-4">
+                    نیاز به پاسخ سریع دارید؟
+                  </h3>
+                  <p className="text-blue-700 mb-6">
+                    تیم پشتیبانی ما آماده پاسخگویی به سوالات شما است
+                  </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="tel:02112345678">
-                      <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
+                      <Button
+                        variant="outline"
+                        className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
                         <Phone className="ml-2 h-4 w-4" />
                         تماس مستقیم
                       </Button>
@@ -433,7 +446,6 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* CTA Section */}
               <div className="mt-12 text-center">
                 <Link href="/register">
                   <Button
@@ -450,7 +462,6 @@ export default function ContactPage() {
         </section>
       </main>
 
-      {/* Footer - Same as About Page */}
       <footer className="bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto py-8 px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

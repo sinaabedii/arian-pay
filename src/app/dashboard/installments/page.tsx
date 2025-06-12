@@ -1,439 +1,429 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CreditCard, CheckCircle, Clock, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Calendar,
-  CreditCard,
-  AlertCircle,
-  CheckCircle,
-  Clock,
-  ChevronDown,
-  ChevronUp
-} from "lucide-react";
 
-// نمونه داده برای اقساط
 const MOCK_INSTALLMENTS = [
-  { 
-    id: "1", 
-    storeName: "فروشگاه دیجی کالا", 
-    productName: "لپ تاپ ایسوس",
-    amount: 45000000, 
-    remainingAmount: 27000000,
-    totalInstallments: 12, 
-    paidInstallments: 4, 
-    nextDueDate: "1402/08/25",
-    daysLeft: 10,
-    monthly: 3750000,
-    status: "active" 
+  {
+    id: "1",
+    merchantName: "دیجی کالا",
+    product: "گوشی موبایل سامسونگ Galaxy S21",
+    totalAmount: 30000000,
+    remainingAmount: 21000000,
+    installmentAmount: 3000000,
+    totalInstallments: 10,
+    paidInstallments: 3,
+    nextInstallmentDate: "1402/04/15",
+    nextInstallmentAmount: 3000000,
+    status: "active",
   },
-  { 
-    id: "2", 
-    storeName: "فروشگاه ایران کالا", 
-    productName: "تلویزیون سامسونگ",
-    amount: 28000000, 
-    remainingAmount: 28000000,
-    totalInstallments: 6, 
-    paidInstallments: 0, 
-    nextDueDate: "1402/09/15",
-    daysLeft: 30,
-    monthly: 4666667,
-    status: "pending" 
+  {
+    id: "2",
+    merchantName: "هایپر استار",
+    product: "یخچال ساید بای ساید ال جی",
+    totalAmount: 45000000,
+    remainingAmount: 45000000,
+    installmentAmount: 5000000,
+    totalInstallments: 9,
+    paidInstallments: 0,
+    nextInstallmentDate: "1402/04/10",
+    nextInstallmentAmount: 5000000,
+    status: "active",
   },
-  { 
-    id: "3", 
-    storeName: "فروشگاه موبایل تهران", 
-    productName: "گوشی آیفون",
-    amount: 35000000, 
+  {
+    id: "3",
+    merchantName: "ایرانیان مال",
+    product: "مبلمان راحتی",
+    totalAmount: 18000000,
     remainingAmount: 0,
-    totalInstallments: 10, 
-    paidInstallments: 10, 
-    nextDueDate: "-",
-    daysLeft: 0,
-    monthly: 3500000,
-    status: "completed" 
-  }
-];
-
-// نمونه داده برای تاریخچه پرداخت‌ها
-const MOCK_PAYMENT_HISTORY = [
-  { id: "1", date: "1402/08/05", amount: 3750000, installmentId: "1", status: "success" },
-  { id: "2", date: "1402/07/05", amount: 3750000, installmentId: "1", status: "success" },
-  { id: "3", date: "1402/06/05", amount: 3750000, installmentId: "1", status: "success" },
-  { id: "4", date: "1402/05/05", amount: 3750000, installmentId: "1", status: "success" },
-  { id: "5", date: "1402/05/15", amount: 3500000, installmentId: "3", status: "success" },
+    installmentAmount: 3000000,
+    totalInstallments: 6,
+    paidInstallments: 6,
+    nextInstallmentDate: null,
+    nextInstallmentAmount: 0,
+    status: "completed",
+  },
 ];
 
 export default function InstallmentsPage() {
-  const [expandedInstallment, setExpandedInstallment] = useState<string | null>("1");
-  
-  // تبدیل اعداد به فرمت تومان با جداکننده هزارگان
+  const [installments, setInstallments] = useState(MOCK_INSTALLMENTS);
+  const [selectedInstallment, setSelectedInstallment] = useState<
+    (typeof MOCK_INSTALLMENTS)[0] | null
+  >(null);
+  const [paymentDialogOpen, setPaymentDialogOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("fa-IR").format(amount) + " تومان";
   };
-  
-  // محاسبه درصد پیشرفت پرداخت
-  const calculateProgress = (paid: number, total: number) => {
-    return (paid / total) * 100;
+
+  const activeInstallments = installments.filter(
+    (item) => item.status === "active"
+  );
+
+  const completedInstallments = installments.filter(
+    (item) => item.status === "completed"
+  );
+
+  const handlePayInstallment = (installment: (typeof MOCK_INSTALLMENTS)[0]) => {
+    setSelectedInstallment(installment);
+    setPaymentDialogOpen(true);
   };
-  
-  const toggleInstallmentDetails = (id: string) => {
-    setExpandedInstallment(expandedInstallment === id ? null : id);
+
+  const processPayment = () => {
+    if (!selectedInstallment) return;
+
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setIsPaymentSuccess(true);
+      const updatedInstallments = installments.map((item) => {
+        if (item.id === selectedInstallment.id) {
+          const updatedPaidInstallments = item.paidInstallments + 1;
+          const updatedRemainingAmount =
+            item.remainingAmount - item.installmentAmount;
+          const newStatus =
+            updatedPaidInstallments >= item.totalInstallments
+              ? "completed"
+              : "active";
+
+          return {
+            ...item,
+            paidInstallments: updatedPaidInstallments,
+            remainingAmount: updatedRemainingAmount,
+            status: newStatus,
+            nextInstallmentDate:
+              newStatus === "completed" ? null : "1402/05/15",
+          };
+        }
+        return item;
+      });
+
+      setInstallments(updatedInstallments);
+
+      setTimeout(() => {
+        setIsPaymentSuccess(false);
+        setPaymentDialogOpen(false);
+        setSelectedInstallment(null);
+      }, 2000);
+    }, 1500);
   };
-  
-  // فیلتر کردن اقساط بر اساس وضعیت
-  const getInstallmentsByStatus = (status: string) => {
-    return MOCK_INSTALLMENTS.filter(item => item.status === status);
-  };
-  
-  // فیلتر کردن تاریخچه پرداخت بر اساس شناسه قسط
-  const getPaymentHistoryByInstallmentId = (installmentId: string) => {
-    return MOCK_PAYMENT_HISTORY.filter(item => item.installmentId === installmentId);
-  };
-  
-  const activeInstallments = getInstallmentsByStatus("active");
-  const pendingInstallments = getInstallmentsByStatus("pending");
-  const completedInstallments = getInstallmentsByStatus("completed");
-  
+
   return (
-    <div className="space-y-8">
-      {/* هدر صفحه */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">مدیریت اقساط</h1>
-        <p className="text-gray-600 mt-1">مشاهده و مدیریت اقساط خرید</p>
-      </div>
-      
-      {/* کارت‌های اطلاعات کلی */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-          <div className="h-1.5 bg-gradient-to-r from-amber-400 to-amber-500"></div>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-500">اقساط جاری</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-1">{activeInstallments.length}</h3>
-              </div>
-              <div className="bg-amber-100 p-2 rounded-full">
-                <Clock className="h-6 w-6 text-amber-600" />
-              </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="space-y-6 p-4 max-w-7xl mx-auto">
+        <div className="pt-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+            اقساط
+          </h1>
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">
+            مدیریت و پرداخت اقساط خریدهای اعتباری
+          </p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+          <div className="p-4 sm:p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <CreditCard className="h-5 w-5 text-blue-600" />
+              <h3 className="text-lg font-semibold text-gray-900">
+                خلاصه وضعیت اقساط
+              </h3>
             </div>
-            
-            <div className="mt-4">
-              <div className="text-sm text-gray-500 mb-1">قسط بعدی</div>
-              <div className="flex justify-between items-center">
-                <span className="font-medium">{formatCurrency(activeInstallments[0]?.monthly || 0)}</span>
-                <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full">
-                  {activeInstallments[0]?.daysLeft || 0} روز مانده
-                </span>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="text-center sm:text-right space-y-1">
+                <p className="text-sm text-gray-500">اقساط فعال</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {activeInstallments.length}
+                </p>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-          <div className="h-1.5 bg-gradient-to-r from-green-400 to-green-500"></div>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
+
+              <div className="text-center sm:text-right space-y-1">
                 <p className="text-sm text-gray-500">اقساط پرداخت شده</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-1">{completedInstallments.length}</h3>
+                <p className="text-2xl font-bold text-gray-900">
+                  {completedInstallments.length}
+                </p>
               </div>
-              <div className="bg-green-100 p-2 rounded-full">
-                <CheckCircle className="h-6 w-6 text-green-600" />
-              </div>
-            </div>
-            
-            <div className="mt-4">
-              <div className="text-sm text-gray-500 mb-1">مجموع پرداختی</div>
-              <div className="font-medium">
-                {formatCurrency(MOCK_PAYMENT_HISTORY.reduce((total, item) => total + item.amount, 0))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-          <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
+
+              <div className="text-center sm:text-right space-y-1">
                 <p className="text-sm text-gray-500">کل بدهی باقیمانده</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-1">
-                  {formatCurrency(MOCK_INSTALLMENTS.reduce((total, item) => total + item.remainingAmount, 0))}
-                </h3>
-              </div>
-              <div className="bg-blue-100 p-2 rounded-full">
-                <CreditCard className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-            
-            <div className="mt-4">
-              <div className="text-sm text-gray-500 mb-1">تعداد اقساط باقیمانده</div>
-              <div className="font-medium">
-                {MOCK_INSTALLMENTS.reduce((total, item) => 
-                  total + (item.totalInstallments - item.paidInstallments), 0)} قسط
+                <p className="text-xl sm:text-2xl font-bold text-gray-900">
+                  {formatCurrency(
+                    activeInstallments.reduce(
+                      (sum, item) => sum + item.remainingAmount,
+                      0
+                    )
+                  )}
+                </p>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">
+            اقساط فعال
+          </h2>
+          {activeInstallments.length > 0 ? (
+            <div className="space-y-4">
+              {activeInstallments.map((installment) => (
+                <InstallmentCard
+                  key={installment.id}
+                  installment={installment}
+                  formatCurrency={formatCurrency}
+                  onPayInstallment={() => handlePayInstallment(installment)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-10 bg-white rounded-xl border border-gray-200">
+              <div className="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle size={32} />
+              </div>
+              <h3 className="text-lg font-medium text-gray-900">
+                هیچ قسط فعالی ندارید
+              </h3>
+              <p className="text-gray-600 mt-1">
+                تمام اقساط شما پرداخت شده است
+              </p>
+            </div>
+          )}
+        </div>
+
+        {completedInstallments.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">
+              اقساط تکمیل شده
+            </h2>
+            <div className="space-y-4">
+              {completedInstallments.map((installment) => (
+                <InstallmentCard
+                  key={installment.id}
+                  installment={installment}
+                  formatCurrency={formatCurrency}
+                  onPayInstallment={() => {}}
+                  isCompleted
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-      
-      {/* تب‌های اقساط */}
-      <Tabs defaultValue="active" className="w-full">
-        <TabsList className="mb-4">
-          <TabsTrigger value="active">اقساط جاری</TabsTrigger>
-          <TabsTrigger value="pending">در انتظار تأیید</TabsTrigger>
-          <TabsTrigger value="completed">تکمیل شده</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="active">
-          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-amber-500"></div>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Clock className="h-5 w-5 text-amber-500" />
-                اقساط جاری
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              {activeInstallments.length > 0 ? (
-                <div className="space-y-6">
-                  {activeInstallments.map((installment) => (
-                    <div key={installment.id} className="border border-gray-200 rounded-xl overflow-hidden">
-                      <div 
-                        className="p-4 flex flex-col md:flex-row md:items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
-                        onClick={() => toggleInstallmentDetails(installment.id)}
-                      >
-                        <div className="flex-1">
-                          <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
-                            <h3 className="font-medium text-gray-900">{installment.productName}</h3>
-                            <span className="text-sm text-gray-500">{installment.storeName}</span>
-                          </div>
-                          
-                          <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-y-2 gap-x-4">
-                            <div>
-                              <p className="text-xs text-gray-500">مبلغ کل</p>
-                              <p className="text-sm font-medium">{formatCurrency(installment.amount)}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-gray-500">قسط ماهانه</p>
-                              <p className="text-sm font-medium">{formatCurrency(installment.monthly)}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-gray-500">پرداخت شده</p>
-                              <p className="text-sm font-medium">{installment.paidInstallments} از {installment.totalInstallments}</p>
-                            </div>
-                            <div>
-                              <p className="text-xs text-gray-500">قسط بعدی</p>
-                              <p className="text-sm font-medium">{installment.nextDueDate}</p>
-                            </div>
-                          </div>
-                          
-                          <div className="mt-3 w-full bg-gray-100 rounded-full h-2">
-                            <div 
-                              className="bg-amber-500 h-2 rounded-full" 
-                              style={{ 
-                                width: `${calculateProgress(installment.paidInstallments, installment.totalInstallments)}%` 
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                        <div className="flex items-center mt-4 md:mt-0 ml-0 md:ml-4">
-                          <div className="text-right md:text-center flex-1 md:flex-none">
-                            <span className="inline-block text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full md:mb-2">
-                              {installment.daysLeft} روز مانده
-                            </span>
-                            <div className="hidden md:block">
-                              {expandedInstallment === installment.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {expandedInstallment === installment.id && (
-                        <div className="bg-gray-50 p-4 border-t border-gray-200">
-                          <h4 className="font-medium text-gray-900 mb-3">تاریخچه پرداخت</h4>
-                          <div className="space-y-2">
-                            {getPaymentHistoryByInstallmentId(installment.id).map((payment) => (
-                              <div key={payment.id} className="flex justify-between items-center p-2 bg-white rounded-lg border border-gray-100">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                                    <CheckCircle className="h-4 w-4 text-green-600" />
-                                  </div>
-                                  <div>
-                                    <p className="text-sm font-medium">پرداخت قسط</p>
-                                    <p className="text-xs text-gray-500">{payment.date}</p>
-                                  </div>
-                                </div>
-                                <div className="text-sm font-medium text-green-600">
-                                  {formatCurrency(payment.amount)}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          
-                          <div className="mt-4 flex gap-2">
-                            <Button className="flex-1 bg-amber-500 hover:bg-amber-600">
-                              پرداخت قسط بعدی
-                            </Button>
-                            <Button variant="outline" className="flex-1">
-                              جزئیات کامل
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+
+      {paymentDialogOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-sm sm:max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">
+                    پرداخت قسط
+                  </h2>
+                  {selectedInstallment && (
+                    <p className="text-gray-600 text-sm mt-1">
+                      {`${selectedInstallment.merchantName} - ${selectedInstallment.product}`}
+                    </p>
+                  )}
                 </div>
-              ) : (
-                <div className="py-12 text-center">
-                  <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                    <Calendar className="h-8 w-8 text-gray-400" />
-                  </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">هیچ قسط فعالی ندارید</h3>
-                  <p className="text-gray-500">در حال حاضر هیچ قسط فعالی برای شما ثبت نشده است.</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="pending">
-          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-            <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-blue-600" />
-                اقساط در انتظار تأیید
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              {pendingInstallments.length > 0 ? (
-                <div className="space-y-6">
-                  {pendingInstallments.map((installment) => (
-                    <div key={installment.id} className="border border-gray-200 rounded-xl overflow-hidden">
-                      <div className="p-4">
-                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
-                          <h3 className="font-medium text-gray-900">{installment.productName}</h3>
-                          <span className="text-sm text-gray-500">{installment.storeName}</span>
-                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full inline-block w-fit">
-                            در انتظار تأیید
+                <button
+                  onClick={() => setPaymentDialogOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
+
+              {!isPaymentSuccess ? (
+                <div className="space-y-4 py-4">
+                  {selectedInstallment && (
+                    <>
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">
+                            مبلغ قسط:
+                          </span>
+                          <span className="font-medium text-gray-900">
+                            {formatCurrency(
+                              selectedInstallment.nextInstallmentAmount
+                            )}
                           </span>
                         </div>
-                        
-                        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-y-2 gap-x-4">
-                          <div>
-                            <p className="text-xs text-gray-500">مبلغ کل</p>
-                            <p className="text-sm font-medium">{formatCurrency(installment.amount)}</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-gray-500">قسط ماهانه</p>
-                            <p className="text-sm font-medium">{formatCurrency(installment.monthly)}</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-gray-500">تعداد اقساط</p>
-                            <p className="text-sm font-medium">{installment.totalInstallments} قسط</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-gray-500">اولین قسط</p>
-                            <p className="text-sm font-medium">{installment.nextDueDate}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="mt-4 flex gap-2">
-                          <Button className="flex-1 bg-blue-600 hover:bg-blue-700">
-                            مشاهده جزئیات
-                          </Button>
-                          <Button variant="outline" className="flex-1 text-red-500 hover:text-red-700 hover:border-red-300">
-                            انصراف
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="py-12 text-center">
-                  <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                    <AlertCircle className="h-8 w-8 text-gray-400" />
-                  </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">هیچ درخواست در انتظاری ندارید</h3>
-                  <p className="text-gray-500">در حال حاضر هیچ درخواست اقساطی در انتظار تأیید ندارید.</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="completed">
-          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-            <div className="h-1.5 bg-gradient-to-r from-green-400 to-green-500"></div>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-600" />
-                اقساط تکمیل شده
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              {completedInstallments.length > 0 ? (
-                <div className="space-y-6">
-                  {completedInstallments.map((installment) => (
-                    <div key={installment.id} className="border border-gray-200 rounded-xl overflow-hidden">
-                      <div className="p-4">
-                        <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6">
-                          <h3 className="font-medium text-gray-900">{installment.productName}</h3>
-                          <span className="text-sm text-gray-500">{installment.storeName}</span>
-                          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full inline-block w-fit">
-                            تکمیل شده
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">
+                            تاریخ سررسید:
+                          </span>
+                          <span className="font-medium text-gray-900">
+                            {selectedInstallment.nextInstallmentDate}
                           </span>
                         </div>
-                        
-                        <div className="mt-3 grid grid-cols-2 md:grid-cols-3 gap-y-2 gap-x-4">
-                          <div>
-                            <p className="text-xs text-gray-500">مبلغ کل</p>
-                            <p className="text-sm font-medium">{formatCurrency(installment.amount)}</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-gray-500">تعداد اقساط</p>
-                            <p className="text-sm font-medium">{installment.totalInstallments} قسط</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-gray-500">قسط ماهانه</p>
-                            <p className="text-sm font-medium">{formatCurrency(installment.monthly)}</p>
-                          </div>
-                        </div>
-                        
-                        <div className="mt-3 w-full bg-gray-100 rounded-full h-2">
-                          <div 
-                            className="bg-green-500 h-2 rounded-full" 
-                            style={{ width: "100%" }}
-                          ></div>
-                        </div>
-                        
-                        <div className="mt-4">
-                          <Button variant="outline" className="w-full">
-                            مشاهده تاریخچه پرداخت
-                          </Button>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-gray-500">
+                            وضعیت پرداخت:
+                          </span>
+                          <span className="font-medium text-yellow-600">
+                            در انتظار پرداخت
+                          </span>
                         </div>
                       </div>
-                    </div>
-                  ))}
+
+                      <div className="pt-2 flex flex-col gap-2">
+                        <Button
+                          onClick={processPayment}
+                          disabled={isProcessing}
+                          className="w-full bg-blue-600 hover:bg-blue-700"
+                        >
+                          {isProcessing ? "در حال پردازش..." : "پرداخت قسط"}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={() => setPaymentDialogOpen(false)}
+                          disabled={isProcessing}
+                          className="w-full border-gray-300 hover:border-blue-600 hover:text-blue-600"
+                        >
+                          انصراف
+                        </Button>
+                      </div>
+                    </>
+                  )}
                 </div>
               ) : (
-                <div className="py-12 text-center">
-                  <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                    <CheckCircle className="h-8 w-8 text-gray-400" />
+                <div className="py-6 text-center space-y-4">
+                  <div className="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto">
+                    <CheckCircle size={32} />
                   </div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-1">هیچ قسط تکمیل شده‌ای ندارید</h3>
-                  <p className="text-gray-500">هنوز هیچ وامی را به طور کامل پرداخت نکرده‌اید.</p>
+                  <div>
+                    <h3 className="text-xl font-semibold text-green-600">
+                      پرداخت با موفقیت انجام شد
+                    </h3>
+                    <p className="text-gray-600 mt-1">
+                      قسط شما با موفقیت پرداخت شد
+                    </p>
+                  </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-} 
+}
+
+interface InstallmentCardProps {
+  installment: (typeof MOCK_INSTALLMENTS)[0];
+  formatCurrency: (amount: number) => string;
+  onPayInstallment: () => void;
+  isCompleted?: boolean;
+}
+
+function InstallmentCard({
+  installment,
+  formatCurrency,
+  onPayInstallment,
+  isCompleted = false,
+}: InstallmentCardProps) {
+  const progress = Math.round(
+    (installment.paidInstallments / installment.totalInstallments) * 100
+  );
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+      <div
+        className={`h-1 bg-gradient-to-r ${
+          isCompleted
+            ? "from-green-400 to-green-600"
+            : "from-orange-400 to-orange-600"
+        }`}
+      ></div>
+      <div className="p-4 sm:p-6">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="space-y-3 flex-1">
+            <div>
+              <h3 className="font-medium text-gray-900 text-lg">
+                {installment.merchantName}
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">
+                {installment.product}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {isCompleted ? (
+                <div className="text-green-600 flex items-center gap-1">
+                  <CheckCircle size={16} />
+                  <span className="text-sm font-medium">تکمیل شده</span>
+                </div>
+              ) : (
+                <div className="text-orange-600 flex items-center gap-1">
+                  <Clock size={16} />
+                  <span className="text-sm font-medium">
+                    موعد پرداخت بعدی: {installment.nextInstallmentDate}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center text-sm text-gray-600">
+              <span className="ml-2">پیشرفت: </span>
+              <div className="w-24 sm:w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all duration-300 ${
+                    isCompleted ? "bg-green-500" : "bg-blue-500"
+                  }`}
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+              <span className="mr-2">
+                {installment.paidInstallments} از{" "}
+                {installment.totalInstallments}
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-4 lg:max-w-xs lg:min-w-0">
+            <div className="grid grid-cols-2 gap-x-3 gap-y-3 text-sm">
+              <div>
+                <p className="text-xs text-gray-500 mb-1">مبلغ کل</p>
+                <p className="font-medium text-gray-900 text-sm">
+                  {formatCurrency(installment.totalAmount)}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">مبلغ باقیمانده</p>
+                <p className="font-medium text-gray-900 text-sm">
+                  {formatCurrency(installment.remainingAmount)}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">مبلغ هر قسط</p>
+                <p className="font-medium text-gray-900 text-sm">
+                  {formatCurrency(installment.installmentAmount)}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 mb-1">قسط بعدی</p>
+                <p className="font-medium text-gray-900 text-sm">
+                  {isCompleted
+                    ? "-"
+                    : formatCurrency(installment.nextInstallmentAmount)}
+                </p>
+              </div>
+            </div>
+
+            {!isCompleted && (
+              <Button
+                onClick={onPayInstallment}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-sm"
+              >
+                پرداخت قسط
+                <ArrowRight className="mr-2 h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

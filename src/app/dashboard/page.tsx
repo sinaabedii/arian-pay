@@ -16,7 +16,6 @@ import {
   QrCode,
   User,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/store/auth-store";
 
@@ -77,7 +76,7 @@ const MOCK_REMINDERS = [
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, isAuthenticated } = useAuthStore();
+  const { user } = useAuthStore();
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("fa-IR").format(amount) + " تومان";
@@ -125,7 +124,7 @@ export default function DashboardPage() {
             icon={<Wallet className="h-5 w-5 text-white" />}
             trend={{ value: "+12%", isPositive: true, label: "از ماه گذشته" }}
             onClick={() => router.push("/dashboard/wallet")}
-            color="bg-blue-600"
+            color="bg-blue-500"
           />
 
           <InfoCard
@@ -142,7 +141,7 @@ export default function DashboardPage() {
                 : undefined
             }
             onClick={() => router.push("/dashboard/credit-request")}
-            color="bg-purple-600"
+            color="bg-purple-500"
           />
 
           <InfoCard
@@ -150,7 +149,7 @@ export default function DashboardPage() {
             value={formatCurrency(4500000)}
             icon={<BarChart3 className="h-5 w-5 text-white" />}
             trend={{ value: "-5%", isPositive: false, label: "از ماه گذشته" }}
-            color="bg-emerald-600"
+            color="bg-green-500"
           />
 
           <InfoCard
@@ -159,20 +158,21 @@ export default function DashboardPage() {
             icon={<Calendar className="h-5 w-5 text-white" />}
             badge={{ label: "قسط بعدی: 3 روز دیگر", variant: "warning" }}
             onClick={() => router.push("/dashboard/installments")}
-            color="bg-amber-500"
+            color="bg-yellow-500"
           />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
-          <Card className="col-span-1 border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-2xl">
-            <div className="h-1.5 bg-gradient-to-r from-amber-400 to-amber-500"></div>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-amber-500" />
-                اقساط فعال
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <div className="col-span-1 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div className="h-1 bg-gradient-to-r from-yellow-400 to-yellow-500"></div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <Calendar className="h-5 w-5 text-yellow-500" />
+                <h3 className="text-lg font-semibold text-gray-900">
+                  اقساط فعال
+                </h3>
+              </div>
+
               <div className="space-y-6">
                 {MOCK_REMINDERS.map((reminder) => (
                   <div key={reminder.id} className="space-y-3">
@@ -183,11 +183,9 @@ export default function DashboardPage() {
                       <div
                         className={`${
                           reminder.daysLeft <= 3
-                            ? "text-red-500"
-                            : "text-amber-500"
-                        } font-medium text-sm px-2 py-1 rounded-full ${
-                          reminder.daysLeft <= 3 ? "bg-red-50" : "bg-amber-50"
-                        }`}
+                            ? "text-red-500 bg-red-50"
+                            : "text-yellow-500 bg-yellow-50"
+                        } font-medium text-sm px-2 py-1 rounded-full`}
                       >
                         {reminder.daysLeft} روز مانده
                       </div>
@@ -200,7 +198,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2">
                       <div
-                        className="bg-gradient-to-r from-amber-400 to-amber-500 h-2 rounded-full transition-all duration-500"
+                        className="bg-gradient-to-r from-yellow-400 to-yellow-500 h-2 rounded-full transition-all duration-500"
                         style={{
                           width: `${((30 - reminder.daysLeft) / 30) * 100}%`,
                         }}
@@ -211,42 +209,45 @@ export default function DashboardPage() {
 
                 <Button
                   variant="outline"
-                  className="w-full gap-1 border-gray-300 hover:border-amber-600 hover:text-amber-600 mt-4"
+                  className="w-full gap-1 border-gray-300 hover:border-yellow-600 hover:text-yellow-600 mt-4"
                   onClick={() => router.push("/dashboard/installments")}
                 >
                   <Calendar size={16} />
                   مشاهده همه اقساط
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card className="col-span-1 lg:col-span-2 border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-2xl">
-            <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-            <CardHeader className="pb-3 flex flex-row items-center justify-between">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <CreditCard className="h-5 w-5 text-blue-600" />
-                حساب‌های بانکی
-              </CardTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="gap-1 h-8 hover:bg-blue-50 hover:text-blue-600"
-                onClick={() => router.push("/dashboard/wallet")}
-              >
-                <span className="hidden sm:inline">مدیریت حساب‌ها</span>
-                <span className="sm:hidden">مدیریت</span>
-                <ChevronRight size={16} />
-              </Button>
-            </CardHeader>
-            <CardContent className="pb-6">
+          <div className="col-span-1 lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <CreditCard className="h-5 w-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    حساب‌های بانکی
+                  </h3>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="gap-1 h-8 hover:bg-blue-50 hover:text-blue-600"
+                  onClick={() => router.push("/dashboard/wallet")}
+                >
+                  <span className="hidden sm:inline">مدیریت حساب‌ها</span>
+                  <span className="sm:hidden">مدیریت</span>
+                  <ChevronRight size={16} />
+                </Button>
+              </div>
+
               <div className="flex flex-col lg:flex-row gap-6">
                 <div className="lg:w-1/2">
                   <div className="mb-4">
                     <div className="text-sm text-gray-500">کارت پیش‌فرض</div>
                   </div>
                   <div className="w-full max-w-sm mx-auto lg:mx-0">
-                    <div className="w-full h-44 sm:h-48 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-4 sm:p-6 text-white shadow-xl relative overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                    <div className="w-full h-44 sm:h-48 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 sm:p-6 text-white shadow-lg relative overflow-hidden hover:shadow-xl transition-shadow duration-300">
                       <div className="absolute top-0 right-0 w-full h-full opacity-10">
                         <div className="absolute transform rotate-45 translate-x-1/2 -translate-y-1/2 right-0 top-0 w-32 sm:w-40 h-32 sm:h-40 bg-white rounded-full"></div>
                         <div className="absolute transform rotate-45 translate-x-1/3 translate-y-1/3 right-0 bottom-0 w-32 sm:w-40 h-32 sm:h-40 bg-white rounded-full"></div>
@@ -348,20 +349,21 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-2xl">
-            <div className="h-1.5 bg-gradient-to-r from-purple-400 to-purple-600"></div>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div className="h-1 bg-gradient-to-r from-purple-400 to-purple-600"></div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-6">
                 <Percent className="h-5 w-5 text-purple-600" />
-                پیشنهادات ویژه برای شما
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  پیشنهادات ویژه برای شما
+                </h3>
+              </div>
+
               <div className="space-y-4">
                 {MOCK_OFFERS.map((offer) => (
                   <div
@@ -392,25 +394,25 @@ export default function DashboardPage() {
                   مشاهده همه پیشنهادات
                 </Button>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-2xl">
-            <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-6">
                 <Zap className="h-5 w-5 text-blue-600" />
-                سرویس‌های پرکاربرد
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  سرویس‌های پرکاربرد
+                </h3>
+              </div>
+
               <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 <ServiceCard
                   icon={<QrCode size={18} />}
                   title="پرداخت با QR"
                   description="پرداخت سریع با اسکن کد"
                   onClick={() => router.push("/dashboard/qr-payment")}
-                  gradient="from-blue-600 to-blue-500"
                   iconColor="text-blue-600"
                 />
 
@@ -419,7 +421,6 @@ export default function DashboardPage() {
                   title="اقساط من"
                   description="مدیریت اقساط و پرداخت‌ها"
                   onClick={() => router.push("/dashboard/installments")}
-                  gradient="from-purple-600 to-purple-500"
                   iconColor="text-purple-600"
                 />
 
@@ -428,7 +429,6 @@ export default function DashboardPage() {
                   title="فروشگاه‌ها"
                   description="فروشگاه‌های طرف قرارداد"
                   onClick={() => router.push("/dashboard/stores")}
-                  gradient="from-green-600 to-green-500"
                   iconColor="text-green-600"
                 />
 
@@ -437,12 +437,11 @@ export default function DashboardPage() {
                   title="پروفایل من"
                   description="مدیریت اطلاعات شخصی"
                   onClick={() => router.push("/dashboard/profile")}
-                  gradient="from-amber-600 to-amber-500"
-                  iconColor="text-amber-600"
+                  iconColor="text-yellow-600"
                 />
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -466,57 +465,51 @@ function InfoCard({
   trend,
   badge,
   onClick,
-  color = "bg-blue-600",
+  color = "bg-blue-500",
 }: InfoCardProps) {
   return (
-    <Card
-      className={`border-0 shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl ${
-        onClick ? "cursor-pointer hover:scale-105" : ""
+    <div
+      className={`bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-6 ${
+        onClick ? "cursor-pointer hover:-translate-y-1" : ""
       }`}
       onClick={onClick}
     >
-      <CardContent className="p-4 sm:p-6">
-        <div className="flex items-center justify-between mb-3">
-          <div
-            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${color} flex items-center justify-center shadow-sm`}
-          >
-            {icon}
+      <div className="flex items-center justify-between mb-4">
+        <div
+          className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center shadow-sm`}
+        >
+          {icon}
+        </div>
+
+        {badge && (
+          <div className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full font-medium">
+            {badge.label}
           </div>
+        )}
+      </div>
 
-          {badge && (
+      <div>
+        <p className="text-sm text-gray-500 mb-1 font-medium">{title}</p>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">{value}</h3>
+
+        {trend && (
+          <div className="flex items-center">
             <div
-              className={`px-2 py-1 bg-amber-100 text-amber-600 text-xs rounded-full`}
+              className={`text-xs font-medium flex items-center gap-1 
+              ${trend.isPositive ? "text-green-600" : "text-red-500"}`}
             >
-              {badge.label}
+              {trend.isPositive ? (
+                <ArrowUpRight size={12} />
+              ) : (
+                <ArrowDownRight size={12} />
+              )}
+              {trend.value}
             </div>
-          )}
-        </div>
-
-        <div>
-          <p className="text-sm text-gray-500 mb-1">{title}</p>
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
-            {value}
-          </h3>
-
-          {trend && (
-            <div className="flex items-center">
-              <div
-                className={`text-xs font-medium flex items-center gap-1 
-                ${trend.isPositive ? "text-green-600" : "text-red-500"}`}
-              >
-                {trend.isPositive ? (
-                  <ArrowUpRight size={12} />
-                ) : (
-                  <ArrowDownRight size={12} />
-                )}
-                {trend.value}
-              </div>
-              <span className="text-xs text-gray-500 mr-1">{trend.label}</span>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            <span className="text-xs text-gray-500 mr-1">{trend.label}</span>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -525,7 +518,6 @@ interface ServiceCardProps {
   title: string;
   description: string;
   onClick: () => void;
-  gradient: string;
   iconColor: string;
 }
 
@@ -534,7 +526,6 @@ function ServiceCard({
   title,
   description,
   onClick,
-  gradient,
   iconColor,
 }: ServiceCardProps) {
   const bgColorClass = iconColor.includes("blue")
@@ -543,26 +534,22 @@ function ServiceCard({
     ? "bg-purple-50"
     : iconColor.includes("green")
     ? "bg-green-50"
-    : iconColor.includes("amber")
-    ? "bg-amber-50"
+    : iconColor.includes("yellow")
+    ? "bg-yellow-50"
     : "bg-gray-50";
 
   return (
     <div
-      className="rounded-xl border border-gray-100 p-3 sm:p-4 cursor-pointer hover:shadow-md hover:border-gray-200 transition-all duration-300 hover:scale-105"
+      className="rounded-xl border border-gray-200 p-4 cursor-pointer hover:shadow-md hover:border-gray-300 transition-all duration-300 hover:-translate-y-1"
       onClick={onClick}
     >
       <div
-        className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg ${bgColorClass} flex items-center justify-center mb-3`}
+        className={`w-10 h-10 rounded-lg ${bgColorClass} flex items-center justify-center mb-3`}
       >
         <div className={iconColor}>{icon}</div>
       </div>
-      <h3 className="font-medium text-gray-900 text-sm sm:text-base mb-1">
-        {title}
-      </h3>
-      <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-        {description}
-      </p>
+      <h3 className="font-medium text-gray-900 text-sm mb-1">{title}</h3>
+      <p className="text-xs text-gray-500 leading-relaxed">{description}</p>
     </div>
   );
 }
