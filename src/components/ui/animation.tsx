@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 // Import animation data
 import paymentAnimation from "@/json/Animation - payment.json";
@@ -21,6 +21,13 @@ interface AnimationProps {
   onComplete?: () => void;
 }
 
+// Type for lottie animation instance
+interface LottieAnimation {
+  destroy: () => void;
+  addEventListener: (event: string, callback: () => void) => void;
+  removeEventListener: (event: string, callback: () => void) => void;
+}
+
 // Static variable to track if lottie is loaded
 let isLottieLoaded = false;
 
@@ -34,11 +41,7 @@ declare global {
         loop: boolean;
         autoplay: boolean;
         animationData: unknown;
-      }) => {
-        destroy: () => void;
-        addEventListener: (event: string, callback: () => void) => void;
-        removeEventListener: (event: string, callback: () => void) => void;
-      }
+      }) => LottieAnimation;
     };
   }
 }
@@ -55,10 +58,10 @@ export function Animation({
   onComplete,
 }: AnimationProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const animRef = useRef<any>(null);
+  const animRef = useRef<LottieAnimation | null>(null);
 
-  // Function to load animation
-  const loadAnimation = () => {
+  // Function to load animation - wrapped in useCallback to fix dependency warning
+  const loadAnimation = useCallback(() => {
     if (!containerRef.current || !window.lottie) return;
     
     // Clear previous animations in the container
@@ -96,7 +99,7 @@ export function Animation({
     if (onComplete && !loop) {
       anim.addEventListener("complete", onComplete);
     }
-  };
+  }, [name, loop, autoplay, onComplete]);
 
   useEffect(() => {
     // Cleanup previous animation if exists
@@ -143,7 +146,7 @@ export function Animation({
         animRef.current = null;
       }
     };
-  }, [name, loop, autoplay, onComplete]);
+  }, [loadAnimation, loop, onComplete]);
   
   return (
     <div
@@ -169,4 +172,4 @@ export function SuccessAnimation(props: Omit<AnimationProps, "name">) {
 
 export function ScanPaperAnimation(props: Omit<AnimationProps, "name">) {
   return <Animation name="scan-paper" {...props} />;
-} 
+}

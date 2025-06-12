@@ -1,420 +1,502 @@
 "use client";
 
-import { useState } from "react";
-import { 
-  CreditCard, 
-  Plus, 
-  Wallet, 
-  BarChart3, 
-  ChevronDown, 
-  ChevronUp, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  Copy,
-  CheckCircle2
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Wallet,
+  CreditCard,
+  ArrowUp,
+  Check,
+  ChevronDown,
+  ChevronsUpDown,
+  Banknote,
+  User,
+  AlertCircle,
+  Clock,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import AppLayout from "@/components/layout/app-layout";
+import { useAuthStore } from "@/lib/store/auth-store";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  BankCard,
+  BankType,
+  AddBankCardButton,
+} from "@/components/ui/bank-card";
+import { AddBankCard, BankCardFormData } from "@/components/ui/add-bank-card";
+import { AnimatedButton } from "@/components/ui/animated-button";
 
-// نمونه داده برای تراکنش‌ها
 const MOCK_TRANSACTIONS = [
-  { id: "1", title: "خرید از دیجی کالا", amount: 2500000, type: "expense", date: "1402/08/15", time: "14:35", iconBg: "bg-blue-100 text-blue-600", icon: <CreditCard size={14} /> },
-  { id: "2", title: "شارژ کیف پول", amount: 5000000, type: "income", date: "1402/08/10", time: "09:20", iconBg: "bg-green-100 text-green-600", icon: <Wallet size={14} /> },
-  { id: "3", title: "پرداخت قسط", amount: 1500000, type: "expense", date: "1402/08/05", time: "11:15", iconBg: "bg-amber-100 text-amber-600", icon: <BarChart3 size={14} /> },
-  { id: "4", title: "خرید از فروشگاه ایرانی", amount: 750000, type: "expense", date: "1402/08/01", time: "16:45", iconBg: "bg-blue-100 text-blue-600", icon: <CreditCard size={14} /> },
-  { id: "5", title: "شارژ کیف پول", amount: 3000000, type: "income", date: "1402/07/25", time: "10:30", iconBg: "bg-green-100 text-green-600", icon: <Wallet size={14} /> },
+  {
+    id: "1",
+    type: "deposit",
+    amount: 1000000,
+    date: "1402/03/15",
+    description: "شارژ کیف پول",
+    status: "success",
+  },
+  {
+    id: "2",
+    type: "withdraw",
+    amount: 450000,
+    date: "1402/03/10",
+    description: "پرداخت قسط",
+    status: "success",
+  },
+  {
+    id: "3",
+    type: "deposit",
+    amount: 2000000,
+    date: "1402/02/25",
+    description: "شارژ کیف پول",
+    status: "success",
+  },
 ];
 
-// نمونه داده برای کارت‌های بانکی
 const MOCK_BANK_CARDS = [
   {
     id: "1",
-    bank: "mellat",
+    bank: "mellat" as BankType,
     cardNumber: "6104337812345678",
+    accountNumber: "12345678901",
+    sheba: "123456789012345678901234",
     cardHolderName: "امیرحسین محمدی",
     expiryDate: "1404/05",
     isDefault: true,
   },
   {
     id: "2",
-    bank: "melli",
-    cardNumber: "6037991234567890",
+    bank: "saman" as BankType,
+    cardNumber: "6219861987654321",
     cardHolderName: "امیرحسین محمدی",
-    expiryDate: "1405/03",
+    expiryDate: "1403/12",
     isDefault: false,
   },
 ];
 
+type BankCardType = {
+  id: string;
+  bank: BankType;
+  cardNumber: string;
+  cardHolderName: string;
+  expiryDate: string;
+  isDefault: boolean;
+  accountNumber?: string;
+  sheba?: string;
+};
+
 export default function WalletPage() {
-  const [chargeAmount, setChargeAmount] = useState<string>("");
-  const [selectedCard, setSelectedCard] = useState<string>(MOCK_BANK_CARDS[0].id);
-  const [expandedMonth, setExpandedMonth] = useState<string>("current");
-  const { toast } = useToast();
-  
-  // تبدیل اعداد به فرمت تومان با جداکننده هزارگان
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuthStore();
+  const [depositAmount, setDepositAmount] = useState("");
+  const [isDepositDialogOpen, setIsDepositDialogOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isDepositSuccess, setIsDepositSuccess] = useState(false);
+  const [bankCards, setBankCards] = useState<BankCardType[]>(
+    MOCK_BANK_CARDS as BankCardType[]
+  );
+  const [isAddCardDialogOpen, setIsAddCardDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("wallet");
+  const [copySuccess, setCopySuccess] = useState<{
+    text: string;
+    type: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, router]);
+
+  if (!user) {
+    return null;
+  }
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("fa-IR").format(amount) + " تومان";
   };
-  
-  // مدیریت کپی شماره کارت
-  const handleCopyCardNumber = (cardNumber: string) => {
-    navigator.clipboard.writeText(cardNumber);
-    toast({
-      title: "کپی شد!",
-      description: "شماره کارت با موفقیت کپی شد.",
-      duration: 3000,
-    });
+
+  const handleDeposit = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setIsDepositSuccess(true);
+      setTimeout(() => {
+        setIsDepositSuccess(false);
+        setIsDepositDialogOpen(false);
+        setDepositAmount("");
+      }, 2000);
+    }, 1500);
   };
-  
-  // گروه‌بندی تراکنش‌ها بر اساس ماه
-  const groupTransactionsByMonth = () => {
-    const currentMonth = MOCK_TRANSACTIONS.filter(t => t.date.includes("1402/08"));
-    const previousMonth = MOCK_TRANSACTIONS.filter(t => t.date.includes("1402/07"));
-    
-    return {
-      current: currentMonth,
-      previous: previousMonth,
+
+  const handleDeleteCard = (id: string) => {
+    setBankCards((prev) => prev.filter((card) => card.id !== id));
+  };
+
+  const handleSetDefaultCard = (id: string) => {
+    setBankCards((prev) =>
+      prev.map((card) => ({
+        ...card,
+        isDefault: card.id === id,
+      }))
+    );
+  };
+
+  const handleAddCard = (data: BankCardFormData) => {
+    const newCard: BankCardType = {
+      id: `${bankCards.length + 1}`,
+      bank: data.bank,
+      cardNumber: data.cardNumber,
+      cardHolderName: data.cardHolderName,
+      expiryDate: data.expiryDate || "",
+      isDefault: bankCards.length === 0,
+      ...(data.accountNumber ? { accountNumber: data.accountNumber } : {}),
+      ...(data.sheba ? { sheba: data.sheba } : {}),
     };
+
+    setBankCards((prev) => [...prev, newCard]);
   };
-  
-  const transactionsByMonth = groupTransactionsByMonth();
-  
-  // محاسبه موجودی کیف پول
-  const calculateWalletBalance = () => {
-    return MOCK_TRANSACTIONS.reduce((total, transaction) => {
-      if (transaction.type === "income") {
-        return total + transaction.amount;
-      } else {
-        return total - transaction.amount;
-      }
-    }, 0);
+
+  const handleCopy = (text: string, type: string) => {
+    navigator.clipboard.writeText(text);
+    setCopySuccess({ text, type });
+
+    setTimeout(() => {
+      setCopySuccess(null);
+    }, 2000);
   };
-  
-  const walletBalance = calculateWalletBalance();
-  
+
   return (
-    <div className="space-y-8">
-      {/* هدر صفحه */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">کیف پول</h1>
-        <p className="text-gray-600 mt-1">مدیریت کیف پول و کارت‌های بانکی</p>
-      </div>
-      
-      {/* بخش موجودی و شارژ */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* کارت موجودی */}
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl lg:col-span-1">
-          <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-          <CardContent className="p-6">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                <Wallet className="h-8 w-8 text-blue-600" />
-              </div>
-              <h2 className="text-lg font-medium text-gray-700 mb-1">موجودی کیف پول</h2>
-              <p className="text-3xl font-bold text-gray-900 mb-4">{formatCurrency(walletBalance)}</p>
-              
-              <div className="w-full flex gap-2 mt-2">
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
-                  onClick={() => window.open("/dashboard/qr-payment", "_self")}
-                >
-                  پرداخت
-                </Button>
-                <Button className="flex-1 bg-blue-600 hover:bg-blue-700">شارژ کیف پول</Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        {/* کارت شارژ کیف پول */}
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl lg:col-span-2">
-          <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-          <CardHeader className="pb-0">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Plus className="h-5 w-5 text-blue-600" />
-              شارژ کیف پول
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">مبلغ (تومان)</label>
-                  <Input 
-                    type="text" 
-                    placeholder="مثال: 500,000" 
-                    value={chargeAmount}
-                    onChange={(e) => setChargeAmount(e.target.value)}
-                    className="w-full"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">کارت بانکی</label>
-                  <div className="space-y-2">
-                    {MOCK_BANK_CARDS.map((card) => (
-                      <div 
-                        key={card.id}
-                        className={`p-3 rounded-lg border ${
-                          selectedCard === card.id 
-                            ? 'border-blue-200 bg-blue-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                        } cursor-pointer transition-colors`}
-                        onClick={() => setSelectedCard(card.id)}
+    <AppLayout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold gradient-text">
+            کیف پول و حساب‌های بانکی
+          </h1>
+          <p className="text-secondary mt-1">
+            مدیریت کیف پول، افزودن حساب‌های بانکی و انجام تراکنش‌های مالی
+          </p>
+        </div>
+
+        <Tabs
+          defaultValue="wallet"
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
+          <TabsList className="w-full justify-start">
+            <TabsTrigger value="wallet" className="gap-2">
+              <Wallet size={16} /> کیف پول
+            </TabsTrigger>
+            <TabsTrigger value="bank-cards" className="gap-2">
+              <CreditCard size={16} /> کارت‌های بانکی
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="wallet">
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="hover-float card-hover shadow-card">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Wallet className="h-5 w-5 text-primary" />
+                      موجودی کیف پول
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold gradient-text">
+                      {formatCurrency(user.walletBalance)}
+                    </div>
+                    <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                      <AnimatedButton
+                        onClick={() => setIsDepositDialogOpen(true)}
+                        className="flex-1 gap-2"
+                        animation="scale"
                       >
+                        <ArrowUp size={18} /> افزایش موجودی
+                      </AnimatedButton>
+                      <AnimatedButton
+                        variant="outline"
+                        className="flex-1 gap-2"
+                        animation="float"
+                      >
+                        <Clock size={18} /> تاریخچه تراکنش‌ها
+                      </AnimatedButton>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover-float card-hover shadow-card">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <ChevronsUpDown className="h-5 w-5 text-primary" />
+                      انتقال وجه سریع
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full gradient-bg flex items-center justify-center shadow-sm text-white">
+                          <User className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <span className="text-sm text-secondary">
+                            انتقال به
+                          </span>
+                          <div className="font-medium">حساب شخصی</div>
+                        </div>
+                      </div>
+
+                      <div className="pt-2">
+                        <AnimatedButton
+                          className="w-full gap-2"
+                          animation="scale"
+                        >
+                          <Banknote size={18} /> انتقال وجه به حساب
+                        </AnimatedButton>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="mt-8">
+                <h2 className="text-xl font-semibold mb-4">تراکنش‌های اخیر</h2>
+                <div className="space-y-4">
+                  {MOCK_TRANSACTIONS.map((transaction) => (
+                    <Card
+                      key={transaction.id}
+                      className="hover-float card-hover shadow-card"
+                    >
+                      <CardContent className="p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                            <CreditCard className="h-5 w-5 text-blue-600" />
+                          <div
+                            className={`p-2 rounded-full ${
+                              transaction.type === "deposit"
+                                ? "bg-success/10 text-success"
+                                : "bg-danger/10 text-danger"
+                            }`}
+                          >
+                            {transaction.type === "deposit" ? (
+                              <ArrowUp size={16} />
+                            ) : (
+                              <CreditCard size={16} />
+                            )}
                           </div>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between">
-                              <p className="font-medium text-gray-900">
-                                {card.bank === 'mellat' ? 'بانک ملت' : 'بانک ملی'}
-                              </p>
-                              {card.isDefault && (
-                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                                  پیش‌فرض
-                                </span>
-                              )}
+                          <div>
+                            <div className="font-medium">
+                              {transaction.description}
                             </div>
-                            <div className="flex items-center gap-2 mt-1">
-                              <p className="text-sm text-gray-600 font-mono tracking-wider">
-                                {card.cardNumber.slice(0, 4)}-****-****-{card.cardNumber.slice(-4)}
-                              </p>
+                            <div className="text-sm text-secondary">
+                              {transaction.date}
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">پرداخت و شارژ کیف پول</Button>
-              </div>
-              
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <h3 className="font-medium text-gray-900 mb-3">مبالغ پیشنهادی</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {[500000, 1000000, 2000000, 5000000].map((amount) => (
-                    <div 
-                      key={amount}
-                      className="p-2 bg-white rounded border border-gray-200 text-center cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-colors"
-                      onClick={() => setChargeAmount(amount.toLocaleString())}
-                    >
-                      {formatCurrency(amount)}
-                    </div>
+                        <div
+                          className={`font-medium ${
+                            transaction.type === "deposit"
+                              ? "text-success"
+                              : "text-danger"
+                          }`}
+                        >
+                          {transaction.type === "deposit" ? "+" : "-"}
+                          {formatCurrency(transaction.amount)}
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
-                
-                <div className="mt-6">
-                  <h3 className="font-medium text-gray-900 mb-3">مزایای شارژ کیف پول</h3>
-                  <ul className="space-y-2 text-sm text-gray-600">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      پرداخت سریع بدون نیاز به رمز پویا
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      امکان استفاده از تخفیف‌های ویژه
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      دریافت جایزه برای شارژهای بالای 1 میلیون تومان
-                    </li>
-                  </ul>
-                </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* کارت‌های بانکی و تراکنش‌ها */}
-      <Tabs defaultValue="transactions" className="w-full">
-        <TabsList className="mb-4">
-          <TabsTrigger value="transactions">تراکنش‌ها</TabsTrigger>
-          <TabsTrigger value="cards">کارت‌های بانکی</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="transactions">
-          <Card className="border-0 shadow-sm rounded-xl overflow-hidden">
-            <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-blue-600" />
-                تاریخچه تراکنش‌ها
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-6">
-                {/* تراکنش‌های ماه جاری */}
+          </TabsContent>
+
+          <TabsContent value="bank-cards">
+            <div className="space-y-6">
+              <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200 flex items-start gap-3 text-blue-800">
+                <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
                 <div>
-                  <div 
-                    className="flex items-center justify-between cursor-pointer mb-4"
-                    onClick={() => setExpandedMonth(expandedMonth === 'current' ? '' : 'current')}
-                  >
-                    <h3 className="font-medium text-gray-900">آبان ۱۴۰۲</h3>
-                    <Button variant="ghost" size="sm" className="p-1">
-                      {expandedMonth === 'current' ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                    </Button>
-                  </div>
-                  
-                  {expandedMonth === 'current' && (
-                    <div className="space-y-4">
-                      {transactionsByMonth.current.map((transaction) => (
-                        <div key={transaction.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-full ${transaction.iconBg} flex items-center justify-center`}>
-                              {transaction.icon}
-                            </div>
-                            <div>
-                              <div className="font-medium text-gray-900">{transaction.title}</div>
-                              <div className="text-xs text-gray-500">
-                                {transaction.date} - {transaction.time}
-                              </div>
-                            </div>
-                          </div>
-                          <div className={`font-medium ${transaction.type === 'income' ? 'text-green-600' : 'text-red-500'}`}>
-                            {transaction.type === 'income' ? '+' : '-'}
-                            {formatCurrency(transaction.amount).split(" ")[0]}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                
-                {/* تراکنش‌های ماه قبل */}
-                <div>
-                  <div 
-                    className="flex items-center justify-between cursor-pointer mb-4"
-                    onClick={() => setExpandedMonth(expandedMonth === 'previous' ? '' : 'previous')}
-                  >
-                    <h3 className="font-medium text-gray-900">مهر ۱۴۰۲</h3>
-                    <Button variant="ghost" size="sm" className="p-1">
-                      {expandedMonth === 'previous' ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                    </Button>
-                  </div>
-                  
-                  {expandedMonth === 'previous' && (
-                    <div className="space-y-4">
-                      {transactionsByMonth.previous.map((transaction) => (
-                        <div key={transaction.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-full ${transaction.iconBg} flex items-center justify-center`}>
-                              {transaction.icon}
-                            </div>
-                            <div>
-                              <div className="font-medium text-gray-900">{transaction.title}</div>
-                              <div className="text-xs text-gray-500">
-                                {transaction.date} - {transaction.time}
-                              </div>
-                            </div>
-                          </div>
-                          <div className={`font-medium ${transaction.type === 'income' ? 'text-green-600' : 'text-red-500'}`}>
-                            {transaction.type === 'income' ? '+' : '-'}
-                            {formatCurrency(transaction.amount).split(" ")[0]}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  <h3 className="font-medium text-blue-800">
+                    راهنمای استفاده از کارت‌های بانکی
+                  </h3>
+                  <p className="text-sm text-blue-700 mt-1">
+                    از این بخش می‌توانید کارت‌های بانکی خود را مدیریت کنید. برای
+                    افزودن کارت جدید روی دکمه «افزودن کارت بانکی» کلیک کنید.
+                    برای مشاهده اطلاعات کامل هر کارت، روی آن کلیک کنید.
+                  </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="cards">
-          <Card className="border-0 shadow-sm rounded-xl overflow-hidden">
-            <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-            <CardHeader className="pb-2 flex flex-row items-center justify-between">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <CreditCard className="h-5 w-5 text-blue-600" />
-                کارت‌های بانکی
-              </CardTitle>
-              <Button className="bg-blue-600 hover:bg-blue-700 gap-1" size="sm">
-                <Plus size={16} />
-                افزودن کارت جدید
-              </Button>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {MOCK_BANK_CARDS.map((card) => (
-                  <div 
-                    key={card.id} 
-                    className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="font-medium text-gray-900">
-                        {card.bank === 'mellat' ? 'بانک ملت' : 'بانک ملی'}
-                      </div>
-                      {card.isDefault ? (
-                        <div className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                          پیش‌فرض
-                        </div>
-                      ) : (
-                        <Button variant="outline" size="sm" className="text-xs h-7">
-                          تنظیم به عنوان پیش‌فرض
-                        </Button>
-                      )}
-                    </div>
-                    
-                    <div className="w-full p-4 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-white shadow-md relative overflow-hidden mb-4">
-                      <div className="absolute top-0 right-0 w-full h-full opacity-10">
-                        <div className="absolute transform rotate-45 translate-x-1/2 -translate-y-1/2 right-0 top-0 w-40 h-40 bg-white rounded-full"></div>
-                        <div className="absolute transform rotate-45 translate-x-1/3 translate-y-1/3 right-0 bottom-0 w-40 h-40 bg-white rounded-full"></div>
-                      </div>
-                      
-                      <div className="flex justify-between text-xl font-mono tracking-wider mb-6">
-                        <span>{card.cardNumber.slice(0, 4)}</span>
-                        <span>{card.cardNumber.slice(4, 8)}</span>
-                        <span>{card.cardNumber.slice(8, 12)}</span>
-                        <span>{card.cardNumber.slice(12, 16)}</span>
-                      </div>
-                      
-                      <div className="flex justify-between items-end">
-                        <div>
-                          <div className="text-xs text-white/70">دارنده کارت</div>
-                          <div>{card.cardHolderName}</div>
-                        </div>
-                        <div>
-                          <div className="text-xs text-white/70">انقضا</div>
-                          <div>{card.expiryDate}</div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-500">شماره کارت:</div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono">{card.cardNumber}</span>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-8 w-8 p-0"
-                          onClick={() => handleCopyCardNumber(card.cardNumber)}
-                        >
-                          <Copy size={14} />
-                        </Button>
-                      </div>
-                    </div>
-                    
-                    <div className="flex gap-2 mt-4">
-                      <Button variant="outline" className="flex-1 text-sm">ویرایش</Button>
-                      <Button variant="destructive" className="flex-1 text-sm">حذف</Button>
-                    </div>
-                  </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {bankCards.map((card) => (
+                  <BankCard
+                    key={card.id}
+                    {...card}
+                    onDelete={handleDeleteCard}
+                    onSetDefault={handleSetDefaultCard}
+                    onCopy={handleCopy}
+                  />
                 ))}
+
+                <AddBankCardButton
+                  onClick={() => setIsAddCardDialogOpen(true)}
+                />
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+
+              {bankCards.length === 0 && (
+                <div className="py-12 text-center">
+                  <div className="w-16 h-16 rounded-full bg-secondary-light mx-auto flex items-center justify-center">
+                    <CreditCard className="h-8 w-8 text-secondary" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-medium">
+                    هنوز کارت بانکی اضافه نکرده‌اید
+                  </h3>
+                  <p className="mt-2 text-secondary">
+                    برای افزودن کارت بانکی جدید روی دکمه بالا کلیک کنید
+                  </p>
+                </div>
+              )}
+
+              {copySuccess && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-success text-white rounded-md shadow-lg animate-fade-in flex items-center gap-2">
+                  <Check size={16} />
+                  <span>
+                    {copySuccess.type === "card" && "شماره کارت "}
+                    {copySuccess.type === "sheba" && "شماره شبا "}
+                    {copySuccess.type === "account" && "شماره حساب "}
+                    کپی شد
+                  </span>
+                </div>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
+
+        <Dialog
+          open={isDepositDialogOpen}
+          onOpenChange={setIsDepositDialogOpen}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>افزایش موجودی کیف پول</DialogTitle>
+              <DialogDescription>
+                مبلغ مورد نظر برای شارژ کیف پول را وارد کنید
+              </DialogDescription>
+            </DialogHeader>
+
+            {!isDepositSuccess ? (
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">مبلغ (تومان)</label>
+                  <Input
+                    type="number"
+                    placeholder="مثال: 1,000,000"
+                    value={depositAmount}
+                    onChange={(e) => setDepositAmount(e.target.value)}
+                    disabled={isProcessing}
+                  />
+                </div>
+
+                {bankCards.length > 0 && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">کارت بانکی</label>
+                    <div className="p-3 border border-border rounded-md flex items-center gap-3">
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center"
+                        style={{
+                          backgroundImage: `linear-gradient(to right, var(--primary-500), var(--primary-600))`,
+                        }}
+                      >
+                        <CreditCard className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium">
+                          {bankCards
+                            .find((card) => card.isDefault)
+                            ?.cardNumber.slice(0, 4) +
+                            " •••• •••• " +
+                            bankCards
+                              .find((card) => card.isDefault)
+                              ?.cardNumber.slice(-4)}
+                        </div>
+                        <div className="text-xs text-secondary">
+                          {
+                            bankCards.find((card) => card.isDefault)
+                              ?.cardHolderName
+                          }
+                        </div>
+                      </div>
+                      <ChevronDown className="h-5 w-5 text-secondary" />
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-2">
+                  <Button
+                    onClick={handleDeposit}
+                    disabled={!depositAmount || isProcessing}
+                    className="w-full"
+                  >
+                    {isProcessing
+                      ? "در حال پردازش..."
+                      : "پرداخت و افزایش موجودی"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsDepositDialogOpen(false)}
+                    disabled={isProcessing}
+                    className="w-full"
+                  >
+                    انصراف
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="py-6 text-center space-y-4">
+                <div className="w-16 h-16 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className="w-8 h-8"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-success">
+                    پرداخت با موفقیت انجام شد
+                  </h3>
+                  <p className="text-secondary mt-1">
+                    موجودی کیف پول شما افزایش یافت
+                  </p>
+                </div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        <AddBankCard
+          open={isAddCardDialogOpen}
+          onOpenChange={setIsAddCardDialogOpen}
+          onSubmit={handleAddCard}
+          isProcessing={isProcessing}
+        />
+      </div>
+    </AppLayout>
   );
-} 
+}

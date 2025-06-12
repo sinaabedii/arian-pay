@@ -1,343 +1,540 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  ChevronDown,
+  Download,
+  Filter,
+  Search,
+  ArrowDownRight,
+  ArrowUpRight,
+  Calendar,
+  CreditCard,
+  ShoppingBag,
+  Wallet,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  CreditCard,
-  Wallet,
-  BarChart3,
-  CalendarIcon,
-  FilterIcon,
-  SearchIcon,
-  ChevronDown,
-  ArrowUpRight,
-  ArrowDownRight,
-  Download,
-  ShoppingBag,
-  Calendar
-} from "lucide-react";
-import { useRouter } from "next/navigation";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuthStore } from "@/lib/store/auth-store";
 
-// نمونه داده برای تراکنش‌ها
-const MOCK_TRANSACTIONS = [
-  { id: "1", title: "خرید از دیجی کالا", amount: 2500000, type: "expense", date: "1402/08/15", time: "14:35", category: "خرید", iconBg: "bg-blue-100 text-blue-600", icon: <ShoppingBag size={14} /> },
-  { id: "2", title: "شارژ کیف پول", amount: 5000000, type: "income", date: "1402/08/10", time: "09:20", category: "شارژ کیف پول", iconBg: "bg-green-100 text-green-600", icon: <Wallet size={14} /> },
-  { id: "3", title: "پرداخت قسط", amount: 1500000, type: "expense", date: "1402/08/05", time: "11:15", category: "اقساط", iconBg: "bg-amber-100 text-amber-600", icon: <Calendar size={14} /> },
-  { id: "4", title: "خرید از فروشگاه ایرانی", amount: 750000, type: "expense", date: "1402/08/01", time: "16:45", category: "خرید", iconBg: "bg-blue-100 text-blue-600", icon: <ShoppingBag size={14} /> },
-  { id: "5", title: "شارژ کیف پول", amount: 3000000, type: "income", date: "1402/07/25", time: "10:30", category: "شارژ کیف پول", iconBg: "bg-green-100 text-green-600", icon: <Wallet size={14} /> },
-  { id: "6", title: "خرید از فروشگاه آنلاین", amount: 1200000, type: "expense", date: "1402/07/20", time: "18:15", category: "خرید", iconBg: "bg-blue-100 text-blue-600", icon: <ShoppingBag size={14} /> },
-  { id: "7", title: "پرداخت قسط", amount: 1500000, type: "expense", date: "1402/07/05", time: "11:30", category: "اقساط", iconBg: "bg-amber-100 text-amber-600", icon: <Calendar size={14} /> },
-  { id: "8", title: "برداشت از کیف پول", amount: 2000000, type: "expense", date: "1402/06/28", time: "14:20", category: "برداشت", iconBg: "bg-red-100 text-red-600", icon: <Wallet size={14} /> },
-  { id: "9", title: "شارژ کیف پول", amount: 10000000, type: "income", date: "1402/06/15", time: "09:45", category: "شارژ کیف پول", iconBg: "bg-green-100 text-green-600", icon: <Wallet size={14} /> },
-  { id: "10", title: "خرید از سوپرمارکت آنلاین", amount: 850000, type: "expense", date: "1402/06/10", time: "16:30", category: "خرید", iconBg: "bg-blue-100 text-blue-600", icon: <ShoppingBag size={14} /> },
+interface Transaction {
+  id: string;
+  title: string;
+  amount: number;
+  type: "expense" | "income" | "credit";
+  category: string;
+  date: string;
+  time: string;
+  status: string;
+  iconBg: string;
+  icon: React.ReactNode;
+  merchant: string;
+  description: string;
+  reference: string;
+}
+
+const MOCK_TRANSACTIONS: Transaction[] = [
+  {
+    id: "tr-1001",
+    title: "خرید از دیجی کالا",
+    amount: 2500000,
+    type: "expense",
+    category: "خرید",
+    date: "1402/06/15",
+    time: "14:30",
+    status: "completed",
+    iconBg: "bg-blue-100 text-blue-600",
+    icon: <ShoppingBag size={14} />,
+    merchant: "دیجی کالا",
+    description: "خرید لپ تاپ اقساطی",
+    reference: "DKC-87654321",
+  },
+  {
+    id: "tr-1002",
+    title: "شارژ کیف پول",
+    amount: 5000000,
+    type: "income",
+    category: "شارژ",
+    date: "1402/06/10",
+    time: "10:15",
+    status: "completed",
+    iconBg: "bg-green-100 text-green-600",
+    icon: <Wallet size={14} />,
+    merchant: "بانک ملت",
+    description: "انتقال از حساب بانکی",
+    reference: "MB-12345678",
+  },
+  {
+    id: "tr-1003",
+    title: "پرداخت قسط",
+    amount: 1500000,
+    type: "expense",
+    category: "قسط",
+    date: "1402/06/05",
+    time: "09:45",
+    status: "completed",
+    iconBg: "bg-purple-100 text-purple-600",
+    icon: <Calendar size={14} />,
+    merchant: "سعید پی",
+    description: "پرداخت قسط ماه شهریور",
+    reference: "INS-43219876",
+  },
+  {
+    id: "tr-1004",
+    title: "خرید از فروشگاه ایران‌مال",
+    amount: 1800000,
+    type: "expense",
+    category: "خرید",
+    date: "1402/06/01",
+    time: "16:20",
+    status: "completed",
+    iconBg: "bg-blue-100 text-blue-600",
+    icon: <ShoppingBag size={14} />,
+    merchant: "ایران‌مال",
+    description: "خرید لوازم خانگی",
+    reference: "IRM-87654322",
+  },
+  {
+    id: "tr-1005",
+    title: "افزایش اعتبار",
+    amount: 10000000,
+    type: "credit",
+    category: "اعتبار",
+    date: "1402/05/25",
+    time: "11:30",
+    status: "completed",
+    iconBg: "bg-yellow-100 text-yellow-600",
+    icon: <CreditCard size={14} />,
+    merchant: "سعید پی",
+    description: "افزایش اعتبار پس از بررسی درخواست",
+    reference: "CR-98765432",
+  },
 ];
 
-// دسته‌بندی‌های تراکنش
-const TRANSACTION_CATEGORIES = [
-  "همه",
-  "خرید",
-  "شارژ کیف پول",
-  "برداشت",
-  "اقساط",
-];
-
-// بازه‌های زمانی
-const TIME_PERIODS = [
-  "همه",
-  "30 روز گذشته",
-  "3 ماه گذشته",
-  "6 ماه گذشته",
-  "1 سال گذشته",
-];
+const FILTER_OPTIONS = {
+  type: [
+    { label: "همه", value: "all" },
+    { label: "دریافتی", value: "income" },
+    { label: "پرداختی", value: "expense" },
+    { label: "اعتبار", value: "credit" },
+  ],
+  category: [
+    { label: "همه", value: "all" },
+    { label: "خرید", value: "خرید" },
+    { label: "شارژ", value: "شارژ" },
+    { label: "قسط", value: "قسط" },
+    { label: "اعتبار", value: "اعتبار" },
+  ],
+  timeRange: [
+    { label: "همه", value: "all" },
+    { label: "امروز", value: "today" },
+    { label: "هفته اخیر", value: "week" },
+    { label: "ماه اخیر", value: "month" },
+    { label: "سه ماه اخیر", value: "quarter" },
+  ],
+};
 
 export default function TransactionsPage() {
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("همه");
-  const [selectedPeriod, setSelectedPeriod] = useState<string>("همه");
-  const [selectedTransactionType, setSelectedTransactionType] = useState<string>("همه");
   const router = useRouter();
-  
-  // تبدیل اعداد به فرمت تومان با جداکننده هزارگان
+  const { isAuthenticated } = useAuthStore();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("all");
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
+  const [filters, setFilters] = useState({
+    type: "all",
+    category: "all",
+    timeRange: "all",
+  });
+  const [filteredTransactions, setFilteredTransactions] =
+    useState<Transaction[]>(MOCK_TRANSACTIONS);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+    }
+  }, [isAuthenticated, router]);
+
+  useEffect(() => {
+    let result = [...MOCK_TRANSACTIONS];
+
+    if (filters.type !== "all") {
+      result = result.filter(
+        (transaction) => transaction.type === filters.type
+      );
+    }
+
+    if (filters.category !== "all") {
+      result = result.filter(
+        (transaction) => transaction.category === filters.category
+      );
+    }
+
+    if (searchQuery) {
+      result = result.filter(
+        (transaction) =>
+          transaction.title.includes(searchQuery) ||
+          transaction.merchant.includes(searchQuery) ||
+          transaction.reference.includes(searchQuery)
+      );
+    }
+
+    if (activeTab !== "all") {
+      result = result.filter((transaction) => transaction.type === activeTab);
+    }
+
+    setFilteredTransactions(result);
+  }, [searchQuery, filters, activeTab]);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("fa-IR").format(amount) + " تومان";
   };
-  
-  // فیلتر تراکنش‌ها بر اساس معیارهای جستجو
-  const filteredTransactions = MOCK_TRANSACTIONS.filter(transaction => {
-    // فیلتر بر اساس متن جستجو
-    const matchesSearch = searchQuery === "" || 
-      transaction.title.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    // فیلتر بر اساس دسته‌بندی
-    const matchesCategory = selectedCategory === "همه" || 
-      transaction.category === selectedCategory;
-    
-    // فیلتر بر اساس نوع تراکنش
-    const matchesType = selectedTransactionType === "همه" || 
-      (selectedTransactionType === "دریافتی" && transaction.type === "income") ||
-      (selectedTransactionType === "پرداختی" && transaction.type === "expense");
-    
-    // می‌توان فیلتر بر اساس بازه زمانی را نیز اضافه کرد
-    
-    return matchesSearch && matchesCategory && matchesType;
-  });
-  
-  // گروه‌بندی تراکنش‌ها بر اساس ماه
-  const groupTransactionsByMonth = () => {
-    const groups: { [key: string]: typeof MOCK_TRANSACTIONS } = {};
-    
-    filteredTransactions.forEach(transaction => {
-      const [year, month] = transaction.date.split('/');
-      const key = `${year}/${month}`;
-      
-      if (!groups[key]) {
-        groups[key] = [];
-      }
-      
-      groups[key].push(transaction);
-    });
-    
-    return groups;
+
+  const showTransactionDetails = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
   };
-  
-  const transactionsByMonth = groupTransactionsByMonth();
-  
-  // محاسبه جمع دریافتی‌ها و پرداختی‌ها
-  const calculateTotals = () => {
-    const income = filteredTransactions
-      .filter(t => t.type === "income")
-      .reduce((total, t) => total + t.amount, 0);
-      
-    const expense = filteredTransactions
-      .filter(t => t.type === "expense")
-      .reduce((total, t) => total + t.amount, 0);
-      
-    return { income, expense, balance: income - expense };
-  };
-  
-  const totals = calculateTotals();
-  
-  // تبدیل کلید ماه به نام فارسی ماه
-  const getPersianMonthName = (monthKey: string) => {
-    const [year, month] = monthKey.split('/');
-    
-    const persianMonths: { [key: string]: string } = {
-      '01': 'فروردین',
-      '02': 'اردیبهشت',
-      '03': 'خرداد',
-      '04': 'تیر',
-      '05': 'مرداد',
-      '06': 'شهریور',
-      '07': 'مهر',
-      '08': 'آبان',
-      '09': 'آذر',
-      '10': 'دی',
-      '11': 'بهمن',
-      '12': 'اسفند',
-    };
-    
-    return `${persianMonths[month]} ${year}`;
-  };
-  
+
   return (
-    <div className="space-y-8">
-      {/* هدر صفحه */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">تاریخچه تراکنش‌ها</h1>
-        <p className="text-gray-600 mt-1">مشاهده و مدیریت تراکنش‌های کیف پول</p>
-      </div>
-      
-      {/* کارت‌های اطلاعات کلی */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-          <div className="h-1.5 bg-gradient-to-r from-green-400 to-green-500"></div>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-500">مجموع دریافتی‌ها</p>
-                <h3 className="text-xl font-bold text-gray-900 mt-1">{formatCurrency(totals.income)}</h3>
-              </div>
-              <div className="bg-green-100 p-2 rounded-full">
-                <ArrowUpRight className="h-6 w-6 text-green-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-          <div className="h-1.5 bg-gradient-to-r from-red-400 to-red-500"></div>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-500">مجموع پرداختی‌ها</p>
-                <h3 className="text-xl font-bold text-gray-900 mt-1">{formatCurrency(totals.expense)}</h3>
-              </div>
-              <div className="bg-red-100 p-2 rounded-full">
-                <ArrowDownRight className="h-6 w-6 text-red-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="border-0 shadow-sm hover:shadow-md transition-shadow overflow-hidden rounded-xl">
-          <div className="h-1.5 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-          <CardContent className="p-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-sm text-gray-500">موجودی کیف پول</p>
-                <h3 className="text-xl font-bold text-gray-900 mt-1">{formatCurrency(totals.balance)}</h3>
-              </div>
-              <div className="bg-blue-100 p-2 rounded-full">
-                <Wallet className="h-6 w-6 text-blue-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* جستجو و فیلتر */}
-      <Card className="border-0 shadow-sm rounded-xl overflow-hidden">
-        <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <SearchIcon className="absolute right-3 top-3 h-4 w-4 text-gray-400" />
-              <Input 
-                placeholder="جستجو در تراکنش‌ها..." 
-                className="pr-10"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            
-            <div className="flex flex-wrap gap-2">
-              <div className="relative">
-                <select 
-                  className="appearance-none bg-gray-50 border border-gray-200 rounded-lg py-2 px-4 pr-10 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  {TRANSACTION_CATEGORIES.map(category => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute left-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
-              </div>
-              
-              <div className="relative">
-                <select 
-                  className="appearance-none bg-gray-50 border border-gray-200 rounded-lg py-2 px-4 pr-10 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                  value={selectedPeriod}
-                  onChange={(e) => setSelectedPeriod(e.target.value)}
-                >
-                  {TIME_PERIODS.map(period => (
-                    <option key={period} value={period}>{period}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute left-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
-              </div>
-              
-              <div className="relative">
-                <select 
-                  className="appearance-none bg-gray-50 border border-gray-200 rounded-lg py-2 px-4 pr-10 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                  value={selectedTransactionType}
-                  onChange={(e) => setSelectedTransactionType(e.target.value)}
-                >
-                  <option value="همه">همه تراکنش‌ها</option>
-                  <option value="دریافتی">دریافتی‌ها</option>
-                  <option value="پرداختی">پرداختی‌ها</option>
-                </select>
-                <ChevronDown className="absolute left-3 top-3 h-4 w-4 text-gray-400 pointer-events-none" />
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex justify-between mt-4">
-            <div className="text-sm text-gray-500">
-              {filteredTransactions.length} تراکنش یافت شد
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" className="gap-1 text-sm">
-                <Download className="h-4 w-4" />
-                دریافت گزارش
-              </Button>
-              <Button 
-                className="gap-1 text-sm bg-blue-600 hover:bg-blue-700"
-                onClick={() => router.push("/dashboard/wallet")}
-              >
-                <Wallet className="h-4 w-4" />
-                مدیریت کیف پول
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* لیست تراکنش‌ها */}
-      <div className="space-y-6">
-        {Object.keys(transactionsByMonth).length > 0 ? (
-          Object.keys(transactionsByMonth)
-            .sort((a, b) => b.localeCompare(a)) // مرتب‌سازی معکوس بر اساس تاریخ
-            .map(monthKey => (
-              <Card key={monthKey} className="border-0 shadow-sm rounded-xl overflow-hidden">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <CalendarIcon className="h-5 w-5 text-blue-600" />
-                    {getPersianMonthName(monthKey)}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-6">
-                  <div className="space-y-4">
-                    {transactionsByMonth[monthKey].map((transaction) => (
-                      <div key={transaction.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                        <div className="flex items-center gap-3">
-                          <div className={`w-10 h-10 rounded-full ${transaction.iconBg} flex items-center justify-center`}>
-                            {transaction.icon}
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-900">{transaction.title}</div>
-                            <div className="text-xs text-gray-500">
-                              {transaction.date} - {transaction.time}
-                            </div>
-                          </div>
-                        </div>
-                        <div className={`font-medium ${transaction.type === 'income' ? 'text-green-600' : 'text-red-500'}`}>
-                          {transaction.type === 'income' ? '+' : '-'}
-                          {formatCurrency(transaction.amount).split(" ")[0]}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-        ) : (
-          <div className="py-12 text-center bg-white rounded-xl border border-gray-200">
-            <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <CreditCard className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-1">هیچ تراکنشی یافت نشد</h3>
-            <p className="text-gray-500">
-              با تغییر معیارهای جستجو، تراکنش‌های بیشتری را مشاهده کنید.
+    <div className="min-h-screen bg-gray-50">
+      <div className="space-y-6 p-4 max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pt-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              تاریخچه تراکنش‌ها
+            </h1>
+            <p className="text-gray-600 mt-1 text-sm sm:text-base">
+              مشاهده و مدیریت تمامی تراکنش‌های شما
             </p>
+          </div>
+          <div className="flex gap-2">
             <Button
               variant="outline"
-              className="mt-4 gap-1"
-              onClick={() => {
-                setSearchQuery("");
-                setSelectedCategory("همه");
-                setSelectedPeriod("همه");
-                setSelectedTransactionType("همه");
-              }}
+              size="sm"
+              className="gap-1 border-gray-300 hover:border-blue-600 hover:text-blue-600"
             >
-              <FilterIcon className="h-4 w-4" />
-              حذف فیلترها
+              <Download size={16} />
+              <span className="hidden sm:inline">دریافت گزارش</span>
+              <span className="sm:hidden">گزارش</span>
             </Button>
+          </div>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
+            <Input
+              type="text"
+              placeholder="جستجو در تراکنش‌ها..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pr-10 border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl"
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-2">
+            <FilterDropdown
+              title="نوع"
+              options={FILTER_OPTIONS.type}
+              value={filters.type}
+              onChange={(value) => setFilters({ ...filters, type: value })}
+            />
+            <FilterDropdown
+              title="دسته"
+              options={FILTER_OPTIONS.category}
+              value={filters.category}
+              onChange={(value) => setFilters({ ...filters, category: value })}
+            />
+            <FilterDropdown
+              title="زمان"
+              options={FILTER_OPTIONS.timeRange}
+              value={filters.timeRange}
+              onChange={(value) => setFilters({ ...filters, timeRange: value })}
+            />
+          </div>
+        </div>
+
+        <Tabs defaultValue="all" onValueChange={setActiveTab}>
+          <TabsList className="w-full bg-gray-100 p-1 rounded-xl">
+            <TabsTrigger
+              value="all"
+              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+            >
+              <span className="hidden sm:inline">همه تراکنش‌ها</span>
+              <span className="sm:hidden">همه</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="income"
+              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+            >
+              <ArrowDownRight className="h-4 w-4 text-green-600 ml-1" />
+              <span className="hidden sm:inline">دریافتی‌ها</span>
+              <span className="sm:hidden">دریافتی</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="expense"
+              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+            >
+              <ArrowUpRight className="h-4 w-4 text-red-600 ml-1" />
+              <span className="hidden sm:inline">پرداختی‌ها</span>
+              <span className="sm:hidden">پرداختی</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="all" className="mt-6">
+            <TransactionsList
+              transactions={filteredTransactions}
+              formatCurrency={formatCurrency}
+              onSelect={showTransactionDetails}
+            />
+          </TabsContent>
+
+          <TabsContent value="income" className="mt-6">
+            <TransactionsList
+              transactions={filteredTransactions}
+              formatCurrency={formatCurrency}
+              onSelect={showTransactionDetails}
+            />
+          </TabsContent>
+
+          <TabsContent value="expense" className="mt-6">
+            <TransactionsList
+              transactions={filteredTransactions}
+              formatCurrency={formatCurrency}
+              onSelect={showTransactionDetails}
+            />
+          </TabsContent>
+        </Tabs>
+
+        {selectedTransaction && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  جزئیات تراکنش
+                </h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedTransaction(null)}
+                  className="hover:bg-gray-100"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 mb-4 p-4 bg-gray-50 rounded-xl">
+                  <div
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${selectedTransaction.iconBg} flex items-center justify-center`}
+                  >
+                    {selectedTransaction.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-gray-900">
+                      {selectedTransaction.title}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {selectedTransaction.date} - {selectedTransaction.time}
+                    </p>
+                  </div>
+                  <div className="text-left">
+                    <span
+                      className={`font-bold text-lg ${
+                        selectedTransaction.type === "income"
+                          ? "text-green-600"
+                          : selectedTransaction.type === "expense"
+                          ? "text-red-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {selectedTransaction.type === "income"
+                        ? "+"
+                        : selectedTransaction.type === "expense"
+                        ? "-"
+                        : ""}
+                      {formatCurrency(selectedTransaction.amount)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-xl">
+                  <InfoItem
+                    label="شماره پیگیری"
+                    value={selectedTransaction.reference}
+                  />
+                  <InfoItem label="وضعیت" value="تکمیل شده" />
+                  <InfoItem
+                    label="پذیرنده"
+                    value={selectedTransaction.merchant}
+                  />
+                  <InfoItem
+                    label="دسته‌بندی"
+                    value={selectedTransaction.category}
+                  />
+                  <InfoItem label="تاریخ" value={selectedTransaction.date} />
+                  <InfoItem label="زمان" value={selectedTransaction.time} />
+                  <InfoItem
+                    label="توضیحات"
+                    value={selectedTransaction.description}
+                    className="sm:col-span-2"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
     </div>
   );
-} 
+}
+
+interface TransactionsListProps {
+  transactions: Transaction[];
+  formatCurrency: (amount: number) => string;
+  onSelect: (transaction: Transaction) => void;
+}
+
+function TransactionsList({
+  transactions,
+  formatCurrency,
+  onSelect,
+}: TransactionsListProps) {
+  if (transactions.length === 0) {
+    return (
+      <div className="text-center py-10 bg-white rounded-xl border border-gray-200">
+        <div className="w-16 h-16 rounded-full bg-gray-100 mx-auto flex items-center justify-center mb-4">
+          <Search className="h-8 w-8 text-gray-400" />
+        </div>
+        <p className="text-gray-600">تراکنشی یافت نشد.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      {transactions.map((transaction) => (
+        <div
+          key={transaction.id}
+          className="p-4 sm:p-6 bg-white rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer"
+          onClick={() => onSelect(transaction)}
+        >
+          <div className="flex items-center gap-3">
+            <div
+              className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${transaction.iconBg} flex items-center justify-center shadow-sm`}
+            >
+              {transaction.icon}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-1 sm:gap-4">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-medium text-gray-900 truncate">
+                    {transaction.title}
+                  </h3>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mt-1">
+                    <span className="text-sm text-gray-500">
+                      {transaction.date} - {transaction.time}
+                    </span>
+                    <span className="text-xs text-gray-400 break-all sm:break-normal">
+                      {transaction.reference}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-left flex-shrink-0">
+                  <span
+                    className={`font-bold text-base sm:text-lg ${
+                      transaction.type === "income"
+                        ? "text-green-600"
+                        : transaction.type === "expense"
+                        ? "text-red-600"
+                        : "text-yellow-600"
+                    }`}
+                  >
+                    {transaction.type === "income"
+                      ? "+"
+                      : transaction.type === "expense"
+                      ? "-"
+                      : ""}
+                    {formatCurrency(transaction.amount)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+interface FilterDropdownProps {
+  title: string;
+  options: { label: string; value: string }[];
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function FilterDropdown({
+  title,
+  options,
+  value,
+  onChange,
+}: FilterDropdownProps) {
+  const selectedOption =
+    options.find((option) => option.value === value)?.label || options[0].label;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1 border-gray-300 hover:border-blue-600 hover:text-blue-600 min-w-0"
+        >
+          <Filter size={14} className="flex-shrink-0" />
+          <span className="hidden sm:inline">{title}: </span>
+          <span className="truncate">{selectedOption}</span>
+          <ChevronDown size={12} className="flex-shrink-0" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="end"
+        className="bg-white border border-gray-200 rounded-xl shadow-lg"
+      >
+        {options.map((option) => (
+          <DropdownMenuItem
+            key={option.value}
+            onClick={() => onChange(option.value)}
+            className="hover:bg-gray-50"
+          >
+            {option.label}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+interface InfoItemProps {
+  label: string;
+  value: string;
+  className?: string;
+}
+
+function InfoItem({ label, value, className = "" }: InfoItemProps) {
+  return (
+    <div className={className}>
+      <p className="text-sm text-gray-500 mb-1">{label}</p>
+      <p className="font-medium text-gray-900 break-words">{value}</p>
+    </div>
+  );
+}

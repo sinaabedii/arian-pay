@@ -38,30 +38,92 @@ import { PaymentAnimation } from "@/components/ui/animation";
 
 export default function WebAppStyleHomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [activeStore, setActiveStore] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const testimonials = [
+    {
+      name: "رضا محمدی",
+      role: "خرید گوشی موبایل",
+      content:
+        "تجربه فوق‌العاده‌ای بود. در کمتر از 15 دقیقه اعتبارم تایید شد و توانستم گوشی موردنظرم را به صورت اقساطی خریداری کنم.",
+      rating: 5,
+      avatar: "ر",
+      date: "۲ ماه پیش",
+    },
+    {
+      name: "مریم اکبری",
+      role: "خرید لپ‌تاپ",
+      content:
+        "بدون نیاز به ضامن و چک توانستم لپ‌تاپ موردنیازم را خریداری کنم. اقساط منعطف و متناسب با بودجه من تنظیم شد.",
+      rating: 4,
+      avatar: "م",
+      date: "۱ ماه پیش",
+    },
+    {
+      name: "علی رضایی",
+      role: "خرید لوازم خانگی",
+      content:
+        "برای جهیزیه نیاز به خرید چند قلم لوازم خانگی داشتم. با سعید پی توانستم همه را یکجا خریداری کنم و در اقساط 12 ماهه پرداخت کنم.",
+      rating: 5,
+      avatar: "ع",
+      date: "۳ هفته پیش",
+    },
+  ];
+
+  const partnerStores = [
+    {
+      name: "دیجی‌کالا",
+      category: "فروشگاه آنلاین",
+      logo: "🛒",
+      discount: "تا ۱۵٪ تخفیف",
+    },
+    {
+      name: "بامیلو",
+      category: "مد و پوشاک",
+      logo: "👕",
+      discount: "تا ۲۰٪ تخفیف",
+    },
+    {
+      name: "ایران خودرو",
+      category: "خودرو",
+      logo: "🚗",
+      discount: "اقساط ۶۰ ماهه",
+    },
+    {
+      name: "سامسونگ",
+      category: "موبایل و لپ‌تاپ",
+      logo: "📱",
+      discount: "اقساط ۲۴ ماهه",
+    },
+    {
+      name: "ال جی",
+      category: "لوازم خانگی",
+      logo: "🏠",
+      discount: "اقساط ۳۶ ماهه",
+    },
+    {
+      name: "طلای مهر",
+      category: "جواهرات",
+      logo: "💍",
+      discount: "تا ۱۰٪ تخفیف",
+    },
+  ];
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [testimonials.length]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveStore((prev) => (prev + 1) % partnerStores.length);
     }, 3000);
     return () => clearInterval(timer);
-  }, []);
+  }, [partnerStores.length]);
 
   const goToPrevTestimonial = () => {
     setCurrentTestimonial((prev) =>
@@ -215,75 +277,6 @@ export default function WebAppStyleHomePage() {
       description:
         "در هر ساعت از شبانه‌روز، کارشناسان ما آماده پاسخگویی به سؤالات شما هستند.",
       color: "from-indigo-500 to-indigo-600",
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "رضا محمدی",
-      role: "خرید گوشی موبایل",
-      content:
-        "تجربه فوق‌العاده‌ای بود. در کمتر از 15 دقیقه اعتبارم تایید شد و توانستم گوشی موردنظرم را به صورت اقساطی خریداری کنم.",
-      rating: 5,
-      avatar: "ر",
-      date: "۲ ماه پیش",
-    },
-    {
-      name: "مریم اکبری",
-      role: "خرید لپ‌تاپ",
-      content:
-        "بدون نیاز به ضامن و چک توانستم لپ‌تاپ موردنیازم را خریداری کنم. اقساط منعطف و متناسب با بودجه من تنظیم شد.",
-      rating: 4,
-      avatar: "م",
-      date: "۱ ماه پیش",
-    },
-    {
-      name: "علی رضایی",
-      role: "خرید لوازم خانگی",
-      content:
-        "برای جهیزیه نیاز به خرید چند قلم لوازم خانگی داشتم. با سعید پی توانستم همه را یکجا خریداری کنم و در اقساط 12 ماهه پرداخت کنم.",
-      rating: 5,
-      avatar: "ع",
-      date: "۳ هفته پیش",
-    },
-  ];
-
-  const partnerStores = [
-    {
-      name: "دیجی‌کالا",
-      category: "فروشگاه آنلاین",
-      logo: "🛒",
-      discount: "تا ۱۵٪ تخفیف",
-    },
-    {
-      name: "بامیلو",
-      category: "مد و پوشاک",
-      logo: "👕",
-      discount: "تا ۲۰٪ تخفیف",
-    },
-    {
-      name: "ایران خودرو",
-      category: "خودرو",
-      logo: "🚗",
-      discount: "اقساط ۶۰ ماهه",
-    },
-    {
-      name: "سامسونگ",
-      category: "موبایل و لپ‌تاپ",
-      logo: "📱",
-      discount: "اقساط ۲۴ ماهه",
-    },
-    {
-      name: "ال جی",
-      category: "لوازم خانگی",
-      logo: "🏠",
-      discount: "اقساط ۳۶ ماهه",
-    },
-    {
-      name: "طلای مهر",
-      category: "جواهرات",
-      logo: "💍",
-      discount: "تا ۱۰٪ تخفیف",
     },
   ];
 
@@ -639,6 +632,8 @@ export default function WebAppStyleHomePage() {
             </div>
           </div>
         </section>
+
+        {/* Continue with rest of sections... */}
         <section className="px-4 py-12 lg:py-16 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
@@ -927,7 +922,7 @@ export default function WebAppStyleHomePage() {
                         </svg>
                       </div>
                       <p className="text-gray-700 text-lg text-center mb-6 leading-relaxed">
-                        "{testimonial.content}"
+                        &ldquo;{testimonial.content}&rdquo;
                       </p>
                       <div className="flex items-center justify-center gap-1 mb-6">
                         {[1, 2, 3, 4, 5].map((star) => (
