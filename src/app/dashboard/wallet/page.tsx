@@ -16,8 +16,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import AppLayout from "@/components/layout/app-layout";
 import { useAuthStore } from "@/lib/store/auth-store";
 import {
   Dialog,
@@ -33,7 +31,6 @@ import {
   AddBankCardButton,
 } from "@/components/ui/bank-card";
 import { AddBankCard, BankCardFormData } from "@/components/ui/add-bank-card";
-import { AnimatedButton } from "@/components/ui/animated-button";
 
 const MOCK_TRANSACTIONS = [
   {
@@ -176,13 +173,13 @@ export default function WalletPage() {
   };
 
   return (
-    <AppLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold gradient-text">
+    <div className="min-h-screen bg-gray-50">
+      <div className="space-y-6 p-4 max-w-7xl mx-auto">
+        <div className="pt-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             کیف پول و حساب‌های بانکی
           </h1>
-          <p className="text-secondary mt-1">
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">
             مدیریت کیف پول، افزودن حساب‌های بانکی و انجام تراکنش‌های مالی
           </p>
         </div>
@@ -193,149 +190,193 @@ export default function WalletPage() {
           onValueChange={setActiveTab}
           className="w-full"
         >
-          <TabsList className="w-full justify-start">
-            <TabsTrigger value="wallet" className="gap-2">
-              <Wallet size={16} /> کیف پول
+          <TabsList className="w-full bg-gray-100 p-1 rounded-xl">
+            <TabsTrigger
+              value="wallet"
+              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+            >
+              <Wallet className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">کیف پول</span>
+              <span className="sm:hidden">کیف پول</span>
             </TabsTrigger>
-            <TabsTrigger value="bank-cards" className="gap-2">
-              <CreditCard size={16} /> کارت‌های بانکی
+            <TabsTrigger
+              value="bank-cards"
+              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+            >
+              <CreditCard className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">کارت‌های بانکی</span>
+              <span className="sm:hidden">کارت‌ها</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="wallet">
+          <TabsContent value="wallet" className="mt-6">
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Card className="hover-float card-hover shadow-card">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Wallet className="h-5 w-5 text-primary" />
-                      موجودی کیف پول
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold gradient-text">
-                      {formatCurrency(user.walletBalance)}
-                    </div>
-                    <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                      <AnimatedButton
-                        onClick={() => setIsDepositDialogOpen(true)}
-                        className="flex-1 gap-2"
-                        animation="scale"
-                      >
-                        <ArrowUp size={18} /> افزایش موجودی
-                      </AnimatedButton>
-                      <AnimatedButton
-                        variant="outline"
-                        className="flex-1 gap-2"
-                        animation="float"
-                      >
-                        <Clock size={18} /> تاریخچه تراکنش‌ها
-                      </AnimatedButton>
-                    </div>
-                  </CardContent>
-                </Card>
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+                <div className="p-4 sm:p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Wallet className="h-5 w-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      خلاصه کیف پول
+                    </h3>
+                  </div>
 
-                <Card className="hover-float card-hover shadow-card">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <ChevronsUpDown className="h-5 w-5 text-primary" />
-                      انتقال وجه سریع
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full gradient-bg flex items-center justify-center shadow-sm text-white">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                    <div className="bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-100">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                          <Wallet className="h-6 w-6 text-blue-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-gray-900">
+                            موجودی کیف پول
+                          </h4>
+                          <p className="text-sm text-gray-500">
+                            موجودی فعلی شما
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+                        {formatCurrency(user.walletBalance)}
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Button
+                          onClick={() => setIsDepositDialogOpen(true)}
+                          className="flex-1 gap-2 bg-blue-600 hover:bg-blue-700"
+                        >
+                          <ArrowUp size={18} />
+                          <span className="hidden sm:inline">
+                            افزایش موجودی
+                          </span>
+                          <span className="sm:hidden">شارژ</span>
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="flex-1 gap-2 border-gray-300 hover:border-blue-600 hover:text-blue-600"
+                        >
+                          <Clock size={18} />
+                          <span className="hidden sm:inline">
+                            تاریخچه تراکنش‌ها
+                          </span>
+                          <span className="sm:hidden">تاریخچه</span>
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-100">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
+                          <ChevronsUpDown className="h-6 w-6 text-green-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-gray-900">
+                            انتقال وجه سریع
+                          </h4>
+                          <p className="text-sm text-gray-500">
+                            انتقال به حساب شخصی
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white">
                           <User className="h-5 w-5" />
                         </div>
                         <div>
-                          <span className="text-sm text-secondary">
+                          <span className="text-sm text-gray-500">
                             انتقال به
                           </span>
-                          <div className="font-medium">حساب شخصی</div>
+                          <div className="font-medium text-gray-900">
+                            حساب شخصی
+                          </div>
                         </div>
                       </div>
-
-                      <div className="pt-2">
-                        <AnimatedButton
-                          className="w-full gap-2"
-                          animation="scale"
-                        >
-                          <Banknote size={18} /> انتقال وجه به حساب
-                        </AnimatedButton>
-                      </div>
+                      <Button className="w-full gap-2 bg-green-600 hover:bg-green-700">
+                        <Banknote size={18} />
+                        انتقال وجه به حساب
+                      </Button>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               </div>
 
               <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4">تراکنش‌های اخیر</h2>
+                <h2 className="text-xl font-semibold mb-4 text-gray-900">
+                  تراکنش‌های اخیر
+                </h2>
                 <div className="space-y-4">
                   {MOCK_TRANSACTIONS.map((transaction) => (
-                    <Card
+                    <div
                       key={transaction.id}
-                      className="hover-float card-hover shadow-card"
+                      className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
                     >
-                      <CardContent className="p-4 flex items-center justify-between">
+                      <div
+                        className={`h-1 bg-gradient-to-r ${
+                          transaction.type === "deposit"
+                            ? "from-green-400 to-green-600"
+                            : "from-red-400 to-red-600"
+                        }`}
+                      ></div>
+                      <div className="p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div
-                            className={`p-2 rounded-full ${
+                            className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                               transaction.type === "deposit"
-                                ? "bg-success/10 text-success"
-                                : "bg-danger/10 text-danger"
+                                ? "bg-green-100 text-green-600"
+                                : "bg-red-100 text-red-600"
                             }`}
                           >
                             {transaction.type === "deposit" ? (
-                              <ArrowUp size={16} />
+                              <ArrowUp size={20} />
                             ) : (
-                              <CreditCard size={16} />
+                              <CreditCard size={20} />
                             )}
                           </div>
                           <div>
-                            <div className="font-medium">
+                            <div className="font-medium text-gray-900">
                               {transaction.description}
                             </div>
-                            <div className="text-sm text-secondary">
+                            <div className="text-sm text-gray-500">
                               {transaction.date}
                             </div>
                           </div>
                         </div>
                         <div
-                          className={`font-medium ${
+                          className={`font-medium text-lg ${
                             transaction.type === "deposit"
-                              ? "text-success"
-                              : "text-danger"
+                              ? "text-green-600"
+                              : "text-red-600"
                           }`}
                         >
                           {transaction.type === "deposit" ? "+" : "-"}
                           {formatCurrency(transaction.amount)}
                         </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
             </div>
           </TabsContent>
 
-          <TabsContent value="bank-cards">
+          <TabsContent value="bank-cards" className="mt-6">
             <div className="space-y-6">
-              <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200 flex items-start gap-3 text-blue-800">
-                <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0" />
-                <div>
-                  <h3 className="font-medium text-blue-800">
-                    راهنمای استفاده از کارت‌های بانکی
-                  </h3>
-                  <p className="text-sm text-blue-700 mt-1">
-                    از این بخش می‌توانید کارت‌های بانکی خود را مدیریت کنید. برای
-                    افزودن کارت جدید روی دکمه «افزودن کارت بانکی» کلیک کنید.
-                    برای مشاهده اطلاعات کامل هر کارت، روی آن کلیک کنید.
-                  </p>
+              <div className="bg-blue-50 rounded-xl p-4 sm:p-6 border border-blue-200">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 mt-0.5 flex-shrink-0 text-blue-600" />
+                  <div>
+                    <h3 className="font-medium text-blue-900">
+                      راهنمای استفاده از کارت‌های بانکی
+                    </h3>
+                    <p className="text-sm text-blue-700 mt-1">
+                      از این بخش می‌توانید کارت‌های بانکی خود را مدیریت کنید.
+                      برای افزودن کارت جدید روی دکمه «افزودن کارت بانکی» کلیک
+                      کنید. برای مشاهده اطلاعات کامل هر کارت، روی آن کلیک کنید.
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
                 {bankCards.map((card) => (
                   <BankCard
                     key={card.id}
@@ -352,21 +393,21 @@ export default function WalletPage() {
               </div>
 
               {bankCards.length === 0 && (
-                <div className="py-12 text-center">
-                  <div className="w-16 h-16 rounded-full bg-secondary-light mx-auto flex items-center justify-center">
-                    <CreditCard className="h-8 w-8 text-secondary" />
+                <div className="text-center py-10 bg-white rounded-xl border border-gray-200">
+                  <div className="w-16 h-16 rounded-full bg-gray-100 mx-auto flex items-center justify-center mb-4">
+                    <CreditCard className="h-8 w-8 text-gray-400" />
                   </div>
-                  <h3 className="mt-4 text-lg font-medium">
+                  <h3 className="text-lg font-medium text-gray-900">
                     هنوز کارت بانکی اضافه نکرده‌اید
                   </h3>
-                  <p className="mt-2 text-secondary">
+                  <p className="text-gray-600 mt-1">
                     برای افزودن کارت بانکی جدید روی دکمه بالا کلیک کنید
                   </p>
                 </div>
               )}
 
               {copySuccess && (
-                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-success text-white rounded-md shadow-lg animate-fade-in flex items-center gap-2">
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-green-600 text-white rounded-xl shadow-lg flex items-center gap-2 z-50">
                   <Check size={16} />
                   <span>
                     {copySuccess.type === "card" && "شماره کارت "}
@@ -384,10 +425,12 @@ export default function WalletPage() {
           open={isDepositDialogOpen}
           onOpenChange={setIsDepositDialogOpen}
         >
-          <DialogContent>
+          <DialogContent className="rounded-2xl max-w-sm sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>افزایش موجودی کیف پول</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className="text-xl font-bold text-gray-900">
+                افزایش موجودی کیف پول
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
                 مبلغ مورد نظر برای شارژ کیف پول را وارد کنید
               </DialogDescription>
             </DialogHeader>
@@ -395,30 +438,30 @@ export default function WalletPage() {
             {!isDepositSuccess ? (
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">مبلغ (تومان)</label>
+                  <label className="text-sm font-medium text-gray-900">
+                    مبلغ (تومان)
+                  </label>
                   <Input
                     type="number"
                     placeholder="مثال: 1,000,000"
                     value={depositAmount}
                     onChange={(e) => setDepositAmount(e.target.value)}
                     disabled={isProcessing}
+                    className="border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl"
                   />
                 </div>
 
                 {bankCards.length > 0 && (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">کارت بانکی</label>
-                    <div className="p-3 border border-border rounded-md flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center"
-                        style={{
-                          backgroundImage: `linear-gradient(to right, var(--primary-500), var(--primary-600))`,
-                        }}
-                      >
+                    <label className="text-sm font-medium text-gray-900">
+                      کارت بانکی
+                    </label>
+                    <div className="p-3 border border-gray-300 rounded-xl flex items-center gap-3 bg-gray-50">
+                      <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
                         <CreditCard className="h-5 w-5 text-white" />
                       </div>
                       <div className="flex-1">
-                        <div className="font-medium">
+                        <div className="font-medium text-gray-900">
                           {bankCards
                             .find((card) => card.isDefault)
                             ?.cardNumber.slice(0, 4) +
@@ -427,23 +470,23 @@ export default function WalletPage() {
                               .find((card) => card.isDefault)
                               ?.cardNumber.slice(-4)}
                         </div>
-                        <div className="text-xs text-secondary">
+                        <div className="text-xs text-gray-500">
                           {
                             bankCards.find((card) => card.isDefault)
                               ?.cardHolderName
                           }
                         </div>
                       </div>
-                      <ChevronDown className="h-5 w-5 text-secondary" />
+                      <ChevronDown className="h-5 w-5 text-gray-400" />
                     </div>
                   </div>
                 )}
 
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2 pt-2">
                   <Button
                     onClick={handleDeposit}
                     disabled={!depositAmount || isProcessing}
-                    className="w-full"
+                    className="w-full bg-blue-600 hover:bg-blue-700"
                   >
                     {isProcessing
                       ? "در حال پردازش..."
@@ -453,7 +496,7 @@ export default function WalletPage() {
                     variant="outline"
                     onClick={() => setIsDepositDialogOpen(false)}
                     disabled={isProcessing}
-                    className="w-full"
+                    className="w-full border-gray-300 hover:border-blue-600 hover:text-blue-600"
                   >
                     انصراف
                   </Button>
@@ -461,7 +504,7 @@ export default function WalletPage() {
               </div>
             ) : (
               <div className="py-6 text-center space-y-4">
-                <div className="w-16 h-16 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto">
+                <div className="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -478,10 +521,10 @@ export default function WalletPage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-success">
+                  <h3 className="text-xl font-semibold text-green-600">
                     پرداخت با موفقیت انجام شد
                   </h3>
-                  <p className="text-secondary mt-1">
+                  <p className="text-gray-600 mt-1">
                     موجودی کیف پول شما افزایش یافت
                   </p>
                 </div>
@@ -497,6 +540,6 @@ export default function WalletPage() {
           isProcessing={isProcessing}
         />
       </div>
-    </AppLayout>
+    </div>
   );
 }

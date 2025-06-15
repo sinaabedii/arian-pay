@@ -11,7 +11,6 @@ import {
   Smartphone,
   MessageCircle,
   ArrowRight,
-  Shield,
   Clock,
 } from "lucide-react";
 
@@ -134,17 +133,6 @@ export default function ForgotPasswordPage() {
                       </>
                     )}
                   </Button>
-
-                  <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600 pt-2">
-                    <div className="flex items-center gap-2">
-                      <Shield className="h-4 w-4 text-green-500" />
-                      <span>امنیت بانکی</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <MessageCircle className="h-4 w-4 text-green-500" />
-                      <span>پیامک رایگان</span>
-                    </div>
-                  </div>
                 </div>
               )}
 

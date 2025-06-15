@@ -167,12 +167,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </nav>
 
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" className="lg:hidden">
+              <Button variant="outline" size="sm" className="lg:hidden">
                 <Search className="h-5 w-5" />
               </Button>
 
               <Link href="/dashboard/notifications">
-                <Button variant="ghost" size="sm" className="relative">
+                <Button variant="outline" size="sm" className="relative">
                   <Bell className="h-5 w-5" />
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                     3
@@ -186,7 +186,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
                       {user.name?.charAt(0) || "ک"}
                     </div>
-                    <span className="text-sm font-medium">
+                    <span className="text-sm text-gray-700 font-medium">
                       {user.name || "کاربر"}
                     </span>
                   </div>
@@ -203,7 +203,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
 
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
                 className="lg:hidden"
                 onClick={toggleMobileMenu}

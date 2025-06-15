@@ -7,9 +7,6 @@ import {
   ArrowLeft,
   Lock,
   Smartphone,
-  Shield,
-  CheckCircle2,
-  Award,
   ArrowRight,
   Eye,
   EyeOff,
@@ -177,20 +174,6 @@ export default function LoginPage() {
                     </>
                   )}
                 </Button>
-                <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600 pt-2">
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-green-500" />
-                    <span>امنیت بانکی</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    <span>تایید فوری</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Award className="h-4 w-4 text-green-500" />
-                    <span>مجوز رسمی</span>
-                  </div>
-                </div>
               </form>
             </CardContent>
 

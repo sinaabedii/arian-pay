@@ -11,9 +11,6 @@ import {
   Smartphone,
   MessageCircle,
   ArrowRight,
-  Shield,
-  CheckCircle2,
-  Award,
   Clock,
 } from "lucide-react";
 import { useAuthStore } from "@/lib/store/auth-store";
@@ -272,22 +269,6 @@ function VerifyForm() {
                     </>
                   )}
                 </Button>
-
-                <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600 pt-2">
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-green-500" />
-                    <span>امنیت بانکی</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    <span>تایید فوری</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Award className="h-4 w-4 text-green-500" />
-                    <span>مجوز رسمی</span>
-                  </div>
-                </div>
-
                 <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl">
                   <p className="text-center text-yellow-700 text-sm font-medium">
                     💡 کد تست: 12345
