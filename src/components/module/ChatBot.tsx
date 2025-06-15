@@ -442,7 +442,7 @@ export default function SaeedPayChatBot() {
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-1 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white shadow-xl relative overflow-hidden group transition-all duration-300"
+          className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white shadow-xl relative overflow-hidden group transition-all duration-300"
           style={{
             boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.5)",
           }}
