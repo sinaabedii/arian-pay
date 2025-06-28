@@ -17,10 +17,25 @@ import {
   LogOut,
   Download,
   Search,
+  Crown,
+  Sparkles,
+  TreePine,
+  MoreHorizontal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { Toaster } from "@/components/ui/toaster";
+import SmartSearch from "@/components/search/smart-search";
+
+interface NavItem {
+  id: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  href: string;
+  exact?: boolean;
+  badge?: string;
+  isNew?: boolean;
+}
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -30,6 +45,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user, isAuthenticated } = useAuthStore();
 
   useEffect(() => {
@@ -38,11 +54,34 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     }
   }, [isAuthenticated, router]);
 
+  // Keyboard shortcut for search (Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const navItems = [
+  const openSearch = () => {
+    setIsSearchOpen(true);
+    setIsMobileMenuOpen(false); // Close mobile menu if open
+  };
+
+  const closeSearch = () => {
+    setIsSearchOpen(false);
+  };
+
+  // Main navigation items (shown always)
+  const mainNavItems: NavItem[] = [
     {
       id: "dashboard",
       label: "داشبورد",
@@ -70,6 +109,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       icon: Store,
       href: "/dashboard/stores",
     },
+  ];
+
+  // Secondary navigation items (shown in dropdown/menu)
+  const secondaryNavItems: NavItem[] = [
     {
       id: "transactions",
       label: "تراکنش‌ها",
@@ -85,7 +128,37 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { id: "profile", label: "پروفایل", icon: User, href: "/dashboard/profile" },
   ];
 
-  const isActive = (item: (typeof navItems)[0]) => {
+  // New features (highlighted)
+  const newFeatures: NavItem[] = [
+    {
+      id: "saeed-club",
+      label: "سعید کلاب",
+      icon: Crown,
+      href: "/dashboard/saeed-club",
+      badge: "جدید",
+      isNew: true,
+    },
+    {
+      id: "ar-shopping",
+      label: "خرید AR",
+      icon: Sparkles,
+      href: "/dashboard/ar-shopping",
+      badge: "جدید",
+      isNew: true,
+    },
+    {
+      id: "green-saeed",
+      label: "سعید سبز",
+      icon: TreePine,
+      href: "/dashboard/green-saeed",
+      badge: "جدید",
+      isNew: true,
+    },
+  ];
+
+  const allNavItems = [...mainNavItems, ...secondaryNavItems, ...newFeatures];
+
+  const isActive = (item: NavItem) => {
     if (item.exact) {
       return pathname === item.href;
     }
@@ -103,6 +176,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200">
+        {/* Top Banner */}
         <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 py-2 text-sm">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -124,8 +198,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </div>
 
+        {/* Main Header */}
         <div className="px-4 py-3">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
+            {/* Logo */}
             <Link href="/">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
@@ -140,15 +216,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
             </Link>
 
+            {/* Desktop Navigation - Only Main Items */}
             <nav className="hidden lg:flex items-center bg-gray-100 rounded-xl p-1">
-              {navItems.slice(0, 8).map((item) => (
+              {mainNavItems.map((item) => (
                 <Link
                   key={item.id}
                   href={item.href}
                   className="focus:outline-none"
                 >
                   <div
-                    className={`relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    className={`relative flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                       isActive(item)
                         ? "bg-white shadow-sm text-blue-600"
                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -164,11 +241,54 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   </div>
                 </Link>
               ))}
+              
+              {/* More Button for Additional Items */}
+              <div className="relative group">
+                <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+                
+                {/* Dropdown Menu */}
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="p-2 space-y-1">
+                    {[...secondaryNavItems, ...newFeatures].map((item) => (
+                      <Link
+                        key={item.id}
+                        href={item.href}
+                        className="flex items-center gap-3 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      >
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.label}</span>
+                        {item.badge && (
+                          <span 
+                            className={`mr-auto text-white text-xs rounded-full px-2 py-1 ${
+                              item.isNew ? 'bg-green-500' : 'bg-red-500'
+                            }`}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </nav>
 
+            {/* Right Section */}
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" className="lg:hidden">
-                <Search className="h-5 w-5" />
+              {/* Search Button */}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={openSearch}
+                className="relative group"
+              >
+                <Search className="h-4 w-4 sm:ml-2" />
+                <span className="hidden sm:inline">جستجو</span>
+                <span className="hidden lg:inline-flex items-center gap-1 mr-2 px-1.5 py-0.5 bg-gray-100 text-gray-500 text-xs rounded">
+                  ⌘K
+                </span>
               </Button>
 
               <Link href="/dashboard/notifications">
@@ -180,6 +300,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </Button>
               </Link>
 
+              {/* User Menu */}
               <div className="hidden sm:flex items-center gap-3">
                 <Link href="/dashboard/profile">
                   <div className="flex items-center bg-gray-100 gap-2 p-2 rounded-lg hover:bg-gray-100 transition-colors">
@@ -202,6 +323,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </Button>
               </div>
 
+              {/* Mobile Menu Button */}
               <Button
                 variant="outline"
                 size="sm"
@@ -218,10 +340,23 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </div>
 
+        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-200 bg-white">
-            <div className="px-4 py-4 space-y-2">
-              {navItems.map((item) => (
+            <div className="px-4 py-4 space-y-2 max-h-96 overflow-y-auto">
+              {/* Mobile Search */}
+              <Button
+                variant="ghost"
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 justify-start"
+                onClick={openSearch}
+              >
+                <Search className="h-5 w-5" />
+                <span>جستجو در سایت</span>
+                <span className="mr-auto text-xs text-gray-400">⌘K</span>
+              </Button>
+
+              {/* Mobile Navigation Items */}
+              {allNavItems.map((item) => (
                 <Link
                   key={item.id}
                   href={item.href}
@@ -238,7 +373,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <item.icon className="h-5 w-5" />
                     <span>{item.label}</span>
                     {item.badge && (
-                      <span className="mr-auto bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                      <span 
+                        className={`mr-auto text-white text-xs rounded-full px-2 py-1 ${
+                          item.isNew ? 'bg-green-500' : 'bg-red-500'
+                        }`}
+                      >
                         {item.badge}
                       </span>
                     )}
@@ -263,35 +402,104 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       <main className="pb-20 pt-6 px-4 max-w-7xl mx-auto">{children}</main>
 
+      {/* Bottom Navigation - Mobile Only */}
       <nav className="fixed bottom-0 right-0 left-0 bg-white border-t border-gray-200 h-16 z-40 md:hidden">
         <div className="grid grid-cols-5 h-full">
-          {navItems.slice(0, 5).map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              className="flex flex-col items-center justify-center relative"
+          {/* Dashboard */}
+          <Link
+            href="/dashboard"
+            className="flex flex-col items-center justify-center relative"
+          >
+            <div
+              className={`flex flex-col items-center justify-center ${
+                pathname === "/dashboard" ? "text-blue-600" : "text-gray-500"
+              }`}
             >
-              <div
-                className={`flex flex-col items-center justify-center ${
-                  isActive(item) ? "text-blue-600" : "text-gray-500"
+              <Home
+                className={`h-5 w-5 ${
+                  pathname === "/dashboard" ? "text-blue-600" : "text-gray-500"
                 }`}
-              >
-                <item.icon
-                  className={`h-5 w-5 ${
-                    isActive(item) ? "text-blue-600" : "text-gray-500"
-                  }`}
-                />
-                <span className="text-xs mt-1">{item.label}</span>
-                {item.badge && (
-                  <span className="absolute -top-1 right-1/4 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                    {item.badge}
-                  </span>
-                )}
-              </div>
-            </Link>
-          ))}
+              />
+              <span className="text-xs mt-1">داشبورد</span>
+            </div>
+          </Link>
+
+          {/* Wallet */}
+          <Link
+            href="/dashboard/wallet"
+            className="flex flex-col items-center justify-center relative"
+          >
+            <div
+              className={`flex flex-col items-center justify-center ${
+                pathname.startsWith("/dashboard/wallet") ? "text-blue-600" : "text-gray-500"
+              }`}
+            >
+              <Wallet
+                className={`h-5 w-5 ${
+                  pathname.startsWith("/dashboard/wallet") ? "text-blue-600" : "text-gray-500"
+                }`}
+              />
+              <span className="text-xs mt-1">کیف پول</span>
+            </div>
+          </Link>
+
+          {/* Search Button */}
+          <button
+            onClick={openSearch}
+            className="flex flex-col items-center justify-center relative"
+          >
+            <div className="flex flex-col items-center justify-center text-gray-500 hover:text-blue-600 transition-colors">
+              <Search className="h-5 w-5" />
+              <span className="text-xs mt-1">جستجو</span>
+            </div>
+          </button>
+
+          {/* Saeed Club */}
+          <Link
+            href="/dashboard/saeed-club"
+            className="flex flex-col items-center justify-center relative"
+          >
+            <div
+              className={`flex flex-col items-center justify-center ${
+                pathname.startsWith("/dashboard/saeed-club") ? "text-blue-600" : "text-gray-500"
+              }`}
+            >
+              <Crown
+                className={`h-5 w-5 ${
+                  pathname.startsWith("/dashboard/saeed-club") ? "text-blue-600" : "text-gray-500"
+                }`}
+              />
+              <span className="text-xs mt-1">سعید کلاب</span>
+              <span className="absolute -top-1 right-1/4 bg-green-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                جدید
+              </span>
+            </div>
+          </Link>
+
+          {/* Profile */}
+          <Link
+            href="/dashboard/profile"
+            className="flex flex-col items-center justify-center relative"
+          >
+            <div
+              className={`flex flex-col items-center justify-center ${
+                pathname.startsWith("/dashboard/profile") ? "text-blue-600" : "text-gray-500"
+              }`}
+            >
+              <User
+                className={`h-5 w-5 ${
+                  pathname.startsWith("/dashboard/profile") ? "text-blue-600" : "text-gray-500"
+                }`}
+              />
+              <span className="text-xs mt-1">پروفایل</span>
+            </div>
+          </Link>
         </div>
       </nav>
+      
+      {/* Smart Search Component */}
+      <SmartSearch isOpen={isSearchOpen} onClose={closeSearch} />
+      
       <Toaster />
     </div>
   );
