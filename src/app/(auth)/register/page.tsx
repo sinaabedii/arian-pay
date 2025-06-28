@@ -44,7 +44,7 @@ export default function RegisterPage() {
     }
 
     let strength = 0;
-    if (password.length >= 8) strength += 1;
+    if (password.length >= 12) strength += 1;
     if (/[A-Z]/.test(password)) strength += 1;
     if (/[0-9]/.test(password)) strength += 1;
     if (/[^A-Za-z0-9]/.test(password)) strength += 1;
@@ -58,6 +58,12 @@ export default function RegisterPage() {
     setErrorMessage("");
 
     try {
+      if (password.length < 12) {
+        setErrorMessage("رمز عبور باید حداقل ۱۲ کاراکتر باشد.");
+        setLoading(false);
+        return;
+      }
+
       if (password !== confirmPassword) {
         setErrorMessage("رمز عبور و تکرار آن مطابقت ندارند.");
         setLoading(false);
@@ -168,12 +174,12 @@ export default function RegisterPage() {
                     <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
                       <Lock className="w-3 h-3 text-blue-600" />
                     </div>
-                    رمز عبور
+                    رمز عبور (حداقل ۱۲ کاراکتر)
                   </label>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="رمز عبور خود را وارد کنید"
+                      placeholder="رمز عبور امن با حداقل ۱۲ کاراکتر وارد کنید"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-xl py-4 px-4 bg-gray-50 hover:bg-white transition-all pr-12"
@@ -191,6 +197,26 @@ export default function RegisterPage() {
                       )}
                     </button>
                   </div>
+                  
+                  {/* Password requirements helper */}
+                  <div className="text-xs text-gray-500 space-y-1">
+                    <p>برای امنیت بیشتر، رمز عبور باید شامل:</p>
+                    <ul className="list-disc list-inside space-y-0.5 mr-2">
+                      <li className={password.length >= 12 ? "text-green-600" : ""}>
+                        حداقل ۱۲ کاراکتر
+                      </li>
+                      <li className={/[A-Z]/.test(password) ? "text-green-600" : ""}>
+                        حروف بزرگ انگلیسی
+                      </li>
+                      <li className={/[0-9]/.test(password) ? "text-green-600" : ""}>
+                        اعداد
+                      </li>
+                      <li className={/[^A-Za-z0-9]/.test(password) ? "text-green-600" : ""}>
+                        نمادهای ویژه (@#$%...)
+                      </li>
+                    </ul>
+                  </div>
+
                   {password && (
                     <div className="space-y-2">
                       <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -222,7 +248,7 @@ export default function RegisterPage() {
                         {passwordStrength === 0
                           ? "رمز عبور ضعیف است"
                           : passwordStrength === 1
-                          ? "رمز عبور ضعیف است"
+                          ? "رمز عبور ضعیف است - حداقل ۱۲ کاراکتر لازم است"
                           : passwordStrength === 2
                           ? "رمز عبور متوسط است"
                           : passwordStrength === 3
