@@ -59,7 +59,7 @@ export function PaymentProcessing({
             <div className="flex flex-col items-center">
               {currentStatus === "processing" ? (
                 <div className="w-full h-60 flex items-center justify-center">
-                  <PaymentAnimation loop={true} className="w-full h-full" />
+                  <PaymentAnimation className="w-full h-full" />
                 </div>
               ) : currentStatus === "success" ? (
                 <div className="w-16 h-16 rounded-full bg-success-100 text-success-500 flex items-center justify-center mb-4">

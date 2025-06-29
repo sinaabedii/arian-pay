@@ -85,19 +85,19 @@ export default function SaeedClubPage() {
         {/* Current Status */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
           {/* Credit Score */}
-          <Card className="text-center">
+          <Card className="text-center bg-white border border-gray-200 shadow-sm">
             <CardContent className="p-4 sm:p-6">
               <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
                 <Trophy className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{clubData.creditScore}</h3>
-              <p className="text-sm sm:text-base text-gray-600">امتیاز اعتباری</p>
+              <p className="text-sm sm:text-base text-gray-700 font-medium">امتیاز اعتباری</p>
               <Progress value={(clubData.creditScore / 1000) * 100} className="mt-2 sm:mt-3" />
             </CardContent>
           </Card>
 
           {/* Loyalty Level */}
-          <Card className="text-center">
+          <Card className="text-center bg-white border border-gray-200 shadow-sm">
             <CardContent className="p-4 sm:p-6">
               <div 
                 className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full flex items-center justify-center text-xl sm:text-2xl"
@@ -106,12 +106,12 @@ export default function SaeedClubPage() {
                 {clubData.loyaltyLevel.icon}
               </div>
               <h3 className="text-lg sm:text-xl font-bold text-gray-900">{clubData.loyaltyLevel.name}</h3>
-              <p className="text-sm sm:text-base text-gray-600">سطح عضویت</p>
+              <p className="text-sm sm:text-base text-gray-700 font-medium">سطح عضویت</p>
               <div className="mt-2 sm:mt-3 space-y-1">
                 <Progress 
                   value={((clubData.totalPoints - clubData.loyaltyLevel.minPoints) / (clubData.loyaltyLevel.maxPoints - clubData.loyaltyLevel.minPoints)) * 100} 
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-700 font-medium">
                   {clubData.totalPoints} / {clubData.loyaltyLevel.maxPoints} امتیاز
                 </p>
               </div>
@@ -119,14 +119,14 @@ export default function SaeedClubPage() {
           </Card>
 
           {/* Monthly Points */}
-          <Card className="text-center sm:col-span-2 lg:col-span-1">
+          <Card className="text-center sm:col-span-2 lg:col-span-1 bg-white border border-gray-200 shadow-sm">
             <CardContent className="p-4 sm:p-6">
               <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center">
                 <Star className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
               </div>
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{clubData.monthlyPoints.toLocaleString('fa-IR')}</h3>
-              <p className="text-sm sm:text-base text-gray-600">امتیاز این ماه</p>
-              <p className="text-sm text-green-600 mt-2">
+              <p className="text-sm sm:text-base text-gray-700 font-medium">امتیاز این ماه</p>
+              <p className="text-sm text-green-600 mt-2 font-medium">
                 +{((clubData.monthlyPoints / clubData.totalPoints) * 100).toFixed(1)}% نسبت به کل
               </p>
             </CardContent>
@@ -135,25 +135,25 @@ export default function SaeedClubPage() {
 
         {/* Main Content */}
         <Tabs defaultValue="challenges" className="space-y-4 sm:space-y-6">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1">
-            <TabsTrigger value="challenges" className="text-xs sm:text-sm">چالش‌ها</TabsTrigger>
-            <TabsTrigger value="rewards" className="text-xs sm:text-sm">جوایز</TabsTrigger>
-            <TabsTrigger value="achievements" className="text-xs sm:text-sm">دستاوردها</TabsTrigger>
-            <TabsTrigger value="impact" className="text-xs sm:text-sm">تأثیر اجتماعی</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 gap-1 bg-gray-100 p-1 rounded-xl">
+            <TabsTrigger value="challenges" className="text-xs sm:text-sm text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg">چالش‌ها</TabsTrigger>
+            <TabsTrigger value="rewards" className="text-xs sm:text-sm text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg">جوایز</TabsTrigger>
+            <TabsTrigger value="achievements" className="text-xs sm:text-sm text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg">دستاوردها</TabsTrigger>
+            <TabsTrigger value="impact" className="text-xs sm:text-sm text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg">تأثیر اجتماعی</TabsTrigger>
           </TabsList>
 
           {/* Challenges */}
           <TabsContent value="challenges" className="space-y-4 sm:space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {clubData.challenges.map((challenge) => (
-                <Card key={challenge.id} className="hover:shadow-lg transition-shadow">
+                <Card key={challenge.id} className="hover:shadow-lg transition-shadow bg-white border border-gray-200 shadow-sm">
                   <CardHeader className="p-4 sm:p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2 sm:gap-3">
                         <div className="text-xl sm:text-2xl">{challenge.icon}</div>
                         <div className="min-w-0 flex-1">
-                          <CardTitle className="text-base sm:text-lg">{challenge.title}</CardTitle>
-                          <p className="text-xs sm:text-sm text-gray-600 mt-1">{challenge.description}</p>
+                          <CardTitle className="text-base sm:text-lg text-gray-900">{challenge.title}</CardTitle>
+                          <p className="text-xs sm:text-sm text-gray-700 font-medium mt-1">{challenge.description}</p>
                         </div>
                       </div>
                       <Badge className={`${getDifficultyColor(challenge.difficulty)} text-xs shrink-0`}>
@@ -168,8 +168,8 @@ export default function SaeedClubPage() {
                       {/* Progress */}
                       <div>
                         <div className="flex justify-between text-xs sm:text-sm mb-2">
-                          <span>پیشرفت</span>
-                          <span>{challenge.progress} / {challenge.target}</span>
+                          <span className="text-gray-700 font-medium">پیشرفت</span>
+                          <span className="text-gray-800 font-medium">{challenge.progress} / {challenge.target}</span>
                         </div>
                         <Progress value={(challenge.progress / challenge.target) * 100} />
                       </div>
@@ -178,7 +178,7 @@ export default function SaeedClubPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 text-xs sm:text-sm">
                         <div className="flex items-center gap-2">
                           <Gift className="w-4 h-4 text-green-500 shrink-0" />
-                          <span>{challenge.reward} امتیاز</span>
+                          <span className="text-gray-800 font-medium">{challenge.reward} امتیاز</span>
                           {challenge.bonus && (
                             <Badge variant="secondary" className="text-xs">
                               +{challenge.bonus} بونوس
@@ -187,7 +187,7 @@ export default function SaeedClubPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-blue-500 shrink-0" />
-                          <span>{getDaysRemaining(challenge.endDate)} روز باقی</span>
+                          <span className="text-gray-800 font-medium">{getDaysRemaining(challenge.endDate)} روز باقی</span>
                         </div>
                       </div>
 
@@ -198,7 +198,7 @@ export default function SaeedClubPage() {
                         </Button>
                       )}
                       {challenge.completed && (
-                        <div className="flex items-center justify-center gap-2 py-2 bg-green-50 rounded-lg">
+                        <div className="flex items-center justify-center gap-2 py-2 bg-green-100 border border-green-200 rounded-lg">
                           <CheckCircle2 className="w-4 h-4 text-green-500" />
                           <span className="text-sm text-green-700 font-medium">تکمیل شده</span>
                         </div>
@@ -214,12 +214,12 @@ export default function SaeedClubPage() {
           <TabsContent value="rewards" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {clubData.rewards.map((reward) => (
-                <Card key={reward.id} className="hover:shadow-lg transition-shadow">
+                <Card key={reward.id} className="hover:shadow-lg transition-shadow bg-white border border-gray-200 shadow-sm">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div>
-                        <CardTitle className="text-lg">{reward.title}</CardTitle>
-                        <p className="text-sm text-gray-600">{reward.description}</p>
+                        <CardTitle className="text-lg text-gray-900">{reward.title}</CardTitle>
+                        <p className="text-sm text-gray-700 font-medium">{reward.description}</p>
                       </div>
                       {reward.partnerLogo && (
                         <Image src={reward.partnerLogo} alt="Partner" width={32} height={32} className="rounded-full" />
@@ -242,13 +242,13 @@ export default function SaeedClubPage() {
                           )}
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-gray-500">قیمت</p>
-                          <p className="font-bold">{reward.cost} امتیاز</p>
+                          <p className="text-sm text-gray-700 font-medium">قیمت</p>
+                          <p className="font-bold text-gray-900">{reward.cost} امتیاز</p>
                         </div>
                       </div>
 
                       {/* Valid Until */}
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <div className="flex items-center gap-2 text-sm text-gray-700 font-medium">
                         <Clock className="w-4 h-4" />
                         <span>تا {formatDate(reward.validUntil)}</span>
                       </div>
@@ -283,12 +283,12 @@ export default function SaeedClubPage() {
               {clubData.achievements.map((achievement) => (
                 <Card 
                   key={achievement.id} 
-                  className={`hover:shadow-lg transition-all ${getRarityGlow(achievement.rarity)} border-2`}
+                  className={`hover:shadow-lg transition-all ${getRarityGlow(achievement.rarity)} border-2 bg-white`}
                 >
                   <CardContent className="p-6 text-center">
                     <div className="text-6xl mb-4">{achievement.icon}</div>
-                    <h3 className="text-lg font-bold mb-2">{achievement.title}</h3>
-                    <p className="text-sm text-gray-600 mb-4">{achievement.description}</p>
+                    <h3 className="text-lg font-bold mb-2 text-gray-900">{achievement.title}</h3>
+                    <p className="text-sm text-gray-700 font-medium mb-4">{achievement.description}</p>
                     
                     <Badge 
                       className={`mb-4 ${
@@ -303,7 +303,7 @@ export default function SaeedClubPage() {
                       {achievement.rarity === 'legendary' && 'افسانه‌ای'}
                     </Badge>
 
-                    <p className="text-xs text-gray-500 mb-4">
+                    <p className="text-xs text-gray-700 font-medium mb-4">
                       دریافت شده در {formatDate(achievement.earnedAt)}
                     </p>
 
@@ -328,51 +328,51 @@ export default function SaeedClubPage() {
           {/* Social Impact */}
           <TabsContent value="impact" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <Card className="text-center">
+              <Card className="text-center bg-white border border-gray-200 shadow-sm">
                 <CardContent className="p-6">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-green-50 border border-green-200 rounded-full flex items-center justify-center">
                     <TreePine className="w-8 h-8 text-green-600" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">{clubData.socialImpact.treesPlanted}</h3>
-                  <p className="text-gray-600">درخت کاشته شده</p>
+                  <p className="text-gray-700 font-medium">درخت کاشته شده</p>
                 </CardContent>
               </Card>
 
-              <Card className="text-center">
+              <Card className="text-center bg-white border border-gray-200 shadow-sm">
                 <CardContent className="p-6">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-blue-50 border border-blue-200 rounded-full flex items-center justify-center">
                     <Heart className="w-8 h-8 text-blue-600" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">{formatCurrency(clubData.socialImpact.totalDonated)}</h3>
-                  <p className="text-gray-600">مبلغ خیریه</p>
+                  <p className="text-gray-700 font-medium">مبلغ خیریه</p>
                 </CardContent>
               </Card>
 
-              <Card className="text-center">
+              <Card className="text-center bg-white border border-gray-200 shadow-sm">
                 <CardContent className="p-6">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-purple-50 border border-purple-200 rounded-full flex items-center justify-center">
                     <Users className="w-8 h-8 text-purple-600" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">{clubData.socialImpact.localBusinessSupported}</h3>
-                  <p className="text-gray-600">کسب‌وکار محلی</p>
+                  <p className="text-gray-700 font-medium">کسب‌وکار محلی</p>
                 </CardContent>
               </Card>
 
-              <Card className="text-center">
+              <Card className="text-center bg-white border border-gray-200 shadow-sm">
                 <CardContent className="p-6">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-100 rounded-full flex items-center justify-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-orange-50 border border-orange-200 rounded-full flex items-center justify-center">
                     <Sparkles className="w-8 h-8 text-orange-600" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900">{clubData.socialImpact.carbonReduced} کیلوگرم</h3>
-                  <p className="text-gray-600">کاهش کربن</p>
+                  <p className="text-gray-700 font-medium">کاهش کربن</p>
                 </CardContent>
               </Card>
             </div>
 
             {/* Streaks */}
-            <Card>
+            <Card className="bg-white border border-gray-200 shadow-sm">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-gray-900">
                   <Flame className="w-5 h-5 text-orange-500" />
                   استریک‌های فعال
                 </CardTitle>
@@ -380,21 +380,21 @@ export default function SaeedClubPage() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {clubData.streaks.map((streak, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div key={index} className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
                       <div>
-                        <h4 className="font-medium">
+                        <h4 className="font-medium text-gray-900">
                           {streak.type === 'payment' && 'پرداخت منظم'}
                           {streak.type === 'saving' && 'پس‌انداز'}
                           {streak.type === 'green' && 'خرید سبز'}
                           {streak.type === 'local' && 'حمایت محلی'}
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-700 font-medium">
                           بهترین: {streak.bestStreak} روز
                         </p>
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-orange-500">{streak.count}</div>
-                        <div className="text-xs text-gray-500">روز متوالی</div>
+                        <div className="text-xs text-gray-700 font-medium">روز متوالی</div>
                       </div>
                     </div>
                   ))}

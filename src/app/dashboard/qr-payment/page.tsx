@@ -66,7 +66,7 @@ export default function QrPaymentPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             پرداخت با QR
           </h1>
-          <p className="text-gray-600 mt-1 text-sm sm:text-base">
+          <p className="text-gray-700 font-medium mt-1 text-sm sm:text-base">
             پرداخت سریع با اسکن یا نمایش کد QR
           </p>
         </div>
@@ -78,7 +78,7 @@ export default function QrPaymentPage() {
           <TabsList className="w-full bg-gray-100 p-1 rounded-xl mb-4">
             <TabsTrigger
               value="scan"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg text-xs sm:text-sm"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg text-xs sm:text-sm"
             >
               <Scan className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">اسکن کد QR</span>
@@ -86,7 +86,7 @@ export default function QrPaymentPage() {
             </TabsTrigger>
             <TabsTrigger
               value="show"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg text-xs sm:text-sm"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg text-xs sm:text-sm"
             >
               <QrCode className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">نمایش کد QR</span>
@@ -94,7 +94,7 @@ export default function QrPaymentPage() {
             </TabsTrigger>
             <TabsTrigger
               value="request"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg text-xs sm:text-sm"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg text-xs sm:text-sm"
             >
               <Send className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">درخواست پرداخت</span>
@@ -127,7 +127,7 @@ export default function QrPaymentPage() {
                       )}
                     </div>
 
-                    <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base px-4">
+                    <p className="text-gray-700 font-medium mb-4 sm:mb-6 text-sm sm:text-base px-4">
                       دوربین خود را روی کد QR نشانه بگیرید تا به صورت خودکار
                       اسکن شود.
                     </p>
@@ -150,24 +150,24 @@ export default function QrPaymentPage() {
                     <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                       پرداخت با موفقیت انجام شد
                     </h3>
-                    <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
+                    <p className="text-gray-700 font-medium mb-4 sm:mb-6 text-sm sm:text-base">
                       مبلغ ۱۵,۰۰۰ تومان به دیجی کالا پرداخت شد.
                     </p>
 
                     <div className="w-full max-w-md space-y-4">
                       <div className="p-4 bg-gray-50 rounded-xl">
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-500">شماره پیگیری:</span>
+                          <span className="text-gray-700 font-medium">شماره پیگیری:</span>
                           <span className="font-medium">۱۲۳۴۵۶۷۸۹۰</span>
                         </div>
                         <div className="flex justify-between text-sm mb-2">
-                          <span className="text-gray-500">تاریخ و زمان:</span>
+                          <span className="text-gray-700 font-medium">تاریخ و زمان:</span>
                           <span className="font-medium">
                             ۱۴۰۲/۰۸/۲۰ - ۱۵:۳۰
                           </span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">وضعیت:</span>
+                          <span className="text-gray-700 font-medium">وضعیت:</span>
                           <span className="font-medium text-green-600">
                             موفق
                           </span>
@@ -223,7 +223,7 @@ export default function QrPaymentPage() {
                         <Copy className="h-4 w-4" />
                       </Button>
                     </div>
-                    <div className="mt-2 text-xs sm:text-sm text-gray-600">
+                    <div className="mt-2 text-xs sm:text-sm text-gray-700 font-medium">
                       <p>
                         با نمایش این کد به پذیرنده، می‌توانید پرداخت سریع انجام
                         دهید.
@@ -267,7 +267,7 @@ export default function QrPaymentPage() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-800 mb-1">
                           مبلغ (تومان)
                         </label>
                         <Input
@@ -280,7 +280,7 @@ export default function QrPaymentPage() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-800 mb-1">
                           توضیحات (اختیاری)
                         </label>
                         <Input
@@ -320,7 +320,7 @@ export default function QrPaymentPage() {
                       <h3 className="font-medium text-gray-900 mb-3">
                         راهنمای درخواست پرداخت
                       </h3>
-                      <ul className="space-y-2 text-xs sm:text-sm text-gray-600">
+                      <ul className="space-y-2 text-xs sm:text-sm text-gray-700 font-medium">
                         <li className="flex items-center gap-2">
                           <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
                           مبلغ مورد نظر را وارد کنید
@@ -357,11 +357,9 @@ export default function QrPaymentPage() {
                           {amount} تومان
                         </div>
                       </div>
-                      {description && (
-                        <div className="mt-2 text-xs sm:text-sm text-gray-600">
-                          <p>توضیحات: {description}</p>
-                        </div>
-                      )}
+                      <div className="mt-2 text-xs sm:text-sm text-gray-700 font-medium">
+                        <p>توضیحات: {description}</p>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-md">

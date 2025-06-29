@@ -41,10 +41,10 @@ interface OnlineStore {
 const StoreMap = dynamic(() => import("@/components/map/store-map"), {
   ssr: false,
   loading: () => (
-    <div className="h-64 sm:h-80 bg-gray-100 rounded-xl border border-gray-200 flex items-center justify-center">
+    <div className="h-64 sm:h-80 bg-blue-50 rounded-xl border border-blue-200 flex items-center justify-center">
       <div className="text-center">
         <Navigation className="h-8 w-8 text-blue-600 mx-auto mb-2 animate-pulse" />
-        <p className="text-gray-600">در حال بارگذاری نقشه...</p>
+        <p className="text-gray-900 font-medium">در حال بارگذاری نقشه...</p>
       </div>
     </div>
   ),
@@ -235,7 +235,7 @@ export default function StoresPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             فروشگاه‌ها
           </h1>
-          <p className="text-gray-600 mt-1 text-sm sm:text-base">
+          <p className="text-gray-700 font-medium mt-1 text-sm sm:text-base">
             خرید آنلاین و حضوری با اعتبار سعید پی
           </p>
         </div>
@@ -263,13 +263,13 @@ export default function StoresPage() {
         </div>
 
         <div className="relative">
-          <Search className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
+          <Search className="absolute right-3 top-3 h-5 w-5 text-gray-500" />
           <Input
             type="text"
             placeholder="جستجوی فروشگاه..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pr-10 border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl"
+            className="pr-10 border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl text-gray-800"
           />
         </div>
 
@@ -281,7 +281,7 @@ export default function StoresPage() {
           <TabsList className="w-full bg-gray-100 p-1 rounded-xl">
             <TabsTrigger
               value="online"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
             >
               <Globe className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">فروشگاه‌های آنلاین</span>
@@ -289,7 +289,7 @@ export default function StoresPage() {
             </TabsTrigger>
             <TabsTrigger
               value="physical"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
             >
               <ShoppingBag className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">فروشگاه‌های حضوری</span>
@@ -306,10 +306,10 @@ export default function StoresPage() {
               </div>
             ) : (
               <div className="text-center py-10 bg-white rounded-xl border border-gray-200">
-                <div className="w-16 h-16 rounded-full bg-gray-100 mx-auto flex items-center justify-center mb-4">
-                  <Search className="h-8 w-8 text-gray-400" />
+                <div className="w-16 h-16 rounded-full bg-blue-50 mx-auto flex items-center justify-center mb-4">
+                  <Search className="h-8 w-8 text-blue-600" />
                 </div>
-                <p className="text-gray-600">فروشگاهی یافت نشد.</p>
+                <p className="text-gray-900 font-medium">فروشگاهی یافت نشد.</p>
               </div>
             )}
           </TabsContent>
@@ -322,7 +322,7 @@ export default function StoresPage() {
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
                     نمایش فروشگاه‌های نزدیک
                   </h3>
-                  <p className="text-gray-600 mb-4 text-sm">
+                  <p className="text-gray-700 font-medium mb-4 text-sm">
                     برای مشاهده فروشگاه‌های نزدیک خود روی دکمه زیر کلیک کنید. به
                     موقعیت مکانی شما نیاز داریم.
                   </p>
@@ -367,10 +367,10 @@ export default function StoresPage() {
                 </div>
               ) : (
                 <div className="text-center py-10 bg-white rounded-xl border border-gray-200">
-                  <div className="w-16 h-16 rounded-full bg-gray-100 mx-auto flex items-center justify-center mb-4">
-                    <Search className="h-8 w-8 text-gray-400" />
+                  <div className="w-16 h-16 rounded-full bg-blue-50 mx-auto flex items-center justify-center mb-4">
+                    <Search className="h-8 w-8 text-blue-600" />
                   </div>
-                  <p className="text-gray-600">فروشگاهی یافت نشد.</p>
+                  <p className="text-gray-900 font-medium">فروشگاهی یافت نشد.</p>
                 </div>
               )}
             </div>
@@ -392,19 +392,19 @@ function OnlineStoreCard({ store }: OnlineStoreCardProps) {
       <CardContent className="p-0">
         <div className="p-4 sm:p-6">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-12 h-12 rounded-xl bg-gray-100 relative flex-shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 relative flex-shrink-0">
               <div className="w-full h-full flex items-center justify-center text-blue-600">
                 <Globe size={24} />
               </div>
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="font-medium text-gray-900 truncate">
+              <h3 className="font-semibold text-gray-900 truncate">
                 {store.name}
               </h3>
-              <p className="text-xs text-gray-500">{store.category}</p>
+              <p className="text-sm text-gray-800 font-medium">{store.category}</p>
             </div>
           </div>
-          <p className="text-sm text-gray-600 mb-4">{store.description}</p>
+          <p className="text-sm text-gray-900 font-medium mb-4">{store.description}</p>
         </div>
         <div className="border-t border-gray-200 p-3 sm:p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <a
@@ -456,14 +456,14 @@ function PhysicalStoreCard({
       <CardContent className="p-0">
         <div className="p-4 sm:p-6">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-12 h-12 rounded-xl bg-gray-100 relative flex-shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 relative flex-shrink-0">
               <div className="w-full h-full flex items-center justify-center text-blue-600">
                 <ShoppingBag size={24} />
               </div>
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="font-medium text-gray-900">{store.name}</h3>
-              <p className="text-sm text-gray-500">{store.category}</p>
+              <h3 className="font-semibold text-gray-900">{store.name}</h3>
+              <p className="text-sm text-gray-800 font-medium">{store.category}</p>
             </div>
             {store.hasInstallment && (
               <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full whitespace-nowrap">
@@ -473,8 +473,8 @@ function PhysicalStoreCard({
           </div>
           <div className="space-y-3">
             <div className="flex items-start gap-2">
-              <MapPin className="h-4 w-4 text-gray-400 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-gray-600">{store.address}</p>
+              <MapPin className="h-4 w-4 text-blue-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-gray-900 font-medium">{store.address}</p>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-blue-600 font-medium">
@@ -482,7 +482,7 @@ function PhysicalStoreCard({
               </span>
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                <span className="text-sm text-gray-600">4.5</span>
+                <span className="text-sm text-gray-800 font-medium">4.5</span>
               </div>
             </div>
           </div>

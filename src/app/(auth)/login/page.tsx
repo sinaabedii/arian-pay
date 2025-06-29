@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   Lock,
@@ -54,44 +55,64 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
+      {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-10 w-32 h-32 bg-blue-200 rounded-full opacity-20 animate-pulse"></div>
+        <div className="absolute top-10 sm:top-20 right-4 sm:right-10 w-16 h-16 sm:w-32 sm:h-32 bg-blue-200 rounded-full opacity-20 animate-pulse"></div>
         <div
-          className="absolute bottom-20 left-10 w-24 h-24 bg-purple-200 rounded-full opacity-20 animate-pulse"
+          className="absolute bottom-10 sm:bottom-20 left-4 sm:left-10 w-12 h-12 sm:w-24 sm:h-24 bg-purple-200 rounded-full opacity-20 animate-pulse"
           style={{ animationDelay: "1s" }}
         ></div>
         <div
-          className="absolute top-1/2 left-1/4 w-16 h-16 bg-orange-200 rounded-full opacity-20 animate-pulse"
+          className="absolute top-1/2 left-1/4 w-8 h-8 sm:w-16 sm:h-16 bg-orange-200 rounded-full opacity-20 animate-pulse"
           style={{ animationDelay: "2s" }}
+        ></div>
+        <div
+          className="absolute top-1/4 right-1/4 w-10 h-10 sm:w-20 sm:h-20 bg-green-200 rounded-full opacity-20 animate-pulse"
+          style={{ animationDelay: "3s" }}
         ></div>
       </div>
 
-      <div className="relative flex items-center justify-center min-h-screen p-4">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-3">
+      <div className="relative flex items-center justify-center min-h-screen p-3 sm:p-4">
+        <div className="w-full max-w-sm sm:max-w-md">
+          {/* Logo and Header */}
+          <div className="text-center mb-6 sm:mb-8">
+            <Link href="/">
+              <div className="flex justify-center mb-4 sm:mb-6 cursor-pointer">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-xl transform hover:scale-105 transition-transform duration-300 p-2 sm:p-3">
+                  <Image
+                    src="/Logo.png"
+                    alt="سعید پی"
+                    width={60}
+                    height={60}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              </div>
+            </Link>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
+              ورود به
               <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 {" "}
                 سعید پی
               </span>
-            </h2>
-            <p className="text-gray-600 text-lg">
+            </h1>
+            <p className="text-gray-600 text-sm sm:text-lg px-4">
               وارد حساب خود شوید و از خدمات اعتباری استفاده کنید
             </p>
           </div>
 
-          <Card className="border-0 shadow-2xl rounded-3xl overflow-hidden bg-white">
-            <div className="h-2 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700"></div>
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-3">
+          <Card className="border-0 shadow-2xl rounded-2xl sm:rounded-3xl overflow-hidden bg-white">
+            <div className="h-1.5 sm:h-2 bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700"></div>
+            <CardContent className="p-4 sm:p-6 lg:p-8">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div className="space-y-2 sm:space-y-3">
                   <label
                     htmlFor="phone"
                     className="text-sm font-medium flex items-center gap-2 text-gray-700"
                   >
-                    <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Smartphone className="w-3 h-3 text-blue-600" />
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Smartphone className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600" />
                     </div>
                     شماره موبایل
                   </label>
@@ -102,20 +123,21 @@ export default function LoginPage() {
                       placeholder="09123456789"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-xl py-4 px-4 bg-gray-50 hover:bg-white transition-all text-right"
+                      className="border-gray-200 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-xl py-3 sm:py-4 px-3 sm:px-4 bg-gray-50 hover:bg-white transition-all text-right text-sm sm:text-base"
                       required
                       dir="ltr"
                     />
                   </div>
                 </div>
-                <div className="space-y-3">
+
+                <div className="space-y-2 sm:space-y-3">
                   <div className="flex items-center justify-between">
                     <label
                       htmlFor="password"
                       className="text-sm font-medium flex items-center gap-2 text-gray-700"
                     >
-                      <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <Lock className="w-3 h-3 text-blue-600" />
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <Lock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600" />
                       </div>
                       رمز عبور
                     </label>
@@ -123,7 +145,7 @@ export default function LoginPage() {
                       href="/forgot-password"
                       className="text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors"
                     >
-                      فراموشی رمز عبور؟
+                      فراموشی رمز؟
                     </Link>
                   </div>
                   <div className="relative">
@@ -133,53 +155,59 @@ export default function LoginPage() {
                       placeholder="رمز عبور خود را وارد کنید"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-xl py-4 px-4 bg-gray-50 hover:bg-white transition-all pr-12"
+                      className="border-gray-200 text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 rounded-xl py-3 sm:py-4 px-3 sm:px-4 bg-gray-50 hover:bg-white transition-all pr-10 sm:pr-12 text-sm sm:text-base"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                      className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                     >
                       {showPassword ? (
-                        <EyeOff className="w-5 h-5" />
+                        <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
                       ) : (
-                        <Eye className="w-5 h-5" />
+                        <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
                       )}
                     </button>
                   </div>
                 </div>
+
                 {errorMessage && (
-                  <div className="p-4 text-sm text-red-600 bg-red-50 rounded-xl border border-red-200 flex items-center gap-2">
+                  <div className="p-3 sm:p-4 text-sm text-red-600 bg-red-50 rounded-xl border border-red-200 flex items-center gap-2">
                     <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
                       <span className="text-white text-xs">!</span>
                     </div>
-                    {errorMessage}
+                    <span className="text-xs sm:text-sm">{errorMessage}</span>
                   </div>
                 )}
+
                 <Button
                   type="submit"
                   disabled={loading || !phone || !password}
-                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white py-4 rounded-xl text-base font-medium shadow-lg hover:shadow-xl disabled:cursor-not-allowed transition-all duration-200"
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white py-3 sm:py-4 rounded-xl text-sm sm:text-base font-medium shadow-lg hover:shadow-xl disabled:cursor-not-allowed transition-all duration-200"
                 >
                   {loading ? (
                     <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
-                      در حال ورود...
+                      <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
+                      <span className="text-sm sm:text-base">
+                        در حال ورود...
+                      </span>
                     </>
                   ) : (
                     <>
-                      ورود به حساب کاربری
-                      <ArrowRight className="mr-2 h-5 w-5" />
+                      <span className="text-sm sm:text-base">
+                        ورود به حساب کاربری
+                      </span>
+                      <ArrowRight className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                     </>
                   )}
                 </Button>
               </form>
             </CardContent>
 
-            <CardFooter className="px-8 py-6 bg-gradient-to-b from-gray-50 to-gray-100 border-t border-gray-200">
-              <div className="w-full space-y-4">
-                <p className="text-center text-gray-600">
+            <CardFooter className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 bg-gradient-to-b from-gray-50 to-gray-100 border-t border-gray-200">
+              <div className="w-full space-y-3 sm:space-y-4">
+                <p className="text-center text-gray-600 text-sm">
                   حساب کاربری ندارید؟{" "}
                   <Link
                     href="/register"
@@ -190,9 +218,9 @@ export default function LoginPage() {
                 </p>
                 <Link
                   href="/"
-                  className="flex items-center justify-center text-sm text-gray-500 hover:text-blue-600 transition-colors group"
+                  className="flex items-center justify-center text-xs sm:text-sm text-gray-500 hover:text-blue-600 transition-colors group"
                 >
-                  <ArrowLeft className="h-4 w-4 ml-2 group-hover:-translate-x-1 transition-transform" />
+                  <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 ml-2 group-hover:-translate-x-1 transition-transform" />
                   بازگشت به صفحه اصلی
                 </Link>
               </div>

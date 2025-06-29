@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Star, X, CheckCircle2 } from "lucide-react";
+import { Star, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface User {
@@ -33,7 +33,7 @@ const ReviewModal = ({ isOpen, onClose }: ReviewModalProps) => {
         const userData = JSON.parse(authData);
         setIsAuthenticated(true);
         setUser(userData);
-      } catch (error) {
+      } catch {
         localStorage.removeItem('saeedpay_user');
       }
     }
@@ -70,7 +70,7 @@ const ReviewModal = ({ isOpen, onClose }: ReviewModalProps) => {
       alert('نظر شما با موفقیت ثبت شد! پس از بررسی منتشر خواهد شد.');
       onClose();
       setReviewData({ rating: 5, comment: "", category: "خرید عمومی" });
-    } catch (error) {
+    } catch {
       alert('خطا در ثبت نظر. لطفاً دوباره تلاش کنید.');
     }
   };
@@ -78,23 +78,23 @@ const ReviewModal = ({ isOpen, onClose }: ReviewModalProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl p-6 max-w-md w-full relative animate-in slide-in-from-top-4 duration-300">
+    <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
+      <div className="bg-white rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto relative animate-in slide-in-from-top-4 duration-300">
         <button
           onClick={onClose}
-          className="absolute top-4 left-4 text-gray-400 hover:text-gray-600"
+          className="absolute top-3 left-3 sm:top-4 sm:left-4 text-gray-400 hover:text-gray-600 p-1"
         >
           <X className="h-5 w-5" />
         </button>
 
-        <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Star className="h-8 w-8 text-white" />
+        <div className="text-center mb-4 sm:mb-6">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+            <Star className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
             نظر شما مهم است
           </h3>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm sm:text-base">
             تجربه خود را با دیگران به اشتراک بگذارید
           </p>
         </div>
@@ -105,16 +105,16 @@ const ReviewModal = ({ isOpen, onClose }: ReviewModalProps) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               امتیاز شما
             </label>
-            <div className="flex justify-center gap-1">
+            <div className="flex justify-center gap-1 sm:gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   type="button"
                   onClick={() => setReviewData(prev => ({ ...prev, rating: star }))}
-                  className="p-1 hover:scale-110 transition-transform"
+                  className="p-1 sm:p-2 hover:scale-110 transition-transform touch-manipulation"
                 >
                   <Star
-                    className={`w-8 h-8 ${
+                    className={`w-6 h-6 sm:w-8 sm:h-8 ${
                       star <= reviewData.rating
                         ? "text-yellow-400 fill-current"
                         : "text-gray-300"
@@ -133,7 +133,7 @@ const ReviewModal = ({ isOpen, onClose }: ReviewModalProps) => {
             <select
               value={reviewData.category}
               onChange={(e) => setReviewData(prev => ({ ...prev, category: e.target.value }))}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
             >
               <option value="خرید عمومی">خرید عمومی</option>
               <option value="موبایل و لپ‌تاپ">موبایل و لپ‌تاپ</option>
@@ -155,7 +155,7 @@ const ReviewModal = ({ isOpen, onClose }: ReviewModalProps) => {
               onChange={(e) => setReviewData(prev => ({ ...prev, comment: e.target.value }))}
               placeholder="تجربه خود را با ما به اشتراک بگذارید..."
               rows={4}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm sm:text-base"
               required
             />
             <div className="text-xs text-gray-500 mt-1">
@@ -164,18 +164,18 @@ const ReviewModal = ({ isOpen, onClose }: ReviewModalProps) => {
           </div>
 
           {/* Submit Button */}
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
               type="button"
               onClick={onClose}
               variant="outline"
-              className="flex-1"
+              className="flex-1 py-3 text-sm sm:text-base"
             >
               انصراف
             </Button>
             <Button
               type="submit"
-              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 py-3 text-sm sm:text-base"
               disabled={!reviewData.comment.trim() || reviewData.comment.length < 10}
             >
               <Star className="h-4 w-4 ml-1" />

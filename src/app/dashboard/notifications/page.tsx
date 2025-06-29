@@ -230,7 +230,7 @@ export default function NotificationsPage() {
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
               اعلان‌ها و یادآوری‌ها
             </h1>
-            <p className="text-gray-600 mt-1 text-sm sm:text-base">
+            <p className="text-gray-700 font-medium mt-1 text-sm sm:text-base">
               مدیریت اعلان‌ها و تنظیمات یادآوری
             </p>
           </div>
@@ -311,10 +311,10 @@ export default function NotificationsPage() {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <TabsList className="w-full bg-gray-100 p-1 rounded-xl">
+            <TabsList className="w-full bg-gray-100 p-1 rounded-xl gap-1">
               <TabsTrigger
                 value="all"
-                className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+                className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
               >
                 <Bell className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">همه</span>
@@ -327,7 +327,7 @@ export default function NotificationsPage() {
               </TabsTrigger>
               <TabsTrigger
                 value="unread"
-                className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+                className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
               >
                 <Archive className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">خوانده نشده</span>
@@ -335,7 +335,7 @@ export default function NotificationsPage() {
               </TabsTrigger>
               <TabsTrigger
                 value="reminder"
-                className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+                className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
               >
                 <Calendar className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">یادآوری‌ها</span>
@@ -343,7 +343,7 @@ export default function NotificationsPage() {
               </TabsTrigger>
               <TabsTrigger
                 value="settings"
-                className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+                className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
               >
                 <Settings className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">تنظیمات</span>
@@ -374,7 +374,7 @@ export default function NotificationsPage() {
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
                       اعلانی موجود نیست
                     </h3>
-                    <p className="text-gray-600">
+                    <p className="text-gray-700 font-medium">
                       در حال حاضر اعلانی برای نمایش وجود ندارد.
                     </p>
                   </div>
@@ -396,7 +396,7 @@ export default function NotificationsPage() {
                       <h2 className="text-lg sm:text-xl font-bold text-gray-900">
                         تنظیمات اعلان‌ها
                       </h2>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-700 font-medium">
                         مدیریت انواع اعلان‌هایی که دریافت می‌کنید
                       </p>
                     </div>
@@ -412,7 +412,7 @@ export default function NotificationsPage() {
                           <h3 className="font-medium text-gray-900">
                             {setting.title}
                           </h3>
-                          <p className="text-sm text-gray-600 mt-1">
+                          <p className="text-sm text-gray-700 font-medium mt-1">
                             {setting.description}
                           </p>
                         </div>

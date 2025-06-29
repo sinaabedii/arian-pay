@@ -49,7 +49,7 @@ export default function ProfilePage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             پروفایل کاربری
           </h1>
-          <p className="text-gray-600 mt-1 text-sm sm:text-base">
+          <p className="text-gray-700 font-medium mt-1 text-sm sm:text-base">
             مدیریت اطلاعات شخصی و تنظیمات حساب
           </p>
         </div>
@@ -58,7 +58,7 @@ export default function ProfilePage() {
           <TabsList className="w-full bg-gray-100 p-1 rounded-xl mb-4 sm:mb-6">
             <TabsTrigger
               value="profile"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg text-xs sm:text-sm"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg text-xs sm:text-sm"
             >
               <User className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">اطلاعات شخصی</span>
@@ -66,7 +66,7 @@ export default function ProfilePage() {
             </TabsTrigger>
             <TabsTrigger
               value="security"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg text-xs sm:text-sm"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg text-xs sm:text-sm"
             >
               <Shield className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">امنیت و حریم خصوصی</span>
@@ -74,7 +74,7 @@ export default function ProfilePage() {
             </TabsTrigger>
             <TabsTrigger
               value="notifications"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg text-xs sm:text-sm"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg text-xs sm:text-sm"
             >
               <Bell className="h-4 w-4 mr-1 sm:mr-2" />
               <span className="hidden sm:inline">اعلان‌ها</span>

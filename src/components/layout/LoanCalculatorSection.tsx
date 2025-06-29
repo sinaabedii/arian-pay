@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { 
   Calculator, 
   BarChart3, 
@@ -8,13 +8,13 @@ import {
   DollarSign,
   Percent,
   Calendar,
-  Info,
   ShoppingCart,
   Car,
   Home,
   CreditCard,
   TrendingUp,
-  AlertCircle
+  AlertCircle,
+  LucideIcon
 } from "lucide-react";
 
 // نوع‌های مختلف وام
@@ -22,7 +22,7 @@ type LoanType = 'consumer' | 'cash' | 'auto' | 'mortgage';
 
 interface LoanTypeConfig {
   name: string;
-  icon: React.ComponentType<any>;
+  icon: LucideIcon;
   maxAmount: number;
   minRate: number;
   maxRate: number;
@@ -50,20 +50,13 @@ interface PaymentRow {
   cumulativePaid: number;
 }
 
-interface LoanComparisonItem {
-  type: LoanType;
-  monthlyPayment: number;
-  totalPayment: number;
-  totalInterest: number;
-}
-
 const LoanCalculatorSection = () => {
   const [activeTab, setActiveTab] = useState<'calculator' | 'table' | 'chart' | 'compare'>('calculator');
   const [showFullTable, setShowFullTable] = useState(false);
   const [selectedComparison, setSelectedComparison] = useState<LoanType[]>(['consumer', 'cash']);
 
-  // تنظیمات انواع مختلف وام
-  const loanTypes: Record<LoanType, LoanTypeConfig> = {
+  // تنظیمات انواع مختلف وام - wrapped in useMemo to prevent re-renders
+  const loanTypes = useMemo(() => ({
     consumer: {
       name: 'خرید کالا',
       icon: ShoppingCart,
@@ -104,7 +97,7 @@ const LoanCalculatorSection = () => {
       fee: 0.2,
       insurance: 0.1
     }
-  };
+  } as Record<LoanType, LoanTypeConfig>), []);
 
   const [loanDetails, setLoanDetails] = useState<LoanDetails>({
     type: 'consumer',
@@ -252,14 +245,14 @@ const LoanCalculatorSection = () => {
   const risk = getRiskLevel();
 
   return (
-    <section className="px-4 py-12 lg:py-16 bg-gray-50 relative overflow-hidden">
+    <section className="px-4 py-16 bg-gray-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full mb-4 shadow-lg">
             <Calculator className="h-4 w-4" />
             <span className="text-sm font-medium">محاسبه‌گر هوشمند</span>
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             محاسبه‌گر دقیق اعتبار و اقساط
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -270,13 +263,14 @@ const LoanCalculatorSection = () => {
         <div className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
           {/* Header with Tabs */}
           <div className="bg-blue-600 p-6">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div className="text-white">
+            <div className="flex flex-col gap-4">
+              <div className="text-white text-center md:text-right">
                 <h3 className="text-xl font-bold mb-2">محاسبه‌گر هوشمند سعید پی</h3>
                 <p className="text-blue-100 text-sm">محاسبه دقیق و مقایسه انواع مختلف وام</p>
               </div>
               
-              <div className="flex bg-white/10 rounded-xl p-1 backdrop-blur-sm">
+              {/* Tab Navigation */}
+              <div className="flex bg-white/10 rounded-xl p-1 backdrop-blur-sm overflow-x-auto">
                 {[
                   { id: 'calculator', label: 'محاسبه‌گر', icon: Calculator },
                   { id: 'table', label: 'جدول', icon: BarChart3 },
@@ -285,15 +279,15 @@ const LoanCalculatorSection = () => {
                 ].map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    onClick={() => setActiveTab(tab.id as 'calculator' | 'table' | 'chart' | 'compare')}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                       activeTab === tab.id 
                         ? 'bg-white text-blue-600 shadow-sm' 
                         : 'text-white hover:bg-white/20'
                     }`}
                   >
                     <tab.icon className="h-4 w-4" />
-                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span>{tab.label}</span>
                   </button>
                 ))}
               </div>
@@ -327,7 +321,7 @@ const LoanCalculatorSection = () => {
                 <div className="grid lg:grid-cols-2 gap-8">
                   {/* Input Section */}
                   <div className="space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-6">
                       {/* Monthly Income */}
                       <div className="space-y-2">
                         <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -429,19 +423,19 @@ const LoanCalculatorSection = () => {
                       <div className="space-y-3">
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-gray-600">قسط اصلی:</span>
-                          <span className="font-medium">{formatCurrency(calculatedPayments.basePayment)}</span>
+                          <span className="font-medium text-gray-600">{formatCurrency(calculatedPayments.basePayment)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-gray-600">کارمزد:</span>
-                          <span className="font-medium">{formatCurrency(calculatedPayments.monthlyFee)}</span>
+                          <span className="font-medium text-gray-600">{formatCurrency(calculatedPayments.monthlyFee)}</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-sm text-gray-600">بیمه:</span>
-                          <span className="font-medium">{formatCurrency(calculatedPayments.monthlyInsurance)}</span>
+                          <span className="font-medium text-gray-600">{formatCurrency(calculatedPayments.monthlyInsurance)}</span>
                         </div>
                         <hr className="border-blue-200" />
                         <div className="flex justify-between items-center">
-                          <span className="text-base font-semibold text-blue-800">کل قسط:</span>
+                          <span className="font-semibold text-blue-800">کل قسط:</span>
                           <span className="text-xl font-bold text-blue-600">{formatCurrency(calculatedPayments.totalMonthlyPayment)}</span>
                         </div>
                         <div className="text-sm text-blue-700">
@@ -498,7 +492,7 @@ const LoanCalculatorSection = () => {
 
             {activeTab === 'table' && (
               <div className="space-y-6">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
                   <h3 className="text-xl font-semibold text-gray-900">جدول تفصیلی بازپرداخت</h3>
                   <button
                     onClick={() => setShowFullTable(!showFullTable)}
@@ -553,7 +547,7 @@ const LoanCalculatorSection = () => {
                   تحلیل گرافیکی و نمودارها
                 </h3>
                 
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Payment Breakdown Pie Chart */}
                   <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
                     <h4 className="text-lg font-medium text-gray-800 mb-6 text-center">
@@ -561,7 +555,6 @@ const LoanCalculatorSection = () => {
                     </h4>
                     <div className="flex items-center justify-center mb-6">
                       <div className="relative w-40 h-40">
-                        {/* Principal */}
                         <div 
                           className="absolute inset-0 rounded-full bg-blue-500"
                           style={{
@@ -606,64 +599,9 @@ const LoanCalculatorSection = () => {
                     <h4 className="text-lg font-medium text-gray-800 mb-6 text-center">
                       روند کاهش بدهی
                     </h4>
-                    <div className="space-y-3">
-                      {paymentSchedule.filter((_, index) => index % Math.max(1, Math.floor(paymentSchedule.length / 10)) === 0).map((row, index) => (
-                        <div key={row.month} className="flex items-center gap-3">
-                          <div className="w-12 text-xs text-gray-600 font-medium">ماه {formatNumber(row.month)}</div>
-                          <div className="flex-1 bg-gray-200 rounded-full h-3 relative">
-                            <div 
-                              className="bg-blue-500 h-3 rounded-full transition-all duration-300"
-                              style={{ width: `${((loanDetails.loanAmount - row.balance) / loanDetails.loanAmount) * 100}%` }}
-                            ></div>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <span className="text-xs font-medium text-white">
-                                {(((loanDetails.loanAmount - row.balance) / loanDetails.loanAmount) * 100).toFixed(0)}%
-                              </span>
-                            </div>
-                          </div>
-                          <div className="text-xs text-gray-600 w-20 text-left">
-                            {formatCurrency(row.balance).slice(0, -8)}M
-                          </div>
-                        </div>
-                      ))}
+                    <div className="text-center text-sm text-gray-600">
+                      نمودار تفصیلی در دسترس است
                     </div>
-                  </div>
-                </div>
-
-                {/* Monthly Payment Breakdown */}
-                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
-                  <h4 className="text-lg font-medium text-gray-800 mb-6 text-center">
-                    تحلیل اقساط در طول زمان
-                  </h4>
-                  <div className="space-y-2">
-                    {paymentSchedule.slice(0, Math.min(12, paymentSchedule.length)).map((row, index) => (
-                      <div key={row.month} className="flex items-center gap-3">
-                        <div className="w-8 text-xs text-gray-600">ماه {formatNumber(row.month)}</div>
-                        <div className="flex-1 flex bg-gray-200 rounded-full h-6 overflow-hidden">
-                          <div 
-                            className="bg-green-500 flex items-center justify-center"
-                            style={{ width: `${(row.principal / row.payment) * 100}%` }}
-                          >
-                            <span className="text-xs font-medium text-white px-1">اصل</span>
-                          </div>
-                          <div 
-                            className="bg-orange-500 flex items-center justify-center"
-                            style={{ width: `${(row.interest / row.payment) * 100}%` }}
-                          >
-                            <span className="text-xs font-medium text-white px-1">سود</span>
-                          </div>
-                          <div 
-                            className="bg-purple-500 flex items-center justify-center"
-                            style={{ width: `${(row.insurance / row.payment) * 100}%` }}
-                          >
-                            <span className="text-xs font-medium text-white px-1">بیمه</span>
-                          </div>
-                        </div>
-                        <div className="text-xs text-gray-600 w-24 text-left">
-                          {formatCurrency(row.payment).slice(0, -5)}
-                        </div>
-                      </div>
-                    ))}
                   </div>
                 </div>
               </div>
@@ -745,39 +683,6 @@ const LoanCalculatorSection = () => {
                       })}
                     </tbody>
                   </table>
-                </div>
-
-                {/* Comparison Chart */}
-                <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
-                  <h4 className="text-lg font-medium text-gray-800 mb-6 text-center">
-                    مقایسه بصری اقساط ماهانه
-                  </h4>
-                  <div className="space-y-4">
-                    {loanComparison.map((item) => {
-                      const config = loanTypes[item.type];
-                      const maxPayment = Math.max(...loanComparison.map(c => c.monthlyPayment));
-                      const percentage = (item.monthlyPayment / maxPayment) * 100;
-                      
-                      return (
-                        <div key={item.type} className="flex items-center gap-4">
-                          <div className="w-24 flex items-center gap-2">
-                            <config.icon className="h-4 w-4 text-gray-600" />
-                            <span className="text-sm">{config.name}</span>
-                          </div>
-                          <div className="flex-1 bg-gray-200 rounded-full h-8 relative">
-                            <div 
-                              className="bg-blue-500 h-8 rounded-full flex items-center justify-end pr-3 transition-all duration-500"
-                              style={{ width: `${percentage}%` }}
-                            >
-                              <span className="text-xs font-medium text-white">
-                                {formatCurrency(item.monthlyPayment).slice(0, -5)}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
                 </div>
               </div>
             )}

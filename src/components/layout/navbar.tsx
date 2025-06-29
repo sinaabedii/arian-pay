@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { CreditCard, Wallet, Home, Store, User, QrCode, Bell, Menu, X } from "lucide-react";
 import { cn } from "@/utils/cn";
@@ -38,8 +39,17 @@ const Navbar = () => {
       >
         <div className="container flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link href="/" className="text-xl font-bold gradient-text">
-              سعید پی 
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg p-1">
+                <Image
+                  src="/Logo.png"
+                  alt="سعید پی"
+                  width={30}
+                  height={30}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <span className="text-xl font-bold gradient-text">سعید پی</span>
             </Link>
             
             <div className="hidden lg:flex items-center gap-1">
@@ -100,10 +110,19 @@ const Navbar = () => {
       </nav>
       
       {/* Mobile Header */}
-      <nav className="fixed top-0 right-0 left-0 h-16 bg-card/95 backdrop-blur-md shadow-sm z-40 flex md:hidden items-center">
+      <nav className="fixed top-0 right-0 left-0 bg-card/95 backdrop-blur-md shadow-card py-3 z-40 md:hidden">
         <div className="container flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold gradient-text">
-            سعید پی 
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-white rounded-lg flex items-center justify-center shadow-lg p-0.5">
+              <Image
+                src="/Logo.png"
+                alt="سعید پی"
+                width={24}
+                height={24}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <span className="text-lg font-bold gradient-text">سعید پی</span>
           </Link>
           
           <div className="flex items-center gap-2">

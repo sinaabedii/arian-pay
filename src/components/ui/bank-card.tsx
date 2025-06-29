@@ -235,11 +235,11 @@ export function BankCard({
         {/* پشت کارت */}
         <div 
           className={cn(
-            "absolute inset-0 rounded-2xl shadow-card backface-hidden overflow-hidden p-5 rotate-y-180 bg-card border border-border",
+            "absolute inset-0 rounded-2xl shadow-card backface-hidden overflow-hidden p-5 rotate-y-180 bg-white border border-gray-200",
           )}
         >
-          <div className="h-full flex flex-col text-primary">
-            <div className="text-lg font-semibold flex items-center gap-2 border-b border-border pb-3">
+          <div className="h-full flex flex-col text-gray-900">
+            <div className="text-lg font-semibold flex items-center gap-2 border-b border-gray-200 pb-3">
               <Image
                 src={IRAN_BANKS[bank]?.logo || IRAN_BANKS.default.logo}
                 alt={IRAN_BANKS[bank]?.name || "Bank"}
@@ -253,15 +253,15 @@ export function BankCard({
             <div className="flex-1 py-3 space-y-4">
               {accountNumber && (
                 <div>
-                  <div className="text-xs text-secondary mb-1">شماره حساب</div>
+                  <div className="text-xs text-gray-600 font-medium mb-1">شماره حساب</div>
                   <div className="flex items-center gap-2">
-                    <div className="font-medium">{accountNumber}</div>
+                    <div className="font-medium text-gray-900">{accountNumber}</div>
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
                         handleCopy(accountNumber, 'account');
                       }}
-                      className="text-secondary hover:text-primary transition-colors"
+                      className="text-gray-600 hover:text-gray-900 transition-colors"
                     >
                       <Copy size={14} />
                     </button>
@@ -270,15 +270,15 @@ export function BankCard({
               )}
               
               <div>
-                <div className="text-xs text-secondary mb-1">شماره کارت</div>
+                <div className="text-xs text-gray-600 font-medium mb-1">شماره کارت</div>
                 <div className="flex items-center gap-2">
-                  <div className="font-medium">{formatCardNumber(cardNumber)}</div>
+                  <div className="font-medium text-gray-900">{formatCardNumber(cardNumber)}</div>
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
                       handleCopy(cardNumber, 'card');
                     }}
-                    className="text-secondary hover:text-primary transition-colors"
+                    className="text-gray-600 hover:text-gray-900 transition-colors"
                   >
                     <Copy size={14} />
                   </button>
@@ -287,15 +287,15 @@ export function BankCard({
               
               {sheba && (
                 <div>
-                  <div className="text-xs text-secondary mb-1">شماره شبا</div>
+                  <div className="text-xs text-gray-600 font-medium mb-1">شماره شبا</div>
                   <div className="flex items-center gap-2">
-                    <div className="font-medium text-sm">{formatSheba(sheba)}</div>
+                    <div className="font-medium text-sm text-gray-900">{formatSheba(sheba)}</div>
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
                         handleCopy(formatSheba(sheba), 'sheba');
                       }}
-                      className="text-secondary hover:text-primary transition-colors"
+                      className="text-gray-600 hover:text-gray-900 transition-colors"
                     >
                       <Copy size={14} />
                     </button>
@@ -304,7 +304,7 @@ export function BankCard({
               )}
             </div>
             
-            <div className="border-t border-border pt-3 flex justify-between">
+            <div className="border-t border-gray-200 pt-3 flex justify-between">
               {!isDefault && onSetDefault && (
                 <Button 
                   variant="ghost" 
@@ -313,6 +313,7 @@ export function BankCard({
                     e.stopPropagation();
                     onSetDefault(id);
                   }}
+                  className="hover:bg-blue-50 hover:text-blue-600"
                 >
                   تنظیم به عنوان پیش‌فرض
                 </Button>
@@ -322,7 +323,7 @@ export function BankCard({
                 <Button 
                   variant="ghost" 
                   size="sm"
-                  className="text-danger hover:text-danger hover:bg-danger/10"
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
                   onClick={(e) => {
                     e.stopPropagation();
                     onDelete(id);
@@ -336,17 +337,6 @@ export function BankCard({
           </div>
         </div>
       </div>
-      {bank && (
-        <div className="absolute top-5 right-5">
-          <Image
-            src={`/images/banks/${bank}.svg`}
-            alt={`${bank} bank logo`}
-            width={48}
-            height={24}
-            className="h-6 object-contain"
-          />
-        </div>
-      )}
     </div>
   );
 }
@@ -355,7 +345,7 @@ export function AddBankCardButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      className="h-56 w-full rounded-2xl border-2 border-dashed border-border hover:border-primary transition-colors flex flex-col items-center justify-center gap-3 text-secondary hover:text-primary hover:bg-primary/5"
+      className="h-56 w-full rounded-2xl border-2 border-dashed border-gray-300 hover:border-blue-500 transition-colors flex flex-col items-center justify-center gap-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50"
     >
       <PlusCircle size={40} />
       <span className="font-medium">افزودن کارت بانکی جدید</span>

@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   CreditCard,
   Wallet,
@@ -18,7 +19,7 @@ import {
   Download,
   Search,
   Crown,
-  Sparkles,
+  // Sparkles,
   TreePine,
   MoreHorizontal,
 } from "lucide-react";
@@ -138,14 +139,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       badge: "جدید",
       isNew: true,
     },
-    {
-      id: "ar-shopping",
-      label: "خرید AR",
-      icon: Sparkles,
-      href: "/dashboard/ar-shopping",
-      badge: "جدید",
-      isNew: true,
-    },
+    // {
+    //   id: "ar-shopping",
+    //   label: "خرید AR",
+    //   icon: Sparkles,
+    //   href: "/dashboard/ar-shopping",
+    //   badge: "جدید",
+    //   isNew: true,
+    // },
     {
       id: "green-saeed",
       label: "سعید سبز",
@@ -201,17 +202,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Main Header */}
         <div className="px-4 py-3">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
-            {/* Logo */}
+            {/* Logo Section */}
             <Link href="/">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <CreditCard className="h-6 w-6 text-white" />
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg p-1.5">
+                  <Image
+                    src="/Logo.png"
+                    alt="سعید پی"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div>
                   <h1 className="text-xl font-bold text-gray-900">سعید پی</h1>
-                  <p className="text-xs text-gray-500 hidden sm:block">
-                    سیستم پرداخت اعتباری
-                  </p>
+                  <p className="text-xs text-gray-500">پنل کاربری</p>
                 </div>
               </div>
             </Link>

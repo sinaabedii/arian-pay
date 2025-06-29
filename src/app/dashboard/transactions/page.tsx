@@ -211,7 +211,7 @@ export default function TransactionsPage() {
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
               تاریخچه تراکنش‌ها
             </h1>
-            <p className="text-gray-600 mt-1 text-sm sm:text-base">
+            <p className="text-gray-700 font-medium mt-1 text-sm sm:text-base">
               مشاهده و مدیریت تمامی تراکنش‌های شما
             </p>
           </div>
@@ -230,13 +230,13 @@ export default function TransactionsPage() {
 
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1">
-            <Search className="absolute right-3 top-3 h-5 w-5 text-gray-400" />
+            <Search className="absolute right-3 top-3 h-5 w-5 text-gray-500" />
             <Input
               type="text"
               placeholder="جستجو در تراکنش‌ها..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pr-10 border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl"
+              className="pr-10 border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl text-gray-800"
             />
           </div>
 
@@ -266,14 +266,14 @@ export default function TransactionsPage() {
           <TabsList className="w-full bg-gray-100 p-1 rounded-xl">
             <TabsTrigger
               value="all"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
             >
               <span className="hidden sm:inline">همه تراکنش‌ها</span>
               <span className="sm:hidden">همه</span>
             </TabsTrigger>
             <TabsTrigger
               value="income"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
             >
               <ArrowDownRight className="h-4 w-4 text-green-600 ml-1" />
               <span className="hidden sm:inline">دریافتی‌ها</span>
@@ -281,7 +281,7 @@ export default function TransactionsPage() {
             </TabsTrigger>
             <TabsTrigger
               value="expense"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
             >
               <ArrowUpRight className="h-4 w-4 text-red-600 ml-1" />
               <span className="hidden sm:inline">پرداختی‌ها</span>

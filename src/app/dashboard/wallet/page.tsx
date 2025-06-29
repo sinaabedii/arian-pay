@@ -66,7 +66,7 @@ const MOCK_BANK_CARDS = [
     cardNumber: "6104337812345678",
     accountNumber: "12345678901",
     sheba: "123456789012345678901234",
-    cardHolderName: "امیرحسین محمدی",
+    cardHolderName: "سینا عابدی",
     expiryDate: "1404/05",
     isDefault: true,
   },
@@ -74,7 +74,7 @@ const MOCK_BANK_CARDS = [
     id: "2",
     bank: "saman" as BankType,
     cardNumber: "6219861987654321",
-    cardHolderName: "امیرحسین محمدی",
+    cardHolderName: "سینا عابدی",
     expiryDate: "1403/12",
     isDefault: false,
   },
@@ -193,7 +193,7 @@ export default function WalletPage() {
           <TabsList className="w-full bg-gray-100 p-1 rounded-xl">
             <TabsTrigger
               value="wallet"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
             >
               <Wallet className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">کیف پول</span>
@@ -201,7 +201,7 @@ export default function WalletPage() {
             </TabsTrigger>
             <TabsTrigger
               value="bank-cards"
-              className="flex-1 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm rounded-lg"
+              className="flex-1 text-gray-600 font-medium data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm data-[state=inactive]:hover:text-gray-800 data-[state=inactive]:hover:bg-gray-50 transition-all duration-200 rounded-lg"
             >
               <CreditCard className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">کارت‌های بانکی</span>

@@ -117,11 +117,19 @@ export function AddBankCard({ open, onOpenChange, onSubmit, isProcessing = false
                 name="bank"
                 value={formData.bank}
                 onChange={handleChange}
-                className="w-full px-3 py-2 rounded-md border border-border bg-card focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-3 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-900 font-medium shadow-sm hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 appearance-none cursor-pointer"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.75rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem',
+                  direction: 'rtl'
+                }}
                 required
               >
                 {banks.map((bank) => (
-                  <option key={bank.value} value={bank.value}>
+                  <option key={bank.value} value={bank.value} className="text-gray-900 bg-white py-2">
                     {bank.label}
                   </option>
                 ))}
@@ -136,7 +144,7 @@ export function AddBankCard({ open, onOpenChange, onSubmit, isProcessing = false
                 value={formatCardNumber(formData.cardNumber)}
                 onChange={handleCardNumberChange}
                 placeholder="مثال: 6037 9970 0000 0000"
-                className="text-left font-medium"
+                className="text-left font-medium text-gray-800"
                 required
               />
             </div>
@@ -149,6 +157,7 @@ export function AddBankCard({ open, onOpenChange, onSubmit, isProcessing = false
                 value={formData.cardHolderName}
                 onChange={handleChange}
                 placeholder="نام و نام خانوادگی"
+                className="text-gray-800"
                 required
               />
             </div>
@@ -161,6 +170,7 @@ export function AddBankCard({ open, onOpenChange, onSubmit, isProcessing = false
                 value={formData.expiryDate}
                 onChange={handleChange}
                 placeholder="مثال: 1404/06"
+                className="text-gray-800"
               />
             </div>
             
@@ -172,6 +182,7 @@ export function AddBankCard({ open, onOpenChange, onSubmit, isProcessing = false
                 value={formData.accountNumber}
                 onChange={handleChange}
                 placeholder="شماره حساب"
+                className="text-gray-800"
               />
             </div>
             
@@ -183,7 +194,7 @@ export function AddBankCard({ open, onOpenChange, onSubmit, isProcessing = false
                 value={formData.sheba}
                 onChange={handleChange}
                 placeholder="مثال: 000000000000000000000000"
-                className="text-left"
+                className="text-left text-gray-800"
               />
             </div>
             
@@ -197,50 +208,52 @@ export function AddBankCard({ open, onOpenChange, onSubmit, isProcessing = false
         
         {step === 'confirm' && (
           <div className="py-4 space-y-4">
-            <div className="space-y-4 bg-secondary-light p-4 rounded-lg">
-              <div className="flex justify-between">
-                <span className="text-secondary">بانک:</span>
-                <span className="font-medium">{IRAN_BANKS[formData.bank as BankType]?.name}</span>
+            <div className="space-y-4 bg-gray-50 border border-gray-200 p-4 rounded-lg shadow-sm">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700 font-medium">بانک:</span>
+                <span className="font-semibold text-gray-900">{IRAN_BANKS[formData.bank as BankType]?.name}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-secondary">شماره کارت:</span>
-                <span className="font-medium">{formatCardNumber(formData.cardNumber)}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700 font-medium">شماره کارت:</span>
+                <span className="font-semibold text-gray-900 font-mono">{formatCardNumber(formData.cardNumber)}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-secondary">نام دارنده کارت:</span>
-                <span className="font-medium">{formData.cardHolderName}</span>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700 font-medium">نام دارنده کارت:</span>
+                <span className="font-semibold text-gray-900">{formData.cardHolderName}</span>
               </div>
               {formData.expiryDate && (
-                <div className="flex justify-between">
-                  <span className="text-secondary">تاریخ انقضا:</span>
-                  <span className="font-medium">{formData.expiryDate}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-700 font-medium">تاریخ انقضا:</span>
+                  <span className="font-semibold text-gray-900">{formData.expiryDate}</span>
                 </div>
               )}
               {formData.accountNumber && (
-                <div className="flex justify-between">
-                  <span className="text-secondary">شماره حساب:</span>
-                  <span className="font-medium">{formData.accountNumber}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-700 font-medium">شماره حساب:</span>
+                  <span className="font-semibold text-gray-900 font-mono">{formData.accountNumber}</span>
                 </div>
               )}
               {formData.sheba && (
-                <div className="flex justify-between">
-                  <span className="text-secondary">شماره شبا:</span>
-                  <span className="font-medium">IR{formData.sheba}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-700 font-medium">شماره شبا:</span>
+                  <span className="font-semibold text-gray-900 font-mono">IR{formData.sheba}</span>
                 </div>
               )}
             </div>
             
-            <div className="pt-4 flex justify-between">
+            <div className="pt-4 flex justify-between gap-3">
               <Button 
                 variant="outline" 
                 onClick={() => setStep('form')}
                 disabled={isProcessing}
+                className="flex-1"
               >
                 ویرایش اطلاعات
               </Button>
               <Button 
                 onClick={handleSubmit}
                 disabled={isProcessing}
+                className="flex-1"
               >
                 {isProcessing ? 'در حال پردازش...' : 'تایید و ذخیره'}
               </Button>
@@ -253,7 +266,7 @@ export function AddBankCard({ open, onOpenChange, onSubmit, isProcessing = false
             <div className="w-16 h-16 rounded-full bg-success/10 text-success flex items-center justify-center mx-auto">
               <Check className="w-8 h-8" />
             </div>
-            <p className="text-secondary">
+            <p className="text-gray-700 font-medium">
               کارت بانکی با موفقیت به حساب کاربری شما اضافه شد و می‌توانید از آن برای تراکنش‌های مالی استفاده کنید.
             </p>
           </div>

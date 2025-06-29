@@ -9,9 +9,8 @@ import {
   Award, 
   Target, 
   Sparkles, 
-  Calculator,
-  Eye,
-  TrendingUp
+  Users,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useMemo } from "react";
@@ -110,24 +109,6 @@ const HeroSection = () => {
                 🚀 سیستم آنلاین و فعال
               </span>
             </div>
-
-            {/* Live Stats Badge */}
-            <div className="inline-flex items-center gap-4 bg-blue-50 text-blue-700 px-4 py-2 rounded-full border border-blue-200">
-              <div className="flex items-center gap-1">
-                <Eye className="h-4 w-4" />
-                <span className="text-sm font-medium">
-                  {liveStats.activeUsers.toLocaleString("fa-IR")} کاربر آنلاین
-                </span>
-              </div>
-              <div className="w-px h-4 bg-blue-300"></div>
-              <div className="flex items-center gap-1">
-                <TrendingUp className="h-4 w-4" />
-                <span className="text-sm font-medium">
-                  {liveStats.todayApprovals} تایید امروز
-                </span>
-              </div>
-            </div>
-
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
                 <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
@@ -143,9 +124,6 @@ const HeroSection = () => {
               <span className="font-bold text-blue-600"> ۱۰ دقیقه </span>
               اعتبار بگیرید و از هزاران فروشگاه خرید اقساطی کنید.
             </p>
-
-            {/* Quick Calculator */}
-           
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link href="/register">
@@ -279,7 +257,7 @@ const HeroSection = () => {
           ))}
         </div>
 
-        {/* Social Proof Numbers */}
+        {/* Live Stats Section */}
         <div className="mt-12 text-center">
           <div className="inline-flex items-center gap-8 bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
             <div className="text-center">
@@ -295,6 +273,24 @@ const HeroSection = () => {
             <div className="text-center">
               <div className="text-2xl font-bold text-purple-600">۴.۹</div>
               <div className="text-sm text-gray-600">امتیاز کاربران</div>
+            </div>
+          </div>
+
+          {/* Live Stats Display */}
+          <div className="mt-6 flex justify-center gap-6">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-4 py-3 rounded-xl border border-blue-200">
+              <div className="flex items-center gap-2 text-blue-700">
+                <Users className="h-4 w-4" />
+                <span className="text-sm font-medium">کاربران آنلاین:</span>
+                <span className="font-bold">{liveStats.activeUsers.toLocaleString('fa-IR')}</span>
+              </div>
+            </div>
+            <div className="bg-gradient-to-r from-green-50 to-green-100 px-4 py-3 rounded-xl border border-green-200">
+              <div className="flex items-center gap-2 text-green-700">
+                <TrendingUp className="h-4 w-4" />
+                <span className="text-sm font-medium">تایید امروز:</span>
+                <span className="font-bold">{liveStats.todayApprovals.toLocaleString('fa-IR')}</span>
+              </div>
             </div>
           </div>
         </div>

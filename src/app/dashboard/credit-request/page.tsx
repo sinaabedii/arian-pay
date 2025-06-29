@@ -634,44 +634,44 @@ export default function CreditRequestPage() {
       {/* دیالوگ درخواست افزایش اعتبار */}
       {creditIncreaseDialogOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-3 sm:p-4 z-50">
-          <div className="bg-white rounded-2xl max-w-sm sm:max-w-md w-full mx-2 sm:mx-4 max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
-            <div className="p-3 sm:p-4 lg:p-6">
-              <div className="flex items-center justify-between mb-3 sm:mb-4">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+          <div className="bg-white rounded-2xl max-w-xs sm:max-w-sm w-full mx-2 sm:mx-4">
+            <div className="p-3 sm:p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <TrendingUp className="h-4 w-4 text-blue-600" />
                   </div>
                   <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                    <h2 className="text-base font-bold text-gray-900">
                       درخواست افزایش اعتبار
                     </h2>
-                    <p className="text-xs sm:text-sm text-gray-600">
+                    <p className="text-xs text-gray-600">
                       اعتبار فعلی: {formatCurrency(user.creditLimit)}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setCreditIncreaseDialogOpen(false)}
-                  className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                 >
-                  <X className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
+                  <X className="h-4 w-4 text-gray-500" />
                 </button>
               </div>
 
               {!creditIncreaseSuccess ? (
-                <div className="space-y-4 sm:space-y-6">
+                <div className="space-y-3">
                   {/* انتخاب مبلغ */}
                   <div>
-                    <label className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+                    <label className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2">
                       <DollarSign className="h-4 w-4 text-blue-600" />
                       مبلغ افزایش اعتبار
                     </label>
-                    <div className="grid grid-cols-1 gap-2 sm:gap-3">
+                    <div className="grid grid-cols-1 gap-2">
                       {CREDIT_INCREASE_OPTIONS.map((option) => (
                         <div
                           key={option.value}
                           onClick={() => setSelectedCreditAmount(option.value)}
-                          className={`relative p-3 sm:p-4 rounded-xl border-2 cursor-pointer transition-all ${
+                          className={`relative p-2.5 rounded-lg border-2 cursor-pointer transition-all ${
                             selectedCreditAmount === option.value
                               ? "border-blue-500 bg-blue-50"
                               : "border-gray-200 hover:border-blue-300 bg-gray-50"
@@ -679,10 +679,10 @@ export default function CreditRequestPage() {
                         >
                           <div className="flex items-center justify-between">
                             <div>
-                              <span className="font-medium text-gray-900 text-sm sm:text-base">
+                              <span className="font-medium text-gray-900 text-sm">
                                 {option.label}
                               </span>
-                              <div className="text-xs sm:text-sm text-gray-600 mt-1">
+                              <div className="text-xs text-gray-600">
                                 اعتبار جدید:{" "}
                                 {formatCurrency(
                                   user.creditLimit + option.value
@@ -690,14 +690,14 @@ export default function CreditRequestPage() {
                               </div>
                             </div>
                             {option.recommended && (
-                              <div className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
+                              <div className="bg-green-100 text-green-700 text-xs px-1.5 py-0.5 rounded-full">
                                 پیشنهادی
                               </div>
                             )}
                           </div>
                           {selectedCreditAmount === option.value && (
-                            <div className="absolute top-2 right-2">
-                              <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                            <div className="absolute top-1.5 right-1.5">
+                              <CheckCircle className="h-4 w-4 text-blue-600" />
                             </div>
                           )}
                         </div>
@@ -707,7 +707,7 @@ export default function CreditRequestPage() {
 
                   {/* دلیل درخواست */}
                   <div>
-                    <label className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+                    <label className="text-sm font-medium text-gray-900 mb-2 flex items-center gap-2">
                       <FileText className="h-4 w-4 text-blue-600" />
                       دلیل درخواست افزایش اعتبار
                     </label>
@@ -717,20 +717,20 @@ export default function CreditRequestPage() {
                         setRequestReason(e.target.value)
                       }
                       placeholder="مثلاً: نیاز به خرید لوازم خانگی، خرید خودرو، و غیره..."
-                      className="w-full border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-xl p-3 resize-none text-sm"
-                      rows={3}
+                      className="w-full border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 rounded-lg p-2.5 resize-none text-sm"
+                      rows={2}
                     />
                   </div>
 
                   {/* هشدار */}
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 sm:p-4">
-                    <div className="flex gap-2 sm:gap-3">
-                      <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-2.5">
+                    <div className="flex gap-2">
+                      <AlertCircle className="h-4 w-4 text-amber-600 flex-shrink-0 mt-0.5" />
                       <div>
                         <h4 className="font-medium text-amber-900 mb-1 text-sm">
                           نکات مهم
                         </h4>
-                        <ul className="text-xs sm:text-sm text-amber-800 space-y-1">
+                        <ul className="text-xs text-amber-800 space-y-0.5">
                           <li>• بررسی درخواست تا ۲۴ ساعت زمان می‌برد</li>
                           <li>
                             • افزایش اعتبار بر اساس تاریخچه پرداخت شما تعیین
@@ -743,7 +743,7 @@ export default function CreditRequestPage() {
                   </div>
 
                   {/* دکمه‌ها */}
-                  <div className="flex flex-col gap-2 sm:gap-3">
+                  <div className="flex flex-col gap-2">
                     <Button
                       onClick={handleSubmitCreditIncrease}
                       disabled={
@@ -751,17 +751,17 @@ export default function CreditRequestPage() {
                         !requestReason.trim() ||
                         isCreditIncreaseProcessing
                       }
-                      className="w-full bg-blue-600 hover:bg-blue-700 py-2.5 sm:py-3 text-sm"
+                      className="w-full bg-blue-600 hover:bg-blue-700 py-2 text-sm"
                     >
                       {isCreditIncreaseProcessing ? (
                         <>
-                          <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
+                          <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin ml-2"></div>
                           در حال بررسی...
                         </>
                       ) : (
                         <>
                           ثبت درخواست
-                          <ArrowRight className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                          <ArrowRight className="mr-2 h-3 w-3" />
                         </>
                       )}
                     </Button>
@@ -769,32 +769,32 @@ export default function CreditRequestPage() {
                       variant="outline"
                       onClick={() => setCreditIncreaseDialogOpen(false)}
                       disabled={isCreditIncreaseProcessing}
-                      className="w-full border-gray-300 hover:border-blue-600 hover:text-blue-600 py-2.5 sm:py-3 text-sm"
+                      className="w-full border-gray-300 hover:border-blue-600 hover:text-blue-600 py-2 text-sm"
                     >
                       انصراف
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-4 sm:py-6 space-y-3 sm:space-y-4">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                    <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
+                <div className="text-center py-3 space-y-3">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg sm:text-xl font-semibold text-green-600 mb-2">
+                    <h3 className="text-base font-semibold text-green-600 mb-2">
                       درخواست با موفقیت ثبت شد
                     </h3>
-                    <div className="bg-blue-50 rounded-xl p-3 sm:p-4 border border-blue-200">
-                      <p className="text-xs sm:text-sm text-blue-800 mb-2">
+                    <div className="bg-blue-50 rounded-lg p-2.5 border border-blue-200">
+                      <p className="text-xs text-blue-800 mb-1">
                         مبلغ درخواستی:
                       </p>
-                      <p className="text-base sm:text-lg font-bold text-blue-900">
+                      <p className="text-sm font-bold text-blue-900">
                         {selectedCreditAmount
                           ? formatCurrency(selectedCreditAmount)
                           : ""}
                       </p>
                     </div>
-                    <p className="text-gray-600 text-xs sm:text-sm mt-3 sm:mt-4 px-2">
+                    <p className="text-gray-600 text-xs mt-2 px-1">
                       درخواست شما در حال بررسی است. نتیجه تا ۲۴ ساعت آینده از
                       طریق پیامک و اپلیکیشن به اطلاع شما خواهد رسید.
                     </p>

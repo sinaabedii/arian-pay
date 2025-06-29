@@ -252,7 +252,7 @@ export default function DashboardPage() {
                         <div className="absolute transform rotate-45 translate-x-1/2 -translate-y-1/2 right-0 top-0 w-32 sm:w-40 h-32 sm:h-40 bg-white rounded-full"></div>
                         <div className="absolute transform rotate-45 translate-x-1/3 translate-y-1/3 right-0 bottom-0 w-32 sm:w-40 h-32 sm:h-40 bg-white rounded-full"></div>
                       </div>
-                      <div className="relative z-10 h-full flex flex-col justify-between">
+                      <div className="relative z-10 h-full flex flex-col justify-between ">
                         <div className="flex items-center justify-between">
                           <span className="text-base sm:text-lg font-semibold">
                             بانک ملت
@@ -275,7 +275,7 @@ export default function DashboardPage() {
                               دارنده کارت
                             </div>
                             <div className="font-medium text-sm sm:text-base">
-                              امیرحسین محمدی
+                              سینا عابدی
                             </div>
                           </div>
                           <div>

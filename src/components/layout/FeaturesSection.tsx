@@ -9,7 +9,6 @@ import {
   HeadphonesIcon,
   Star,
   ArrowRight,
-  X
 } from "lucide-react";
 import { PaymentAnimation } from "@/components/ui/animation";
 
@@ -62,7 +61,7 @@ const FeaturesSection = () => {
   return (
     <>
       {/* Payment Animation Section */}
-      <section className="px-4 py-12 bg-gradient-to-b from-gray-50 to-white">
+      <section className="px-4 py-32 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full mb-4">
@@ -129,68 +128,6 @@ const FeaturesSection = () => {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Feature Comparison Table */}
-          <div className="mt-16 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
-            <h3 className="text-2xl font-bold text-center text-gray-900 mb-8">
-              مقایسه سعید پی با روش‌های سنتی
-            </h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-right py-3 px-4">ویژگی</th>
-                    <th className="text-center py-3 px-4 text-blue-600 font-bold">
-                      سعید پی
-                    </th>
-                    <th className="text-center py-3 px-4 text-gray-600">
-                      روش سنتی
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  <tr>
-                    <td className="py-3 px-4 font-medium">زمان تایید</td>
-                    <td className="py-3 px-4 text-center">
-                      <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">
-                        ۱۰ دقیقه
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-center text-gray-600">
-                      ۲-۳ روز
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-medium">نیاز به ضامن</td>
-                    <td className="py-3 px-4 text-center">
-                      <X className="h-5 w-5 text-red-500 mx-auto" />
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-medium">مراجعه حضوری</td>
-                    <td className="py-3 px-4 text-center">
-                      <X className="h-5 w-5 text-red-500 mx-auto" />
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-medium">مدیریت آنلاین</td>
-                    <td className="py-3 px-4 text-center">
-                      <CheckCircle2 className="h-5 w-5 text-green-500 mx-auto" />
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <X className="h-5 w-5 text-red-500 mx-auto" />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
       </section>

@@ -65,11 +65,17 @@ const TestimonialsSection = ({ onReviewClick }: TestimonialsSectionProps) => {
     return () => clearInterval(interval);
   }, [testimonials.length]);
 
-  const renderStars = (rating: number) => {
+  const renderStars = (rating: number, size: "sm" | "md" | "lg" = "md") => {
+    const sizeClasses = {
+      sm: "h-3 w-3",
+      md: "h-4 w-4", 
+      lg: "h-5 w-5"
+    };
+    
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`h-4 w-4 ${
+        className={`${sizeClasses[size]} ${
           i < rating ? "text-yellow-400 fill-current" : "text-gray-300"
         }`}
       />
@@ -80,14 +86,15 @@ const TestimonialsSection = ({ onReviewClick }: TestimonialsSectionProps) => {
   const totalReviews = testimonials.length;
 
   return (
-    <section className="px-4 py-12 lg:py-16 bg-gradient-to-br from-blue-50 via-purple-50/30 to-pink-50/30">
+    <section className="px-4 py-16 bg-gradient-to-br from-blue-50 via-purple-50/30 to-pink-50/30">
       <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-yellow-50 text-yellow-700 px-4 py-2 rounded-full mb-4">
             <Star className="h-4 w-4" />
             <span className="text-sm font-medium">نظرات مشتریان</span>
           </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             مشتریان چه می‌گویند؟
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
@@ -101,7 +108,7 @@ const TestimonialsSection = ({ onReviewClick }: TestimonialsSectionProps) => {
                 {averageRating.toFixed(1)}
               </div>
               <div className="flex justify-center gap-1 mb-1">
-                {renderStars(Math.round(averageRating))}
+                {renderStars(Math.round(averageRating), "sm")}
               </div>
               <div className="text-sm text-gray-600">
                 از {totalReviews.toLocaleString('fa-IR')} نظر
@@ -123,20 +130,20 @@ const TestimonialsSection = ({ onReviewClick }: TestimonialsSectionProps) => {
             </div>
             
             <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+              <div className="flex flex-col md:flex-row items-center md:items-start gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
                   {testimonials[currentTestimonialIndex].name[0]}
                 </div>
-                <div>
+                <div className="text-center md:text-right">
                   <h3 className="text-xl font-semibold text-gray-900">
                     {testimonials[currentTestimonialIndex].name}
                   </h3>
                   <p className="text-gray-600">
                     {testimonials[currentTestimonialIndex].city} • {testimonials[currentTestimonialIndex].category}
                   </p>
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex flex-col md:flex-row items-center gap-2 mt-1">
                     <div className="flex gap-1">
-                      {renderStars(testimonials[currentTestimonialIndex].rating)}
+                      {renderStars(testimonials[currentTestimonialIndex].rating, "sm")}
                     </div>
                     <span className="text-sm text-gray-500">
                       {testimonials[currentTestimonialIndex].date}
@@ -145,11 +152,11 @@ const TestimonialsSection = ({ onReviewClick }: TestimonialsSectionProps) => {
                 </div>
               </div>
 
-              <blockquote className="text-lg text-gray-700 leading-relaxed mb-4">
-                "{testimonials[currentTestimonialIndex].comment}"
+              <blockquote className="text-lg text-gray-700 leading-relaxed mb-4 text-center md:text-right">
+                &ldquo;{testimonials[currentTestimonialIndex].comment}&rdquo;
               </blockquote>
 
-              <div className="flex items-center gap-4 text-sm text-gray-500">
+              <div className="flex items-center justify-center md:justify-start gap-4 text-sm text-gray-500">
                 <button className="flex items-center gap-1 hover:text-blue-600 transition-colors">
                   <ThumbsUp className="h-4 w-4" />
                   <span>{testimonials[currentTestimonialIndex].helpful} نفر مفید بوده</span>
@@ -164,10 +171,10 @@ const TestimonialsSection = ({ onReviewClick }: TestimonialsSectionProps) => {
               <button
                 key={index}
                 onClick={() => setCurrentTestimonialIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
+                className={`h-3 rounded-full transition-all ${
                   index === currentTestimonialIndex
                     ? "bg-blue-600 w-8"
-                    : "bg-gray-300 hover:bg-gray-400"
+                    : "bg-gray-300 hover:bg-gray-400 w-3"
                 }`}
               />
             ))}
@@ -175,7 +182,7 @@ const TestimonialsSection = ({ onReviewClick }: TestimonialsSectionProps) => {
         </div>
 
         {/* More Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {testimonials.slice(0, 6).map((testimonial) => (
             <div
               key={testimonial.id}
@@ -192,41 +199,45 @@ const TestimonialsSection = ({ onReviewClick }: TestimonialsSectionProps) => {
               </div>
 
               <div className="flex gap-1 mb-3">
-                {renderStars(testimonial.rating)}
+                {renderStars(testimonial.rating, "sm")}
               </div>
 
               <p className="text-gray-700 text-sm leading-relaxed mb-4 line-clamp-3">
                 {testimonial.comment}
               </p>
 
-              <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                <span className="text-xs text-gray-500">{testimonial.category}</span>
-                <span className="text-xs text-gray-500">{testimonial.date}</span>
+              <div className="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-100">
+                <span className="bg-gray-100 px-2 py-1 rounded-full">
+                  {testimonial.category}
+                </span>
+                <span>{testimonial.date}</span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* CTA Section */}
-        <div className="text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 text-white">
-          <h3 className="text-2xl font-bold mb-4">
-            شما هم تجربه خود را به اشتراک بگذارید
-          </h3>
-          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            نظر شما برای بهبود خدمات و کمک به سایر کاربران بسیار مهم است
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button
-              onClick={onReviewClick}
-              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-xl font-medium shadow-lg"
-            >
-              <MessageCircle className="ml-2 h-5 w-5" />
-              ثبت نظر جدید
-            </Button>
+        {/* Review Call to Action */}
+        <div className="text-center bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+          <div className="max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+              تجربه شما چطور بوده؟
+            </h3>
+            <p className="text-gray-600 mb-6">
+              نظر شما به بهبود خدمات ما کمک می‌کند و راهنمای سایر کاربران خواهد بود
+            </p>
             
-            <div className="text-sm text-blue-100">
-              یا با تلفن پشتیبانی ۰۲۱-۱۲۳۴۵۶۷۸ تماس بگیرید
+            <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
+              <Button
+                onClick={onReviewClick}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-6 py-3 rounded-xl"
+              >
+                <MessageCircle className="ml-2 h-4 w-4" />
+                ثبت نظر شما
+              </Button>
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                <span>۹۸.۵٪ نظرات مثبت</span>
+              </div>
             </div>
           </div>
         </div>
