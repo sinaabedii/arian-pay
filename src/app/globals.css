@@ -930,7 +930,8 @@ body {
 }
 
 .hover-color-shift:hover {
-  background-image: var(--gradient-blue-night);
+  background: linear-gradient(135deg, var(--blue) 0%, var(--dark-blue) 100%);
+  color: var(--light-cream);
 }
 
 /* کلاس‌های رنگ پس‌زمینه */
@@ -1125,4 +1126,14 @@ body {
 
 .hover-color-shift:hover {
   background-image: var(--gradient-blue-night);
+}
+
+/* کلاس برای پنهان کردن scrollbar در عناصر اسکرول افقی */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Safari and Chrome */
 }

@@ -1,18 +1,20 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
-import { MapPin, Navigation } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Navigation } from "lucide-react";
 
 // نوع داده برای فروشگاه‌ها
 interface Store {
   id: string;
   name: string;
+  logo: string;
   category: string;
   address: string;
   distance: number;
   hasInstallment: boolean;
-  logo: string;
+  hasCashback: boolean;
+  rating: number;
+  isOnline: boolean;
   position?: [number, number]; // [latitude, longitude]
 }
 
@@ -56,7 +58,6 @@ declare global {
 }
 
 export default function StoreMap({ stores, onStoreSelect }: StoreMapProps) {
-  const [selectedStore, setSelectedStore] = useState<Store | null>(null);
   const [mapInitialized, setMapInitialized] = useState(false);
   const mapRef = useRef<HTMLDivElement>(null);
   const leafletMap = useRef<LeafletMapType | null>(null);
@@ -168,7 +169,6 @@ export default function StoreMap({ stores, onStoreSelect }: StoreMapProps) {
         
         // اضافه کردن رویداد کلیک به مارکر
         marker.on('click', () => {
-          setSelectedStore(store);
           onStoreSelect(store);
         });
         
@@ -178,7 +178,6 @@ export default function StoreMap({ stores, onStoreSelect }: StoreMapProps) {
             const button = document.getElementById(`select-store-${store.id}`);
             if (button) {
               button.addEventListener('click', () => {
-                setSelectedStore(store);
                 onStoreSelect(store);
                 marker.closePopup();
               });
@@ -236,80 +235,24 @@ export default function StoreMap({ stores, onStoreSelect }: StoreMapProps) {
     }
   }, [mapInitialized, nearbyStores, onStoreSelect, userLocation]);
 
-  // انتخاب فروشگاه از لیست
-  const handleStoreClick = (store: Store) => {
-    setSelectedStore(store);
-    onStoreSelect(store);
-    
-    // حرکت نقشه به سمت فروشگاه انتخاب شده
-    if (leafletMap.current && store.position) {
-      leafletMap.current.setView(store.position, 15);
-    }
-  };
-
   return (
     <div className="space-y-3">
       {/* نقشه واقعی */}
-      <div className="h-64 rounded-lg overflow-hidden border border-border relative">
+      <div className="h-64 sm:h-80 rounded-lg overflow-hidden border border-gray-200 relative">
         <div ref={mapRef} className="w-full h-full">
           {!mapInitialized && (
-            <div className="absolute inset-0 flex items-center justify-center bg-secondary-light">
+            <div className="absolute inset-0 flex items-center justify-center bg-blue-50">
               <div className="text-center">
-                <Navigation className="h-8 w-8 text-primary mx-auto mb-2 animate-pulse" />
-                <p className="text-secondary">در حال آماده‌سازی نقشه...</p>
+                <Navigation className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 mx-auto mb-2 animate-pulse" />
+                <p className="text-gray-900 font-medium text-sm sm:text-base">در حال بارگذاری نقشه...</p>
               </div>
             </div>
           )}
         </div>
       </div>
-      
-      {/* لیست فروشگاه‌ها */}
-      <h3 className="text-sm font-medium mt-4">فروشگاه‌های نزدیک شما</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-        {nearbyStores.slice(0, 6).map((store, index) => (
-          <div 
-            key={store.id}
-            className={`p-3 rounded-lg border cursor-pointer transition-all ${
-              selectedStore?.id === store.id 
-                ? 'border-primary bg-primary/5' 
-                : 'border-border hover:border-primary/50'
-            }`}
-            onClick={() => handleStoreClick(store)}
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-md overflow-hidden bg-secondary-light relative flex-shrink-0 flex items-center justify-center">
-                <span className="absolute top-0 left-0 bg-primary text-white text-xs w-4 h-4 flex items-center justify-center">{index + 1}</span>
-                <MapPin className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h4 className="font-medium text-sm">{store.name}</h4>
-                <p className="text-xs text-secondary">{store.distance.toFixed(1)} کیلومتر • {store.category}</p>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="mt-2 text-xs text-gray-500 text-center">
+        برای مشاهده اطلاعات بیشتر روی نشانگر فروشگاه کلیک کنید
       </div>
-      
-      {/* نمایش جزئیات فروشگاه انتخاب شده */}
-      {selectedStore && (
-        <div className="mt-4 p-4 border border-primary/20 rounded-lg bg-primary/5">
-          <h3 className="font-bold text-lg mb-2 text-primary">{selectedStore.name}</h3>
-          <p className="text-sm mb-2">{selectedStore.category}</p>
-          <div className="flex items-start gap-2 mb-2">
-            <MapPin className="h-4 w-4 text-secondary flex-shrink-0 mt-0.5" />
-            <p className="text-sm">{selectedStore.address}</p>
-          </div>
-          <div className="flex justify-between items-center mt-4">
-            <span className="text-sm text-primary font-medium">{selectedStore.distance.toFixed(1)} کیلومتر از شما</span>
-            {selectedStore.hasInstallment && (
-              <span className="text-xs px-2 py-1 bg-accent-light text-accent rounded-full">
-                قابل خرید اقساطی
-              </span>
-            )}
-          </div>
-          <Button className="w-full mt-3">مشاهده محصولات این فروشگاه</Button>
-        </div>
-      )}
     </div>
   );
 } 

@@ -152,6 +152,7 @@ function VerifyForm() {
           name: "کاربر سعید پی ",
           phone,
           email: "",
+          role: "customer" as const,
           nationalId: "",
           creditLimit: 0,
           walletBalance: 0,

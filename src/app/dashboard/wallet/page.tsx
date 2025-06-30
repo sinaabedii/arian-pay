@@ -8,11 +8,16 @@ import {
   ArrowUp,
   Check,
   ChevronDown,
-  ChevronsUpDown,
-  Banknote,
-  User,
   AlertCircle,
   Clock,
+  RefreshCw,
+  Share2,
+  Send,
+  ArrowDown,
+  ShoppingCart,
+  Smartphone,
+  TrendingUp,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -108,6 +113,14 @@ export default function WalletPage() {
     type: string;
   } | null>(null);
 
+  // اضافه کردن state های جدید برای فیچرهای جدید
+  const [isWalletCirculationOpen, setIsWalletCirculationOpen] = useState(false);
+  const [isShareWalletOpen, setIsShareWalletOpen] = useState(false);
+  const [isWalletToWalletOpen, setIsWalletToWalletOpen] = useState(false);
+  const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+  const [isTopUpServicesOpen, setIsTopUpServicesOpen] = useState(false);
+
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
@@ -170,6 +183,31 @@ export default function WalletPage() {
     setTimeout(() => {
       setCopySuccess(null);
     }, 2000);
+  };
+
+  // اضافه کردن handler های جدید
+  const handleWalletCirculation = () => {
+    setIsWalletCirculationOpen(true);
+  };
+
+  const handleShareWallet = () => {
+    setIsShareWalletOpen(true);
+  };
+
+  const handleWalletToWallet = () => {
+    setIsWalletToWalletOpen(true);
+  };
+
+  const handleWithdraw = () => {
+    setIsWithdrawOpen(true);
+  };
+
+  const handlePurchase = () => {
+    setIsPurchaseOpen(true);
+  };
+
+  const handleTopUpServices = () => {
+    setIsTopUpServicesOpen(true);
   };
 
   return (
@@ -237,7 +275,7 @@ export default function WalletPage() {
                         </div>
                       </div>
                       <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                        {formatCurrency(user.walletBalance)}
+                        {formatCurrency(user.walletBalance || 0)}
                       </div>
                       <div className="flex flex-col sm:flex-row gap-3">
                         <Button
@@ -263,37 +301,155 @@ export default function WalletPage() {
                       </div>
                     </div>
 
-                    <div className="bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-100">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center">
-                          <ChevronsUpDown className="h-6 w-6 text-green-600" />
+                    {/* اضافه کردن بخش جدید برای عملیات کیف پول */}
+                    <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 overflow-hidden">
+                      <div className="h-1 bg-gradient-to-r from-purple-400 to-purple-600"></div>
+                      <div className="p-4 sm:p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <CreditCard className="h-5 w-5 text-purple-600" />
+                          <h3 className="text-lg font-semibold text-gray-900">
+                            عملیات کیف پول
+                          </h3>
                         </div>
-                        <div>
-                          <h4 className="font-medium text-gray-900">
-                            انتقال وجه سریع
-                          </h4>
-                          <p className="text-sm text-gray-500">
-                            انتقال به حساب شخصی
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white">
-                          <User className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <span className="text-sm text-gray-500">
-                            انتقال به
-                          </span>
-                          <div className="font-medium text-gray-900">
-                            حساب شخصی
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          {/* گردش کیف */}
+                          <div 
+                            onClick={handleWalletCirculation}
+                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer group"
+                          >
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              <div className="w-12 h-12 rounded-xl bg-blue-100 group-hover:bg-blue-200 flex items-center justify-center transition-colors">
+                                <RefreshCw className="h-6 w-6 text-blue-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 text-sm">گردش کیف</h4>
+                                <p className="text-xs text-gray-500 mt-1">مشاهده گردش مالی کیف</p>
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                            </div>
+                          </div>
+
+                          {/* اشتراک کیف */}
+                          <div 
+                            onClick={handleShareWallet}
+                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-green-300 hover:bg-green-50 transition-all cursor-pointer group"
+                          >
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              <div className="w-12 h-12 rounded-xl bg-green-100 group-hover:bg-green-200 flex items-center justify-center transition-colors">
+                                <Share2 className="h-6 w-6 text-green-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 text-sm">اشتراک کیف</h4>
+                                <p className="text-xs text-gray-500 mt-1">اشتراک کیف با دیگران</p>
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-green-600 transition-colors" />
+                            </div>
+                          </div>
+
+                          {/* کیف به کیف */}
+                          <div 
+                            onClick={handleWalletToWallet}
+                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-indigo-300 hover:bg-indigo-50 transition-all cursor-pointer group"
+                          >
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              <div className="w-12 h-12 rounded-xl bg-indigo-100 group-hover:bg-indigo-200 flex items-center justify-center transition-colors">
+                                <Send className="h-6 w-6 text-indigo-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 text-sm">کیف به کیف</h4>
+                                <p className="text-xs text-gray-500 mt-1">انتقال وجه از کیف شما به کیف دیگران</p>
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-indigo-600 transition-colors" />
+                            </div>
+                          </div>
+
+                          {/* برداشت از کیف پول */}
+                          <div 
+                            onClick={handleWithdraw}
+                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-red-300 hover:bg-red-50 transition-all cursor-pointer group"
+                          >
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              <div className="w-12 h-12 rounded-xl bg-red-100 group-hover:bg-red-200 flex items-center justify-center transition-colors">
+                                <ArrowDown className="h-6 w-6 text-red-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 text-sm">برداشت از کیف پول</h4>
+                                <p className="text-xs text-gray-500 mt-1">برداشت وجه از کیف پول نزد</p>
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-red-600 transition-colors" />
+                            </div>
+                          </div>
+
+                          {/* خرید */}
+                          <div 
+                            onClick={handlePurchase}
+                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-orange-300 hover:bg-orange-50 transition-all cursor-pointer group"
+                          >
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              <div className="w-12 h-12 rounded-xl bg-orange-100 group-hover:bg-orange-200 flex items-center justify-center transition-colors">
+                                <ShoppingCart className="h-6 w-6 text-orange-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 text-sm">خرید</h4>
+                                <p className="text-xs text-gray-500 mt-1">پرداخت حضوری</p>
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-orange-600 transition-colors" />
+                            </div>
+                          </div>
+
+                          {/* شارژ کیف پول */}
+                          <div 
+                            onClick={() => setIsDepositDialogOpen(true)}
+                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer group"
+                          >
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              <div className="w-12 h-12 rounded-xl bg-blue-100 group-hover:bg-blue-200 flex items-center justify-center transition-colors">
+                                <TrendingUp className="h-6 w-6 text-blue-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 text-sm">شارژ کیف پول</h4>
+                                <p className="text-xs text-gray-500 mt-1">افزایش موجودی کیف پول</p>
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                            </div>
+                          </div>
+
+                          {/* شارژ و اینترنت */}
+                          <div 
+                            onClick={handleTopUpServices}
+                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-purple-300 hover:bg-purple-50 transition-all cursor-pointer group"
+                          >
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              <div className="w-12 h-12 rounded-xl bg-purple-100 group-hover:bg-purple-200 flex items-center justify-center transition-colors">
+                                <Smartphone className="h-6 w-6 text-purple-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 text-sm">شارژ و اینترنت</h4>
+                                <p className="text-xs text-gray-500 mt-1">خرید شارژ و بسته اینترنت</p>
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                            </div>
+                          </div>
+
+                          {/* گردش کیف (دوباره) */}
+                          <div 
+                            onClick={handleWalletCirculation}
+                            className="bg-gray-50 rounded-xl p-4 border border-gray-100 hover:border-teal-300 hover:bg-teal-50 transition-all cursor-pointer group"
+                          >
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              <div className="w-12 h-12 rounded-xl bg-teal-100 group-hover:bg-teal-200 flex items-center justify-center transition-colors">
+                                <TrendingUp className="h-6 w-6 text-teal-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium text-gray-900 text-sm">گردش کیف</h4>
+                                <p className="text-xs text-gray-500 mt-1">مشاهده گردش مالی کیف</p>
+                              </div>
+                              <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-teal-600 transition-colors" />
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <Button className="w-full gap-2 bg-green-600 hover:bg-green-700">
-                        <Banknote size={18} />
-                        انتقال وجه به حساب
-                      </Button>
                     </div>
                   </div>
                 </div>
@@ -426,8 +582,8 @@ export default function WalletPage() {
           onOpenChange={setIsDepositDialogOpen}
         >
           <DialogContent className="rounded-2xl max-w-sm sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-xl font-bold text-gray-900">
+            <DialogHeader className="space-y-3 pb-2">
+              <DialogTitle className="text-xl font-bold text-gray-900 pr-8">
                 افزایش موجودی کیف پول
               </DialogTitle>
               <DialogDescription className="text-gray-600">
@@ -539,6 +695,304 @@ export default function WalletPage() {
           onSubmit={handleAddCard}
           isProcessing={isProcessing}
         />
+
+        {/* Dialog های جدید برای فیچرهای کیف پول */}
+        
+        {/* گردش کیف */}
+        <Dialog open={isWalletCirculationOpen} onOpenChange={setIsWalletCirculationOpen}>
+          <DialogContent className="rounded-2xl max-w-md">
+            <DialogHeader className="space-y-3 pb-2">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2 pr-8">
+                <RefreshCw className="h-5 w-5 text-blue-600" />
+                گردش کیف
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                مشاهده گردش مالی و تراکنش‌های کیف پول
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 py-4">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto">
+                  <RefreshCw className="h-8 w-8" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">گردش مالی کیف پول</h3>
+                  <p className="text-gray-600 mt-1">
+                    در اینجا می‌توانید کلیه تراکنش‌ها و گردش مالی کیف پول خود را مشاهده کنید
+                  </p>
+                </div>
+                <Button 
+                  onClick={() => setIsWalletCirculationOpen(false)}
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                >
+                  مشاهده تراکنش‌ها
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* اشتراک کیف */}
+        <Dialog open={isShareWalletOpen} onOpenChange={setIsShareWalletOpen}>
+          <DialogContent className="rounded-2xl max-w-md">
+            <DialogHeader className="space-y-3 pb-2">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2 pr-8">
+                <Share2 className="h-5 w-5 text-green-600" />
+                اشتراک کیف
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                اشتراک‌گذاری کیف پول با دیگران
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 py-4">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto">
+                  <Share2 className="h-8 w-8" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">اشتراک‌گذاری کیف پول</h3>
+                  <p className="text-gray-600 mt-1">
+                    می‌توانید کیف پول خود را با دوستان و خانواده به اشتراک بگذارید
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Button 
+                    className="w-full bg-green-600 hover:bg-green-700"
+                  >
+                    ساخت لینک اشتراک
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => setIsShareWalletOpen(false)}
+                    className="w-full border-gray-300"
+                  >
+                    انصراف
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* کیف به کیف */}
+        <Dialog open={isWalletToWalletOpen} onOpenChange={setIsWalletToWalletOpen}>
+          <DialogContent className="rounded-2xl max-w-md">
+            <DialogHeader className="space-y-3 pb-2">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2 pr-8">
+                <Send className="h-5 w-5 text-indigo-600" />
+                کیف به کیف
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                انتقال وجه از کیف شما به کیف دیگران
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 py-4">
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-900">شماره کیف پول مقصد</label>
+                  <Input
+                    type="text"
+                    placeholder="شماره کیف پول یا شماره تلفن"
+                    className="border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-xl mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-900">مبلغ (تومان)</label>
+                  <Input
+                    type="number"
+                    placeholder="مثال: 100,000"
+                    className="border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-xl mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-900">توضیحات (اختیاری)</label>
+                  <Input
+                    type="text"
+                    placeholder="توضیح کوتاه برای انتقال"
+                    className="border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-xl mt-1"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2 pt-2">
+                <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+                  انتقال وجه
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => setIsWalletToWalletOpen(false)}
+                  className="w-full border-gray-300"
+                >
+                  انصراف
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* برداشت از کیف پول */}
+        <Dialog open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen}>
+          <DialogContent className="rounded-2xl max-w-md">
+            <DialogHeader className="space-y-3 pb-2">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2 pr-8">
+                <ArrowDown className="h-5 w-5 text-red-600" />
+                برداشت از کیف پول
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                برداشت وجه از کیف پول به حساب بانکی
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 py-4">
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-900">مبلغ برداشت (تومان)</label>
+                  <Input
+                    type="number"
+                    placeholder="مثال: 500,000"
+                    className="border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 rounded-xl mt-1"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    حداکثر مبلغ قابل برداشت: {formatCurrency(user?.walletBalance || 0)}
+                  </p>
+                </div>
+                
+                {bankCards.length > 0 && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-900">حساب مقصد</label>
+                    <div className="p-3 border border-gray-300 rounded-xl flex items-center gap-3 bg-gray-50 mt-1">
+                      <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center">
+                        <CreditCard className="h-5 w-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">
+                          {bankCards.find((card) => card.isDefault)?.cardNumber.slice(0, 4) +
+                            " •••• •••• " +
+                            bankCards.find((card) => card.isDefault)?.cardNumber.slice(-4)}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {bankCards.find((card) => card.isDefault)?.cardHolderName}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="space-y-2 pt-2">
+                <Button className="w-full bg-red-600 hover:bg-red-700">
+                  تایید برداشت
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => setIsWithdrawOpen(false)}
+                  className="w-full border-gray-300"
+                >
+                  انصراف
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* خرید */}
+        <Dialog open={isPurchaseOpen} onOpenChange={setIsPurchaseOpen}>
+          <DialogContent className="rounded-2xl max-w-md">
+            <DialogHeader className="space-y-3 pb-2">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2 pr-8">
+                <ShoppingCart className="h-5 w-5 text-orange-600" />
+                خرید
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                پرداخت حضوری با استفاده از کیف پول
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 py-4">
+              <div className="text-center space-y-4">
+                <div className="w-16 h-16 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mx-auto">
+                  <ShoppingCart className="h-8 w-8" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">پرداخت حضوری</h3>
+                  <p className="text-gray-600 mt-1">
+                    برای پرداخت در فروشگاه‌ها و مراکز خرید از کیف پول خود استفاده کنید
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                    تولید QR Code پرداخت
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => setIsPurchaseOpen(false)}
+                    className="w-full border-gray-300"
+                  >
+                    انصراف
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* شارژ و اینترنت */}
+        <Dialog open={isTopUpServicesOpen} onOpenChange={setIsTopUpServicesOpen}>
+          <DialogContent className="rounded-2xl max-w-md">
+            <DialogHeader className="space-y-3 pb-2">
+              <DialogTitle className="text-xl font-bold text-gray-900 flex items-center gap-2 pr-8">
+                <Smartphone className="h-5 w-5 text-purple-600" />
+                شارژ و اینترنت
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                خرید شارژ و بسته اینترنت موبایل
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-4 py-4">
+              <div className="space-y-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-900">شماره موبایل</label>
+                  <Input
+                    type="tel"
+                    placeholder="09123456789"
+                    className="border-gray-300 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 rounded-xl mt-1"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium text-gray-900">نوع خدمات</label>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <Button variant="outline" className="p-3 h-auto flex flex-col items-center">
+                      <Smartphone className="h-5 w-5 mb-1" />
+                      <span className="text-sm">شارژ</span>
+                    </Button>
+                    <Button variant="outline" className="p-3 h-auto flex flex-col items-center">
+                      <TrendingUp className="h-5 w-5 mb-1" />
+                      <span className="text-sm">بسته اینترنت</span>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 pt-2">
+                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                  ادامه
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => setIsTopUpServicesOpen(false)}
+                  className="w-full border-gray-300"
+                >
+                  انصراف
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

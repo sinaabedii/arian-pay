@@ -132,6 +132,7 @@ export default function RegisterVerifyPage() {
           name,
           phone,
           email: "",
+          role: "customer" as const,
           nationalId: "",
           creditLimit: 0,
           walletBalance: 0,

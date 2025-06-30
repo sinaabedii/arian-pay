@@ -11,6 +11,9 @@ import {
   ArrowRight,
   Eye,
   EyeOff,
+  User,
+  Store,
+  Shield,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -48,6 +51,11 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fillDemoCredentials = (phone: string, password: string) => {
+    setPhone(phone);
+    setPassword(password);
   };
 
   if (!mounted) {
@@ -204,6 +212,81 @@ export default function LoginPage() {
                 </Button>
               </form>
             </CardContent>
+
+            {/* Demo Credentials Section */}
+            <div className="px-4 sm:px-6 lg:px-8 py-4 bg-gradient-to-b from-blue-50 to-blue-100 border-t border-blue-200">
+              <div className="space-y-3">
+                <h3 className="text-sm font-medium text-gray-700 text-center">
+                  حساب‌های نمونه برای تست (کلیک کنید تا فرم پر شود)
+                </h3>
+                
+                <div className="grid grid-cols-1 gap-2">
+                  {/* Customer Account */}
+                  <div 
+                    onClick={() => fillDemoCredentials("09123456789", "customer123")}
+                    className="p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-400 cursor-pointer transition-all hover:shadow-sm"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <User className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900">مشتری (علی احمدی)</p>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <span>09123456789</span>
+                          <span>•</span>
+                          <span>customer123</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Store Account */}
+                  <div 
+                    onClick={() => fillDemoCredentials("09987654321", "store123")}
+                    className="p-3 bg-white rounded-lg border border-green-200 hover:border-green-400 cursor-pointer transition-all hover:shadow-sm"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                        <Store className="w-4 h-4 text-green-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900">فروشگاه (دیجی کالا)</p>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <span>09987654321</span>
+                          <span>•</span>
+                          <span>store123</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Admin Account */}
+                  <div 
+                    onClick={() => fillDemoCredentials("09111111111", "admin123")}
+                    className="p-3 bg-white rounded-lg border border-purple-200 hover:border-purple-400 cursor-pointer transition-all hover:shadow-sm"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <Shield className="w-4 h-4 text-purple-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900">مدیر سیستم</p>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <span>09111111111</span>
+                          <span>•</span>
+                          <span>admin123</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  💡 هر حساب دارای داشبورد و امکانات متفاوت است
+                </p>
+              </div>
+            </div>
 
             <CardFooter className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 bg-gradient-to-b from-gray-50 to-gray-100 border-t border-gray-200">
               <div className="w-full space-y-3 sm:space-y-4">
